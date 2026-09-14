@@ -13,14 +13,14 @@
   "ci": "success",
   "health": "healthy",
   "releases": {
-    "dev": "v0.1.8-dev.24",
-    "stable": "v0.1.8"
+    "dev": "v0.1.9-dev.26",
+    "stable": "v0.1.9"
   },
   "repository": "universal-ontology-engine",
   "schema": "universal-ontology-engine/repository-status-v1",
   "self": "healthy",
   "versions": {
-    "dev": "0.1.8",
-    "main": "0.1.8"
+    "dev": "0.1.9-dev.26",
+    "main": "0.1.9"
   }
 }

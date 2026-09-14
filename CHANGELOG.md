@@ -2,6 +2,23 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.9 — STABLE — 2026-09-14
+
+## What's Changed
+* docs(product): integrate OX-DX product design handoff by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/35
+* release: promote OX-DX product design handoff by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/36
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.8...v0.1.9
+
+## v0.1.9-dev.26 — DEV — 2026-09-14
+
+## What's Changed
+* docs(product): integrate OX-DX product design handoff by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/35
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.8...v0.1.9-dev.26
+
 ## v0.1.8 — STABLE — 2026-09-14
 
 ## What's Changed
