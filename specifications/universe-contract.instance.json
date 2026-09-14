@@ -10,7 +10,6 @@
       "id": "rocksoul",
       "name": "ROCKSOUL",
       "path": "ecosystem-rocksoul",
-      "repository": "bjo163/ecosystem-rocksoul",
       "lifecycle": "active",
       "contract": "ecosystem-foundation"
     },
@@ -18,21 +17,18 @@
       "id": "moonwitness",
       "name": "MoonWitness",
       "path": "ecosystem-moonwitness",
-      "repository": "bjo163/ecosystem-moonwitness",
       "lifecycle": "active"
     },
     {
       "id": "crayon",
       "name": "CRAYON",
       "path": "ecosystem-crayon",
-      "repository": "bjo163/ecosystem-crayon",
       "lifecycle": "active"
     },
     {
       "id": "isp",
       "name": "ISP",
       "path": "ecosystem-isp",
-      "repository": "bjo163/ecosystem-isp",
       "lifecycle": "active"
     }
   ]
