@@ -41,18 +41,14 @@ impl OntologyGraph {
         if !self.nodes.contains_key(&to) { return Err(OntologyError::UnknownNode(to)); }
         if from == to { return Err(OntologyError::SelfEdge(from)); }
         if !self.registry.supports_edge(kind) { return Err(OntologyError::UndeclaredEdgeKind(kind.slug().into())); }
-
         if kind == EdgeKind::Contains {
             let child = self.nodes.get(&to).expect("checked above");
             if child.parent.as_ref() != Some(&from) {
                 return Err(OntologyError::InvalidContainment { from, to });
             }
         }
-
         let edge = Edge { from: from.clone(), to: to.clone(), kind };
-        if !self.edges.insert(edge.clone()) {
-            return Err(OntologyError::DuplicateEdge { from, to, kind });
-        }
+        if !self.edges.insert(edge) { return Err(OntologyError::DuplicateEdge { from, to, kind }); }
         Ok(())
     }
 
@@ -63,17 +59,20 @@ impl OntologyGraph {
     }
 
     pub fn children(&self, parent: &NodeId) -> impl Iterator<Item = &Node> {
-        self.nodes.values().filter(move |node| node.parent.as_ref() == Some(parent))
+        let parent = parent.clone();
+        self.nodes.values().filter(move |node| node.parent.as_ref() == Some(&parent))
     }
 
     pub fn edges(&self) -> impl Iterator<Item = &Edge> { self.edges.iter() }
 
     pub fn outgoing(&self, from: &NodeId) -> impl Iterator<Item = &Edge> {
-        self.edges.iter().filter(move |edge| &edge.from == from)
+        let from = from.clone();
+        self.edges.iter().filter(move |edge| edge.from == from)
     }
 
     pub fn outgoing_kind(&self, from: &NodeId, kind: EdgeKind) -> impl Iterator<Item = &Edge> {
-        self.edges.iter().filter(move |edge| &edge.from == from && edge.kind == kind)
+        let from = from.clone();
+        self.edges.iter().filter(move |edge| edge.from == from && edge.kind == kind)
     }
 
     pub fn path_to_root(&self, id: &NodeId) -> Vec<&Node> {
@@ -134,7 +133,6 @@ mod tests {
         g.insert_node(node("repo", Some("u"), OntologyType::Repository)).unwrap();
         g.insert_node(node("src", Some("repo"), OntologyType::Source)).unwrap();
         g.insert_node(node("event", None, OntologyType::Event)).unwrap();
-
         g.add_edge(NodeId::new("u"), NodeId::new("repo"), EdgeKind::Contains).unwrap();
         g.add_edge(NodeId::new("src"), NodeId::new("event"), EdgeKind::Causes).unwrap();
         assert_eq!(g.edge_len(), 2);
