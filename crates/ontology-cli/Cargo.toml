@@ -3,10 +3,15 @@ name = "ontology-engine"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+default-run = "ontology-engine"
 
 [[bin]]
 name = "ontology-engine"
-path = "src/main_v2.rs"
+path = "src/main.rs"
+
+[[bin]]
+name = "ontology-syntax-discover"
+path = "src/bin/syntax_discover.rs"
 
 [dependencies]
 ontology-core = { path = "../ontology-core" }
