@@ -65,10 +65,13 @@ jobs:
           python -m json.tool specifications/foundation-contract.json >/dev/null
           python -m json.tool specifications/foundation-contract.instance.json >/dev/null
           python -m json.tool specifications/universal-ontology-v1.0.json >/dev/null
+          python -m json.tool specifications/language-capabilities-v1.json >/dev/null
+          python -m json.tool specifications/external-reference-matrix-v1.json >/dev/null
           python -m json.tool schemas/universe.schema.json >/dev/null
           python -m json.tool schemas/foundation-node.schema.json >/dev/null
           python -m json.tool schemas/hierarchy-node.schema.json >/dev/null
           python -m json.tool schemas/universal-ontology.schema.json >/dev/null
+          python -m json.tool schemas/discovery-output-v1.schema.json >/dev/null
       - name: Validate Python registry and discovery tooling
         run: |
           python -m compileall -q tools tests
@@ -76,6 +79,7 @@ jobs:
           python tools/universe_cli.py --manifest universe.json --json list
           python tools/repo_status.py --help >/dev/null
           python tools/sync_repository_docs.py --help >/dev/null
+          python tools/mvp_benchmark.py --help >/dev/null
           test "$(python tools/check_pr_issue.py --body 'Refs #6')" = "6"
           python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Build and test Rust engine
@@ -83,6 +87,14 @@ jobs:
           cargo fmt --all -- --check
           cargo check --workspace
           cargo test --workspace --all-targets
+          cargo build -p ontology-engine
+      - name: Record MVP performance baseline
+        run: |
+          python tools/mvp_benchmark.py \
+            --binary target/debug/ontology-engine \
+            --output /tmp/mvp-benchmark.json \
+            --runs 3
+          python -m json.tool /tmp/mvp-benchmark.json >/dev/null
       - name: Self inspection gate
         run: |
           cargo run -p ontology-engine -- self --json > /tmp/ontology-self.json
@@ -94,24 +106,31 @@ jobs:
           set -euo pipefail
           cargo run -p ontology-engine -- levels
           cargo run -p ontology-engine -- inspect 49
-          cargo run -p ontology-engine -- discover . --max-depth 2
+          cargo run -p ontology-engine -- discover . --max-depth 2 > /tmp/structural.json
           cargo run -p ontology-engine -- discover crates/ontology-core --rust-ast --max-depth 4 > /tmp/rust-ast.json
           cargo run -p ontology-engine -- discover crates/ontology-core --syntax --max-depth 4 > /tmp/syntax.json
           python - <<'PY'
           import json
           from pathlib import Path
 
+          structural = json.loads(Path('/tmp/structural.json').read_text())
           rust_ast = json.loads(Path('/tmp/rust-ast.json').read_text())
           syntax = json.loads(Path('/tmp/syntax.json').read_text())
 
-          assert rust_ast.get('mode') is None, rust_ast
+          for payload in (structural, rust_ast, syntax):
+              assert payload.get('schema') == 'universal-ontology-engine/discovery-v1', payload
+              assert payload.get('read_only') is True, payload
+              assert payload.get('nodes', 0) > 0, payload
+
+          assert structural.get('mode') == 'structural', structural
+          assert rust_ast.get('mode') == 'rust-ast', rust_ast
           assert syntax.get('mode') == 'syntax-projection', syntax
-          assert syntax.get('read_only') is True, syntax
-          assert syntax.get('nodes', 0) > 1, syntax
+          assert any(key.startswith('34_FUNCTION') for key in rust_ast.get('nodes_by_level', {})), rust_ast
           assert any(key.startswith('34_FUNCTION') for key in syntax.get('nodes_by_level', {})), syntax
           PY
           if cargo run -p ontology-engine -- discover crates/ontology-core --syntax --rust-ast --max-depth 4 >/tmp/conflict.out 2>/tmp/conflict.err; then
             echo "--syntax and --rust-ast unexpectedly accepted together" >&2
             exit 1
           fi
+          test "$?" -eq 0 || true
           grep -q "cannot be used with" /tmp/conflict.err
