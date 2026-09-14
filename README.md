@@ -31,19 +31,18 @@ Rust reference implementation of **Universal Ontology v1.0.0**.
 ## Architecture
 
 ```text
-FOUNDATION CONTRACT
+NORMATIVE REGISTRY JSON
         ↓
-49 CANONICAL TYPES
+ontology-registry
         ↓
-TYPED GRAPH
- ┌──────┼───────────┬──────────────┐
- ↓      ↓           ↓              ↓
-contains references projection representation
-                    ↓
-             runtime / binary / bit
+49-level validated registry
+        ↓
+ontology-core + ontology-graph
+        ↓
+discovery → semantic → runtime → representation → bit
 ```
 
-`TYPE` is one canonical level. `KIND` is a specialization owned by exactly one type.
+`TYPE` is one canonical level. `KIND` is a specialization owned by exactly one type. The Rust compiled type representation is checked against the registry at load time; the registry remains the source of truth for definitions, ordering, and ontology rules.
 
 Intermediate levels may be unmaterialized. Native language structures remain authoritative and are mapped into the universal vocabulary rather than forced into artificial directories.
 
@@ -51,44 +50,59 @@ Intermediate levels may be unmaterialized. Native language structures remain aut
 
 ```text
 crates/
-├── ontology-core   # canonical types, identity, source spans, edge taxonomy
-├── ontology-graph  # typed graph and invariants
-└── ontology-cli    # ontology-engine command-line interface
+├── ontology-core      # canonical compiled ontology primitives
+├── ontology-graph      # typed graph and invariants
+├── ontology-registry   # registry loader + canonical validation
+└── ontology-cli        # ontology-engine command-line interface
 ```
 
 ## Current commands
 
 ```bash
+cargo run -p ontology-engine -- validate
 cargo run -p ontology-engine -- levels
 cargo run -p ontology-engine -- inspect 49
+cargo run -p ontology-engine -- --registry path/to/universal-ontology-v1.0.json levels
 ```
 
 ## Engine roadmap
 
 ```text
-Phase 1  Core types + graph                    [current]
-Phase 2  Contract/schema loader
-Phase 3  Persistent graph + identity
-Phase 4  Filesystem/Git discovery
-Phase 5  Rust source + AST adapters
-Phase 6  Cross-language parsing adapters
-Phase 7  Semantic projection
-Phase 8  Runtime observation
-Phase 9  Binary/encoding readers
-Phase 10 Character/token analysis
-Phase 11 Bit-level bounded reader
-Phase 12 Query engine + certification
+Phase 1   Core ontology primitives                  ✅
+Phase 2   Canonical registry + schema loading       ✅
+Phase 3   Persistent typed graph + identity         →
+Phase 4   Filesystem / Git discovery                →
+Phase 5   Rust source + AST adapters                →
+Phase 6   Cross-language parsing adapters            →
+Phase 7   Semantic projection                       →
+Phase 8   Runtime observation                       →
+Phase 9   Binary / encoding readers                 →
+Phase 10  Token / character representation          →
+Phase 11  Bit-level bounded reader                  →
+Phase 12  Query engine + certification               →
 ```
 
 ## Safety boundaries
 
 Binary and bit inspection must be bounded and streaming-capable. The engine must not require whole-file materialization for a range inspection, and malformed input must remain an explicit observation rather than silently changing ontology meaning.
 
-## Foundation contract
+## Normative specification
 
-The normative ontology specification lives in:
+The canonical registry is:
 
-- `specifications/universal-ontology-v1.0.md`
-- `specifications/universal-ontology-v1.0.json`
+```text
+specifications/universal-ontology-v1.0.json
+```
 
-The implementation architecture is documented in `standards/universal-ontology-engine.md` and `docs/architecture.md`.
+The normative explanation is:
+
+```text
+specifications/universal-ontology-v1.0.md
+```
+
+The implementation architecture is documented in:
+
+```text
+standards/universal-ontology-engine.md
+docs/architecture.md
+```
