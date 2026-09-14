@@ -14,22 +14,71 @@ UNIVERSE
             └── PROJECT
                 └── REPOSITORY
                     └── SOURCE
-                        └── MODULE / COMPONENT
+                        └── UNIT
+                            └── MODULE
+                                └── COMPONENT
+                                    └── ELEMENT
+                                        └── IMPLEMENTATION
 ```
 
-For Universe Foundation, only the `UNIVERSE → ECOSYSTEM` boundary is canonical. Everything below an ecosystem is governed by that ecosystem's foundation contract.
+For Universe Foundation, only the `UNIVERSE → ECOSYSTEM` boundary is owned here. Everything below an ecosystem is governed by the ecosystem contract while preserving this canonical vocabulary.
 
-## Universe
+## Universal vocabulary
 
+### Universe
 A managed top-level boundary containing one or more ecosystems that are related operationally, organizationally, or strategically.
 
-A universe owns cross-ecosystem registry, identity, discovery, workspace conventions, relationships, and orchestration boundaries.
+### Ecosystem
+A self-contained boundary with its own projects, repositories, semantics, and implementation choices.
 
-## Ecosystem
+### Organization
+The ownership and governance boundary within an ecosystem. Its exact administrative form is ecosystem-defined.
 
-A self-contained domain boundary with its own projects, repositories, semantics, and implementation choices.
+### Domain
+A business, technical, research, or product area. Domain is optional.
 
-An ecosystem must remain autonomous below its boundary and may adopt `ecosystem-foundation` or another compatible contract.
+### Project
+A product, system, initiative, or bounded engineering effort.
+
+### Repository
+A version-controlled implementation unit.
+
+### Source
+The implementation area of a repository, regardless of its native filesystem naming.
+
+### Unit
+A native implementation container recognized as a logical unit inside Source. Examples include a Rust crate, a Node package, a Go package, a Python package, an application, a library, or a service.
+
+`UNIT` is a universal semantic term, not a required directory name.
+
+### Module
+A logical grouping of related implementation within a Unit.
+
+### Component
+A cohesive implementation part with a defined responsibility. A component may be represented by different native constructs in different languages or frameworks.
+
+### Element
+A smaller meaningful implementation construct inside a Component, such as a function, method, type, interface, handler, or constant.
+
+### Implementation
+The concrete logic or behavior that realizes an Element or Component.
+
+## Native mapping rule
+
+Native terms remain valid inside repositories and tools:
+
+```text
+UNIT
+├── Rust      → crate
+├── Node      → package / application / library
+├── Go        → package / command / service
+├── Python    → package / module
+└── Java      → module / package / application
+```
+
+These native terms are mappings, not replacements for canonical hierarchy vocabulary.
+
+A repository MUST NOT be required to create physical directories named `unit/`, `module/`, `component/`, `element/`, or `implementation/` merely to conform to this hierarchy.
 
 ## External system
 
@@ -44,3 +93,4 @@ A system may interact with a universe without being owned by it. External system
 5. Workspace paths are local operational metadata and MUST NOT become identity.
 6. Repository names MUST NOT be used as universe-level identity unless explicitly referenced by an ecosystem manifest.
 7. A single resource MUST have one clear owning layer.
+8. Universal terminology MUST remain separate from native filesystem and language terminology.
