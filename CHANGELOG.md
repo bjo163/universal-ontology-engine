@@ -2,6 +2,32 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.8 — STABLE — 2026-09-14
+
+## What's Changed
+* docs(brand): integrate OX-DX brand bible superset by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/31
+* test(mvp): lock deterministic discovery with committed fixtures by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/32
+* release: promote deterministic MVP fixtures and OX-DX brand integration by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/33
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.7...v0.1.8
+
+## v0.1.8-dev.24 — DEV — 2026-09-14
+
+## What's Changed
+* test(mvp): lock deterministic discovery with committed fixtures by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/32
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.8-dev.23...v0.1.8-dev.24
+
+## v0.1.8-dev.23 — DEV — 2026-09-14
+
+## What's Changed
+* docs(brand): integrate OX-DX brand bible superset by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/31
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.7...v0.1.8-dev.23
+
 ## v0.1.7 — STABLE — 2026-09-14
 
 ## What's Changed
