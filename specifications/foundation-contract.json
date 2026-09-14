@@ -1,16 +1,24 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/bjo163/universe-foundation/blob/main/specifications/foundation-contract.json",
-  "title": "Complete Universe Foundation Semantic Contract",
+  "title": "Universal Ontology Foundation Contract",
   "type": "object",
   "required": ["version", "hierarchy", "optionalLayers", "supportingDimensions", "nativeMappings", "rules"],
   "properties": {
-    "version": {"const": "0.3"},
+    "version": {"const": "1.0"},
     "hierarchy": {
-      "const": ["UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"]
+      "const": [
+        "UNIVERSE", "CREATION", "COSMIC_ORDER", "REALITY", "REALM", "WORLD", "ECOSYSTEM",
+        "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE",
+        "COMPONENT", "ELEMENT", "IMPLEMENTATION"
+      ]
     },
     "optionalLayers": {"const": ["ORGANIZATION", "DOMAIN"]},
-    "supportingDimensions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "supportingDimensions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
     "nativeMappings": {
       "type": "object",
       "properties": {
@@ -24,13 +32,15 @@
     },
     "rules": {
       "type": "object",
-      "required": ["singleFoundation", "semanticDirectories", "externalSystems", "stableIdentity", "parentScopedIdentity"],
+      "required": ["singleFoundation", "semanticDirectories", "externalSystems", "stableIdentity", "parentScopedIdentity", "creatorOutsideModel", "tokenIsParserDetail"],
       "properties": {
         "singleFoundation": {"const": true},
         "semanticDirectories": {"const": false},
         "externalSystems": {"const": "relationship"},
         "stableIdentity": {"const": true},
-        "parentScopedIdentity": {"const": true}
+        "parentScopedIdentity": {"const": true},
+        "creatorOutsideModel": {"const": true},
+        "tokenIsParserDetail": {"const": true}
       },
       "additionalProperties": false
     }
