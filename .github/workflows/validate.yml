@@ -72,6 +72,7 @@ jobs:
           python -m json.tool schemas/hierarchy-node.schema.json >/dev/null
           python -m json.tool schemas/universal-ontology.schema.json >/dev/null
           python -m json.tool schemas/discovery-output-v1.schema.json >/dev/null
+          python -m json.tool governance/performance-baseline-v0.1.10.json >/dev/null
       - name: Validate Python registry and discovery tooling
         run: |
           python -m compileall -q tools tests
@@ -80,6 +81,7 @@ jobs:
           python tools/repo_status.py --help >/dev/null
           python tools/sync_repository_docs.py --help >/dev/null
           python tools/mvp_benchmark.py --help >/dev/null
+          python tools/check_mvp_performance.py --help >/dev/null
           test "$(python tools/check_pr_issue.py --body 'Refs #6')" = "6"
           python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Build and test Rust engine
@@ -88,13 +90,17 @@ jobs:
           cargo check --workspace
           cargo test --workspace --all-targets
           cargo build -p ontology-engine
-      - name: Record MVP performance baseline
+      - name: Check MVP performance regression budget
         run: |
           python tools/mvp_benchmark.py \
             --binary target/debug/ontology-engine \
             --output /tmp/mvp-benchmark.json \
             --runs 3
           python -m json.tool /tmp/mvp-benchmark.json >/dev/null
+          python tools/check_mvp_performance.py \
+            --baseline governance/performance-baseline-v0.1.10.json \
+            --current /tmp/mvp-benchmark.json \
+            --factor 3
       - name: Self inspection gate
         run: |
           cargo run -p ontology-engine -- self --json > /tmp/ontology-self.json
@@ -132,5 +138,22 @@ jobs:
             echo "--syntax and --rust-ast unexpectedly accepted together" >&2
             exit 1
           fi
-          test "$?" -eq 0 || true
           grep -q "cannot be used with" /tmp/conflict.err
+
+  windows-path-contract:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+      - name: Verify Windows CLI/path contract
+        shell: pwsh
+        run: |
+          cargo test -p ontology-engine --test mvp_exit_cli --test mvp_fixtures
+          cargo build -p ontology-engine
+          .\target\debug\ontology-engine.exe --registry specifications\universal-ontology-v1.0.json discover fixtures\mvp\typescript --syntax | Out-File -Encoding utf8 $env:RUNNER_TEMP\windows-discovery.json
+          $report = Get-Content $env:RUNNER_TEMP\windows-discovery.json -Raw | ConvertFrom-Json
+          if ($report.schema -ne "universal-ontology-engine/discovery-v1") { throw "unexpected schema" }
+          if ($report.mode -ne "syntax-projection") { throw "unexpected mode" }
+          if ($report.workspace -match "\\") { throw "workspace path is not normalized to logical slash form" }
