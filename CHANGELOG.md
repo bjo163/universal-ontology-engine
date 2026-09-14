@@ -2,6 +2,15 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.4-dev.13 — DEV — 2026-09-14
+
+## What's Changed
+* docs: rewrite README for OX-DX by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/13
+* feat: discover standalone repository roots by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/15
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.3...v0.1.4-dev.13
+
 ## v0.1.3 — STABLE — 2026-09-14
 
 ## What's Changed

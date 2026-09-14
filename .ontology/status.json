@@ -8,19 +8,19 @@
   },
   "branches": {
     "model": "feature/* -> dev -> main",
-    "relation": "aligned"
+    "relation": "dev_ahead"
   },
   "ci": "success",
   "health": "healthy",
   "releases": {
-    "dev": "v0.1.3-dev.9",
+    "dev": "v0.1.4-dev.13",
     "stable": "v0.1.3"
   },
   "repository": "universal-ontology-engine",
   "schema": "universal-ontology-engine/repository-status-v1",
   "self": "healthy",
   "versions": {
-    "dev": "0.1.3",
+    "dev": "0.1.4-dev.13",
     "main": "0.1.3"
   }
 }
