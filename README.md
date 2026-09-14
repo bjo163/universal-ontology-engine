@@ -39,13 +39,14 @@ universe-foundation/
 ├── templates/
 ├── tools/
 ├── tests/
-├── universe.json
 └── README.md
 ```
 
-## Contract
+## Contracts
 
-Current contract version: **0.2**.
+Universe contract: **0.2**
+
+Ecosystem manifest envelope: **0.1**
 
 See:
 
@@ -53,35 +54,25 @@ See:
 - `specifications/universe-contract.md`
 - `specifications/universe-contract.json`
 - `specifications/universe-contract.instance.json`
+- `specifications/ecosystem-manifest.md`
 - `schemas/universe.schema.json`
+- `schemas/ecosystem-manifest.schema.json`
 - `standards/workspace.md`
 
-## Canonical registry
+## Registry and CLI
 
-`universe.json` is the operational Universe registry used by tooling. The stable ecosystem `id` is the identity; `path` is workspace metadata.
+The canonical universe registry is `universe.json`.
 
-The current reference registry contains ROCKSOUL, MoonWitness, CRAYON, and ISP.
-
-## Registry / discovery CLI
-
-The dependency-free Python CLI is `tools/universe_cli.py`.
-
-```text
+```bash
 python tools/universe_cli.py list
 python tools/universe_cli.py inspect rocksoul
 python tools/universe_cli.py validate
-python tools/universe_cli.py discover X:\\REPO\\universe
-python tools/universe_cli.py status X:\\REPO\\universe
+python tools/universe_cli.py discover X:\REPO\universe
+python tools/universe_cli.py status X:\REPO\universe
+python tools/universe_cli.py doctor X:\REPO\universe
 ```
 
-Add `--json` for machine-readable output:
-
-```text
-python tools/universe_cli.py --json list
-python tools/universe_cli.py --json status X:\\REPO\\universe
-```
-
-`list` reads the registry only. `discover` scans the workspace for `ecosystem-*` directories and reports registered, missing, and unknown entries. `status` combines registry entries with local filesystem/Git presence.
+Use `--json` for launcher/orchestrator integration.
 
 ## Relationship to Ecosystem Foundation
 
@@ -89,10 +80,14 @@ python tools/universe_cli.py --json status X:\\REPO\\universe
 
 `ecosystem-foundation` remains the canonical contract for structure inside an ecosystem.
 
+The ecosystem manifest is only the boundary envelope needed for identity and discovery. It does not redefine the ecosystem's internal hierarchy.
+
 ```text
 universe-foundation v0.2
         ↓
-ecosystem-foundation v0.x
+ecosystem manifest envelope v0.1
         ↓
-ecosystem repositories
+ecosystem-foundation v0.x (optional)
+        ↓
+ecosystem-owned repositories
 ```
