@@ -81,7 +81,26 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add Cargo.toml Cargo.lock
             git commit -m "chore(release): v${{ steps.version.outputs.version }}"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+
+            # Generated documentation may advance the release branch after checkout.
+            # Rebase the release-only commit onto the newest branch tip and retry a
+            # bounded number of times. Never force-push release history.
+            for attempt in 1 2 3; do
+              git fetch origin "${GITHUB_REF_NAME}"
+              remote_ref="origin/${GITHUB_REF_NAME}"
+              if ! git merge-base --is-ancestor "$remote_ref" HEAD; then
+                echo "release branch advanced; rebasing version bump (attempt ${attempt}/3)"
+                git rebase "$remote_ref"
+              fi
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+                echo "version bump pushed"
+                break
+              fi
+              if [[ "$attempt" -eq 3 ]]; then
+                echo "failed to push version bump after 3 safe retries" >&2
+                exit 1
+              fi
+            done
           fi
 
       - name: Create GitHub release
