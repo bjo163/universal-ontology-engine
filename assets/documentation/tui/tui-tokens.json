@@ -1,0 +1,353 @@
+{
+  "version": "1.0",
+  "name": "OX-DX TUI System",
+  "authority": "assets/documentation/OX-DX-TUI-SYSTEM-v1.0.md",
+  "identity": {
+    "brand": "OX-DX",
+    "descriptor": "Universal Ontology & Experience Engine",
+    "metaphor": "AN INSTRUMENT FOR INSPECTING COMPLEX SYSTEMS.",
+    "primaryFlow": [
+      "SEE",
+      "TRACE",
+      "RESOLVE"
+    ],
+    "secondaryFlow": [
+      "OBSERVE",
+      "CONNECT",
+      "VERIFY"
+    ]
+  },
+  "terminal": {
+    "profiles": {
+      "compact": {
+        "minColumns": 0,
+        "maxColumns": 80,
+        "reference": "80x24"
+      },
+      "standard": {
+        "minColumns": 81,
+        "maxColumns": 100,
+        "reference": "100x30"
+      },
+      "inspection": {
+        "minColumns": 101,
+        "maxColumns": 120,
+        "reference": "120x40"
+      },
+      "wide": {
+        "minColumns": 121,
+        "maxColumns": 159,
+        "reference": "160x50"
+      },
+      "fullDepth": {
+        "minColumns": 160,
+        "maxColumns": null,
+        "reference": "200x60"
+      }
+    },
+    "compatibility": [
+      "A_TRUECOLOR_UTF8",
+      "B_256_UTF8",
+      "C_16_UTF8",
+      "D_ASCII"
+    ]
+  },
+  "colors": {
+    "canonical": {
+      "void": "#07090A",
+      "charcoal": "#111418",
+      "graphite": "#20252B",
+      "white": "#F5F7F8",
+      "muted": "#99A2AA",
+      "cyan": "#00D8FF",
+      "acid": "#8CFF00",
+      "ultraviolet": "#9C4DFF",
+      "black": "#000000"
+    },
+    "ansi256": {
+      "void": 232,
+      "charcoal": 234,
+      "graphite": 236,
+      "white": 255,
+      "muted": 247,
+      "cyan": 45,
+      "acid": 118,
+      "ultraviolet": 99,
+      "black": 16
+    },
+    "ansi16": {
+      "structure": "bright_white_or_default",
+      "focus": "bright_cyan",
+      "observation": "cyan",
+      "signal": "bright_green",
+      "verified": "bright_green",
+      "projection": "magenta",
+      "muted": "bright_black_or_gray",
+      "warning": "yellow",
+      "error": "red"
+    },
+    "ansi8": {
+      "structure": "default",
+      "focus": "cyan",
+      "observation": "cyan",
+      "signal": "green",
+      "verified": "green",
+      "projection": "magenta",
+      "warning": "yellow",
+      "error": "red",
+      "unknown": "default"
+    },
+    "rule": "Color reinforces text/glyph/structure and is never the sole status carrier."
+  },
+  "spacingCells": {
+    "none": 0,
+    "micro": 1,
+    "standard": 2,
+    "context": 3,
+    "wide": 4,
+    "note": "Terminal cell spacing is a medium-specific layout mapping, not a replacement for canonical pixel design tokens."
+  },
+  "borders": {
+    "primary": {
+      "unicode": {
+        "h": "─",
+        "v": "│"
+      },
+      "ascii": {
+        "h": "-",
+        "v": "|"
+      },
+      "rule": "prefer partial/open boundary"
+    },
+    "secondary": {
+      "unicode": "┄",
+      "ascii": "."
+    },
+    "focus": {
+      "unicode": "◆─",
+      "ascii": "*>"
+    },
+    "observation": {
+      "unicode": "◇┄",
+      "ascii": "o."
+    },
+    "warning": {
+      "unicode": "! ─",
+      "ascii": "! -"
+    },
+    "unknown": {
+      "unicode": "⋯",
+      "ascii": "..."
+    },
+    "disabled": {
+      "unicode": "DISABLED",
+      "ascii": "DISABLED"
+    }
+  },
+  "glyphs": {
+    "structure": {
+      "unicode": "■",
+      "ascii": "#"
+    },
+    "relation": {
+      "unicode": "─▷",
+      "ascii": "->"
+    },
+    "trace": {
+      "unicode": "┄▷",
+      "ascii": "..>"
+    },
+    "observation": {
+      "unicode": "◇",
+      "ascii": "o"
+    },
+    "resolution": {
+      "unicode": "◆",
+      "ascii": "*"
+    },
+    "signal": {
+      "unicode": "·",
+      "ascii": "."
+    },
+    "unknown": {
+      "unicode": "⋯",
+      "ascii": "..."
+    },
+    "warning": {
+      "unicode": "!",
+      "ascii": "!"
+    },
+    "verified": {
+      "unicode": "✓",
+      "ascii": "OK"
+    },
+    "error": {
+      "unicode": "×",
+      "ascii": "X"
+    },
+    "focus": {
+      "unicode": "›",
+      "ascii": ">"
+    },
+    "selected": {
+      "unicode": "◆",
+      "ascii": "*"
+    },
+    "collapsed": {
+      "unicode": "▸",
+      "ascii": ">"
+    },
+    "expanded": {
+      "unicode": "▾",
+      "ascii": "v"
+    }
+  },
+  "focus": {
+    "priority": [
+      "marker",
+      "boundary",
+      "weight_or_inversion",
+      "color"
+    ],
+    "marker": {
+      "unicode": "›",
+      "ascii": ">"
+    },
+    "rule": "Focus indicates interaction location, not data meaning."
+  },
+  "states": {
+    "semantic": [
+      "OBSERVED",
+      "VERIFIED",
+      "DERIVED",
+      "PROJECTED",
+      "UNVERIFIED",
+      "UNKNOWN",
+      "EXPERIMENTAL",
+      "GATED",
+      "PLANNED"
+    ],
+    "operational": [
+      "DISCOVERING",
+      "INSPECTING",
+      "PARSING",
+      "MAPPING",
+      "TRACING",
+      "RESOLVING",
+      "VERIFYING"
+    ],
+    "diagnostic": [
+      "INFO",
+      "NOTICE",
+      "WARNING",
+      "ERROR",
+      "FATAL"
+    ],
+    "rule": "These are UI vocabularies and do not create engine enums."
+  },
+  "density": {
+    "LOW": {
+      "secondaryRegions": 0,
+      "description": "orientation/thinking"
+    },
+    "MEDIUM": {
+      "secondaryRegions": 1,
+      "description": "normal use"
+    },
+    "HIGH": {
+      "secondaryRegions": 2,
+      "description": "technical inspection"
+    },
+    "INSPECTION": {
+      "secondaryRegions": 3,
+      "description": "maximum evidence density"
+    }
+  },
+  "motion": {
+    "enabledByDefault": true,
+    "routineFrameCount": [
+      2,
+      5
+    ],
+    "timing": {
+      "micro": "98ms",
+      "witness": "196ms",
+      "resolve": "294ms",
+      "field": "490ms"
+    },
+    "allowed": [
+      "cursor_movement",
+      "line_reveal",
+      "local_state_change",
+      "focus_transition",
+      "bounded_process_cadence"
+    ],
+    "forbidden": [
+      "rapid_flash",
+      "screen_clear_effect",
+      "fake_hacker_typing",
+      "matrix_rain",
+      "ambient_spinner"
+    ],
+    "reducedMotion": "render final state directly"
+  },
+  "sound": {
+    "default": "SILENT",
+    "modes": [
+      "SILENT",
+      "MINIMAL",
+      "NOTIFY"
+    ],
+    "routineNavigation": "none",
+    "terminalBell": "not_routine_identity"
+  },
+  "resolution": {
+    "levels": 49,
+    "zones": 7,
+    "currentMarker": {
+      "unicode": "◆",
+      "ascii": "*"
+    },
+    "compactContextRadius": 2,
+    "rule": "Canonical order is resolution context, not proof of containment."
+  },
+  "keymap": {
+    "navigation": {
+      "previous": "Up",
+      "next": "Down",
+      "broader": "Left",
+      "finer": "Right",
+      "activate": "Enter",
+      "nextRegion": "Tab",
+      "previousRegion": "Shift+Tab"
+    },
+    "optionalVi": {
+      "previous": "k",
+      "next": "j",
+      "broader": "h",
+      "finer": "l"
+    },
+    "resolution": {
+      "broader": "[",
+      "finer": "]"
+    },
+    "global": {
+      "help": "?",
+      "quit": "q",
+      "return": "Esc"
+    },
+    "graph": {
+      "trace": "t",
+      "expand": "e",
+      "collapse": "c"
+    }
+  },
+  "accessibility": {
+    "keyboard": true,
+    "nonColorStatus": true,
+    "asciiFallback": true,
+    "reducedMotion": true,
+    "silentMode": true,
+    "highContrast": true
+  }
+}
