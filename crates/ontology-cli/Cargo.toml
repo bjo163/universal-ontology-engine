@@ -1,0 +1,14 @@
+[package]
+name = "ontology-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "ontology-engine"
+path = "src/main.rs"
+
+[dependencies]
+ontology-core = { path = "../ontology-core" }
+clap.workspace = true
+serde_json.workspace = true
