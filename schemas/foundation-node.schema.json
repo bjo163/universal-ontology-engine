@@ -6,11 +6,8 @@
   "required": ["id", "type", "parent"],
   "properties": {
     "id": {"type": "string", "minLength": 1, "pattern": "^[a-z0-9][a-z0-9._-]*$"},
-    "type": {"enum": ["UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"]},
-    "parent": {
-      "type": ["string", "null"],
-      "minLength": 1
-    },
+    "type": {"enum": ["UNIVERSE", "CREATION", "COSMIC_ORDER", "REALITY", "REALM", "WORLD", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"]},
+    "parent": {"type": ["string", "null"]},
     "name": {"type": "string", "minLength": 1},
     "path": {"type": "string", "minLength": 1},
     "source": {"type": "string", "minLength": 1},
@@ -18,7 +15,8 @@
     "description": {"type": "string"},
     "lifecycle": {"enum": ["planned", "active", "maintenance", "archived"]},
     "children": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-    "relationships": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+    "relationships": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "metadata": {"type": "object"}
   },
   "additionalProperties": false
 }
