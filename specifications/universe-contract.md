@@ -2,9 +2,11 @@
 
 ## 1. Scope
 
-This is the single normative foundation contract for the complete software hierarchy managed by a Universe.
+This is the **single normative foundation contract** for the complete software hierarchy managed by a Universe.
 
-It governs the chain from `UNIVERSE` through `IMPLEMENTATION` and does not delegate any canonical layer to another foundation repository.
+It governs identity, ownership, discovery, relationships, validation, and orchestration semantics from `UNIVERSE` down to concrete `IMPLEMENTATION`.
+
+No second foundation repository is required for an Ecosystem, Project, Repository, Source, Unit, Module, Component, Element, or Implementation.
 
 ## 2. Canonical hierarchy
 
@@ -23,98 +25,86 @@ UNIVERSE
                                         └── IMPLEMENTATION
 ```
 
-`ORGANIZATION` and `DOMAIN` are optional. All other layers form the canonical continuous chain.
+`ORGANIZATION` and `DOMAIN` are optional semantic layers. All other hierarchy levels are canonical concepts.
 
-## 3. Foundation principle
+## 3. Identity
 
-`universe-foundation` is the only foundation contract required for conformance.
+Every canonical node SHOULD have a stable identifier within its parent scope.
 
-There is no normative dependency on `ecosystem-foundation` or any other lower-level foundation repository. An ecosystem may still contain its own documentation or governance, but those materials are subordinate to this universal contract and cannot redefine the canonical hierarchy.
+Filesystem paths, repository names, package names, and native language constructs are operational metadata unless explicitly declared as identity.
 
-## 4. Identity
+A stable identity MUST survive a local directory rename.
 
-Every canonical entity SHOULD have a stable semantic identifier within its parent scope.
+## 4. Ownership
 
-Filesystem paths, directory names, repository names, branch names, and build artifacts are operational references unless explicitly declared as identifiers.
+Ownership flows strictly downward through the hierarchy.
 
-## 5. Layer responsibilities
+```text
+UNIVERSE → ECOSYSTEM → ORGANIZATION? → DOMAIN? → PROJECT → REPOSITORY → SOURCE → UNIT → MODULE → COMPONENT → ELEMENT → IMPLEMENTATION
+```
 
-- `UNIVERSE`: global boundary, registry, topology, discovery, cross-ecosystem coordination.
-- `ECOSYSTEM`: coherent product, research, platform, or software boundary.
-- `ORGANIZATION`: ownership/governance grouping when applicable.
-- `DOMAIN`: bounded business, technical, research, or product area when applicable.
-- `PROJECT`: bounded initiative, product, system, or engineering effort.
-- `REPOSITORY`: version-controlled implementation boundary.
-- `SOURCE`: repository implementation area.
-- `UNIT`: logical native implementation container.
-- `MODULE`: grouping of related implementation inside a Unit.
-- `COMPONENT`: cohesive implementation responsibility.
-- `ELEMENT`: smaller meaningful construct within a Component.
-- `IMPLEMENTATION`: concrete logic or behavior that realizes an Element or Component.
+A resource MUST have one clear owning layer.
 
-## 6. Native implementation mapping
+Cross-cutting concerns such as tests, documentation, assets, configuration, data, deployment, and infrastructure are supporting dimensions; they do not create additional ownership layers.
 
-The universal vocabulary is semantic and language-agnostic. Native constructs remain valid and are mapped to the canonical layers.
+## 5. Native compatibility
+
+The foundation is language-agnostic. Native ecosystem concepts remain valid and are mapped to canonical semantic concepts.
 
 ```text
 UNIT
-├── Rust      → crate
-├── Node      → package / application / library
-├── Go        → package / command / service
-├── Python    → package / module
-└── Java      → module / package / application
+├── Rust   → crate
+├── Node   → package / application / library
+├── Go     → package / command / service
+├── Python → package / module
+└── Java   → module / package / application
 ```
 
-Examples of lower mappings include:
+`MODULE`, `COMPONENT`, `ELEMENT`, and `IMPLEMENTATION` may map to different native constructs depending on language and framework.
 
-```text
-MODULE        → native module / namespace / source grouping
-COMPONENT     → class / service / handler / subsystem / feature unit
-ELEMENT       → function / method / type / interface / constant / handler
-IMPLEMENTATION → concrete executable logic, data flow, or behavior
-```
+The canonical terms MUST NOT be turned into mandatory directory names.
 
-Profiles may refine mappings without changing the universal vocabulary.
+## 6. Repository conformance
 
-## 7. Physical layout rule
+A repository may declare a root manifest describing its position in the hierarchy. Native manifests remain where their toolchain requires them.
 
-Canonical semantic layers MUST NOT become mandatory directory names.
+Examples include `Cargo.toml`, `package.json`, `go.mod`, `pyproject.toml`, and `pom.xml`.
 
-A repository may use native layouts such as:
+Conformance MUST be achievable without restructuring an otherwise valid native repository merely to satisfy naming aesthetics.
 
-```text
-src/ apps/ packages/ crates/ libs/ cmd/ pkg/ internal/ modules/ components/
-```
+## 7. Discovery
 
-A repository MUST NOT create `unit/`, `module/`, `component/`, `element/`, or `implementation/` merely to satisfy the hierarchy.
+The Universe registry is the entry point for discovery.
 
-## 8. Supporting concerns
+Discovery walks downward using explicit stable identifiers and declared parent relationships. Filesystem scanning may discover candidates, but filesystem names alone MUST NOT define identity.
 
-Tests, examples, fixtures, tools, scripts, configuration, data, documentation, specifications, infrastructure, deployment, and assets are supporting dimensions. They are not extra canonical parent layers.
+## 8. Relationships
 
-## 9. Registry and discovery
+Relationships may connect any compatible canonical nodes or external systems without changing ownership.
 
-`universe.json` is the top-level registry. It MUST identify ecosystems using stable IDs and operational references.
+External systems are relationships, not children of the ownership tree.
 
-An ecosystem MAY expose an `ecosystem.json` discovery manifest. Such a manifest is an optional metadata envelope and is not a second foundation contract.
+## 9. Validation
 
-## 10. Relationships
+Validation MUST check:
 
-References between entities MUST preserve ownership. Cross-ecosystem relationships point to stable identifiers and do not transfer ownership.
+- contract version
+- canonical hierarchy
+- stable identifiers
+- parent/child consistency
+- uniqueness within scope
+- safe operational paths
+- absence of competing foundation contracts
+- native mapping compatibility
 
-External systems are relationships, not children of the canonical hierarchy.
+## 10. Single-foundation rule
 
-## 11. Conformance
+`universe-foundation` is the sole normative foundation repository.
 
-A conforming implementation MUST:
+An ecosystem MAY contain local governance, architecture, standards, or documentation, but none may redefine the canonical Universe hierarchy or claim to be a second foundation contract.
 
-1. use the canonical vocabulary consistently;
-2. preserve native project/repository structures through mappings;
-3. avoid duplicate ownership layers and overlapping alias directories;
-4. maintain stable identity independent of local paths;
-5. validate machine-readable manifests against the current foundation contract;
-6. treat this repository as the single normative foundation.
+Legacy foundation repositories are compatibility/history artifacts only and are not part of the active foundation chain.
 
-## 12. Change control
+## 11. Change control
 
 Changes to hierarchy, semantics, identity rules, or native mappings require an explicit contract update and corresponding validator/test changes before templates or adopters are changed.
