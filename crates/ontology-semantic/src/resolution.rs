@@ -56,9 +56,15 @@ impl ConflictPair {
     pub fn new(a: impl Into<String>, b: impl Into<String>) -> Self {
         let (a, b) = (a.into(), b.into());
         if a <= b {
-            Self { left_rule_id: a, right_rule_id: b }
+            Self {
+                left_rule_id: a,
+                right_rule_id: b,
+            }
         } else {
-            Self { left_rule_id: b, right_rule_id: a }
+            Self {
+                left_rule_id: b,
+                right_rule_id: a,
+            }
         }
     }
 }
@@ -83,7 +89,7 @@ pub fn resolve_evaluations(
         source_id: source_id.clone(),
         codes: BTreeSet::new(),
         candidate_targets: BTreeSet::new(),
-        rule_ids: BTreSet::new(),
+        rule_ids: BTreeSet::new(),
     };
 
     for evaluation in evaluations {
@@ -92,7 +98,9 @@ pub fn resolve_evaluations(
             RuleEvaluation::Unresolved(result) => {
                 unresolved.codes.extend(result.codes);
                 unresolved.rule_ids.extend(result.rule_ids);
-                unresolved.candidate_targets.extend(result.candidate_targets);
+                unresolved
+                    .candidate_targets
+                    .extend(result.candidate_targets);
             }
         }
     }
@@ -100,13 +108,19 @@ pub fn resolve_evaluations(
     candidates.sort();
     candidates.dedup();
 
-    if candidates.iter().any(|candidate| candidate.edge_kind != EdgeKind::ProjectsTo) {
+    if candidates
+        .iter()
+        .any(|candidate| candidate.edge_kind != EdgeKind::ProjectsTo)
+    {
         unresolved.codes.insert(UnresolvedCode::InvalidEvidence);
         add_context(&mut unresolved, &candidates);
         return ResolutionOutcome::Unresolved(unresolved);
     }
 
-    let active_rules: BTreeSet<_> = candidates.iter().map(|candidate| candidate.rule_id.clone()).collect();
+    let active_rules: BTreeSet<_> = candidates
+        .iter()
+        .map(|candidate| candidate.rule_id.clone())
+        .collect();
     if conflicts.iter().any(|pair| {
         active_rules.contains(&pair.left_rule_id) && active_rules.contains(&pair.right_rule_id)
     }) {
@@ -115,7 +129,10 @@ pub fn resolve_evaluations(
         return ResolutionOutcome::Unresolved(unresolved);
     }
 
-    let targets: BTreeSet<_> = candidates.iter().map(|candidate| candidate.target.clone()).collect();
+    let targets: BTreeSet<_> = candidates
+        .iter()
+        .map(|candidate| candidate.target.clone())
+        .collect();
     if targets.len() > 1 {
         unresolved.codes.insert(UnresolvedCode::Ambiguous);
         add_context(&mut unresolved, &candidates);
