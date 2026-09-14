@@ -1,0 +1,57 @@
+:root {
+  --ox-void: #07090A;
+  --ox-charcoal: #111418;
+  --ox-graphite: #20252B;
+  --ox-white: #F5F7F8;
+  --ox-muted: #99A2AA;
+  --ox-cyan: #00D8FF;
+  --ox-acid: #8CFF00;
+  --ox-ultraviolet: #9C4DFF;
+  --ox-black: #000000;
+
+  --ox-micro: 3px;
+  --ox-u: 7px;
+  --ox-2u: 14px;
+  --ox-3u: 21px;
+  --ox-5u: 35px;
+  --ox-field: 49px;
+  --ox-field-2: 98px;
+
+  --ox-stroke-hair: 1px;
+  --ox-stroke-relation: 3px;
+  --ox-stroke-structure: 7px;
+  --ox-corner: 0px;
+  --ox-cut: 7px;
+  --ox-anchor-sm: 7px;
+  --ox-anchor-md: 14px;
+  --ox-anchor-lg: 21px;
+  --ox-break-local: 7px;
+  --ox-break-relation: 14px;
+  --ox-break-unresolved: 21px;
+
+  --ox-motion-micro: 98ms;
+  --ox-motion-witness: 196ms;
+  --ox-motion-resolve: 294ms;
+  --ox-motion-field: 490ms;
+  --ox-ease-resolution: cubic-bezier(0.21, 0.63, 0.28, 1);
+
+  --ox-bp-compact: 420px;
+  --ox-bp-medium: 840px;
+  --ox-bp-wide: 1260px;
+  --ox-bp-ultra: 1680px;
+
+  --ox-font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --ox-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ox-product-base: var(--ox-void);
+  --ox-product-surface: var(--ox-charcoal);
+  --ox-product-surface-secondary: var(--ox-graphite);
+  --ox-product-text: var(--ox-white);
+  --ox-product-muted: var(--ox-muted);
+  --ox-product-border: var(--ox-graphite);
+  --ox-product-structure: var(--ox-white);
+  --ox-product-observation: var(--ox-cyan);
+  --ox-product-attention: var(--ox-acid);
+  --ox-product-projection: var(--ox-ultraviolet);
+  --ox-product-unknown: var(--ox-muted);
+}

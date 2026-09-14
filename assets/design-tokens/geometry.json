@@ -1,0 +1,28 @@
+{
+  "source": "assets/documentation/technical/design-tokens.md",
+  "stroke": {
+    "hair": "1px",
+    "relation": "3px",
+    "structure": "7px"
+  },
+  "corner": {
+    "radius": "0px",
+    "cut": "7px"
+  },
+  "anchor": {
+    "small": "7px",
+    "medium": "14px",
+    "large": "21px"
+  },
+  "break": {
+    "local": "7px",
+    "relation": "14px",
+    "unresolvedMinimum": "21px"
+  },
+  "rules": {
+    "defaultNode": "diamond-or-cut-square",
+    "frame": "open-or-interrupted-when-semantically-appropriate",
+    "selection": "add-witness-geometry-preserve-object-identity",
+    "focus": "high-contrast-open-witness-distinct-from-selection"
+  }
+}

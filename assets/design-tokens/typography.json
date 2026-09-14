@@ -1,0 +1,41 @@
+{
+  "source": "assets/documentation/technical/typography.md",
+  "fontFamily": {
+    "sans": "Inter, ui-sans-serif, system-ui, sans-serif",
+    "mono": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+  },
+  "roles": {
+    "identity": {
+      "source": "canonical-vector-wordmark"
+    },
+    "headline": {
+      "family": "{fontFamily.sans}",
+      "weight": "650-800",
+      "sizeDesktop": "40-72px",
+      "sizeCompact": "30-48px",
+      "lineHeight": "0.98-1.08",
+      "tracking": "-0.03em to -0.01em"
+    },
+    "body": {
+      "family": "{fontFamily.sans}",
+      "weight": "400-500",
+      "size": "16-20px",
+      "lineHeight": "1.45-1.65",
+      "tracking": "normal"
+    },
+    "technical": {
+      "family": "{fontFamily.mono}",
+      "weight": "400-550",
+      "size": "13-16px",
+      "lineHeight": "1.4-1.55"
+    },
+    "label": {
+      "family": "{fontFamily.mono}",
+      "weight": "550-650",
+      "size": "10-12px",
+      "lineHeight": "1.2-1.35",
+      "tracking": "0.10em-0.16em",
+      "case": "uppercase"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "note": "Semantic aliases for future component libraries. Values resolve to canonical OX-DX tokens; this is not a component API.",
+  "surface": {
+    "canvas": "{color.void}",
+    "inspection": "{color.charcoal}",
+    "secondary": "{color.graphite}",
+    "foreground": "{color.white}",
+    "annotation": "{color.muted}",
+    "border": "{color.graphite}"
+  },
+  "signal": {
+    "observation": "{color.cyan}",
+    "attention": "{color.acid}",
+    "projection": "{color.ultraviolet}",
+    "unknown": "{color.muted}"
+  },
+  "geometry": {
+    "frameRadius": "{geometry.radius}",
+    "frameCut": "{geometry.cut}",
+    "focusStroke": "{stroke.relation}",
+    "structureStroke": "{stroke.structure}",
+    "witness": "{geometry.anchorMd}"
+  },
+  "motion": {
+    "hover": "{motion.witness}",
+    "focus": "{motion.witness}",
+    "resolve": "{motion.resolve}",
+    "field": "{motion.field}",
+    "easing": "{motion.easing}"
+  },
+  "density": {
+    "microGap": "{space.micro}",
+    "compactGap": "{space.u}",
+    "standardGap": "{space.2u}",
+    "contextGap": "{space.3u}",
+    "fieldGap": "{space.field}"
+  },
+  "statusRule": "Status must combine text with geometry/icon/persistence; aliases do not define an engine status enum."
+}
