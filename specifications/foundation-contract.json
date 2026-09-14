@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bjo163/universe-foundation/blob/main/specifications/foundation-contract.json",
+  "title": "Complete Universe Foundation Semantic Contract",
+  "type": "object",
+  "required": ["version", "hierarchy", "optionalLayers", "supportingDimensions", "nativeMappings", "rules"],
+  "properties": {
+    "version": {"const": "0.3"},
+    "hierarchy": {
+      "const": ["UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"]
+    },
+    "optionalLayers": {"const": ["ORGANIZATION", "DOMAIN"]},
+    "supportingDimensions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "nativeMappings": {
+      "type": "object",
+      "properties": {
+        "rust": {"type": "array", "items": {"type": "string"}},
+        "node": {"type": "array", "items": {"type": "string"}},
+        "go": {"type": "array", "items": {"type": "string"}},
+        "python": {"type": "array", "items": {"type": "string"}},
+        "java": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "rules": {
+      "type": "object",
+      "required": ["singleFoundation", "semanticDirectories", "externalSystems", "stableIdentity"],
+      "properties": {
+        "singleFoundation": {"const": true},
+        "semanticDirectories": {"const": false},
+        "externalSystems": {"const": "relationship"},
+        "stableIdentity": {"const": true}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
