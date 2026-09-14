@@ -356,13 +356,13 @@ cargo run -p ontology-engine -- self --json
 
 | Signal | Value |
 |---|---:|
-| Health | **HEALTHY** |
+| Health | **DEGRADED** |
 | CI | `success` |
 | Stable release | `v0.1.10` |
-| Dev release | `v0.1.11-dev.30` |
+| Dev release | `v0.1.11-dev.32` |
 | Main version | `0.1.10` |
-| Dev version | `0.1.11-dev.30` |
-| Branch relation | `dev_ahead` |
+| Dev version | `0.1.11-dev.32` |
+| Branch relation | `diverged` |
 | Branch model | `feature/* -> dev -> main` |
 
 See [`CHANGELOG.md`](CHANGELOG.md) for generated release history.
