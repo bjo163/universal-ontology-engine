@@ -5,18 +5,20 @@
   "type": "object",
   "required": ["contract_version", "universe", "ecosystems"],
   "properties": {
-    "contract_version": {"const": "0.1"},
+    "contract_version": {"const": "0.2"},
     "universe": {
       "type": "object",
       "required": ["id", "name"],
       "properties": {
-        "id": {"type": "string", "minLength": 1},
-        "name": {"type": "string", "minLength": 1}
+        "id": {"type": "string", "minLength": 1, "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "name": {"type": "string", "minLength": 1},
+        "description": {"type": "string"}
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "ecosystems": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "required": ["id", "name", "path"],
@@ -24,12 +26,15 @@
           "id": {"type": "string", "minLength": 1, "pattern": "^[a-z0-9][a-z0-9-]*$"},
           "name": {"type": "string", "minLength": 1},
           "path": {"type": "string", "minLength": 1},
+          "source": {"type": "string", "minLength": 1},
           "repository": {"type": "string"},
-          "lifecycle": {"type": "string"}
+          "organization": {"type": "string"},
+          "lifecycle": {"type": "string", "enum": ["planned", "active", "maintenance", "archived"]},
+          "contract": {"type": "string"}
         },
-        "additionalProperties": true
+        "additionalProperties": false
       }
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }
