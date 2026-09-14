@@ -1,7 +1,8 @@
 use clap::{Parser, Subcommand};
-use ontology_core::ONTOLOGY_VERSION;
+use ontology_core::{OntologyType, ONTOLOGY_VERSION};
 use ontology_discovery::{discover_workspace, DiscoveryOptions};
 use ontology_registry::OntologyRegistry;
+use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::sync::Arc;
 
@@ -33,6 +34,9 @@ enum Command {
         /// Include observed file-boundary execution nodes.
         #[arg(long)]
         include_files: bool,
+        /// Parse Rust source files through the AST adapter.
+        #[arg(long)]
+        rust_ast: bool,
         /// Maximum nested native directory depth under each unit.
         #[arg(long)]
         max_depth: Option<usize>,
@@ -70,11 +74,11 @@ fn main() {
         Command::Validate => {
             println!("valid: ontology={} levels={} source={}", ONTOLOGY_VERSION, registry.len(), cli.registry.display());
         }
-        Command::Discover { workspace, include_files, max_depth } => {
+        Command::Discover { workspace, include_files, rust_ast, max_depth } => {
             let result = match discover_workspace(
                 &workspace,
                 registry,
-                DiscoveryOptions { include_files, max_depth },
+                DiscoveryOptions { include_files, max_depth, parse_rust_ast: rust_ast },
             ) {
                 Ok(result) => result,
                 Err(error) => {
@@ -82,13 +86,22 @@ fn main() {
                     std::process::exit(2);
                 }
             };
+
+            let mut by_level = BTreeMap::new();
+            for ty in OntologyType::ALL {
+                let count = result.graph.nodes_by_type(ty).count();
+                if count > 0 {
+                    by_level.insert(format!("{:02}_{}", ty.level(), ty.slug()), count);
+                }
+            }
             let summary = serde_json::json!({
                 "ontology": ONTOLOGY_VERSION,
                 "workspace": workspace,
                 "read_only": true,
                 "nodes": result.graph.len(),
                 "edges": result.graph.edge_len(),
-                "observations": result.observations.len(),
+                "nodes_by_level": by_level,
+                "observations": result.observations,
             });
             println!("{}", serde_json::to_string_pretty(&summary).expect("summary is serializable"));
         }
