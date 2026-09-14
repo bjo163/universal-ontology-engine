@@ -23,13 +23,19 @@ const IGNORED: &[&str] = &[
 ];
 
 const SOURCE_EXTENSIONS: &[&str] = &[
-    "rs", "ts", "tsx", "js", "jsx", "go", "py", "java", "kt", "rb", "php", "cs", "cpp",
-    "h", "hpp",
+    "rs", "ts", "tsx", "js", "jsx", "go", "py", "java", "kt", "rb", "php", "cs", "cpp", "h", "hpp",
 ];
 
-pub fn validate_workspace(workspace: &Path, requested_max_depth: Option<usize>) -> Result<(), String> {
-    let metadata = fs::symlink_metadata(workspace)
-        .map_err(|error| format!("workspace preflight failed for `{}`: {error}", workspace.display()))?;
+pub fn validate_workspace(
+    workspace: &Path,
+    requested_max_depth: Option<usize>,
+) -> Result<(), String> {
+    let metadata = fs::symlink_metadata(workspace).map_err(|error| {
+        format!(
+            "workspace preflight failed for `{}`: {error}",
+            workspace.display()
+        )
+    })?;
     if metadata.file_type().is_symlink() {
         return Err(format!(
             "workspace symlink is not allowed by the MVP safety contract: `{}`",
@@ -37,24 +43,39 @@ pub fn validate_workspace(workspace: &Path, requested_max_depth: Option<usize>) 
         ));
     }
     if !metadata.is_dir() {
-        return Err(format!("workspace is not a directory: `{}`", workspace.display()));
+        return Err(format!(
+            "workspace is not a directory: `{}`",
+            workspace.display()
+        ));
     }
 
-    let max_depth = requested_max_depth.unwrap_or(HARD_MAX_DEPTH).min(HARD_MAX_DEPTH);
+    let max_depth = requested_max_depth
+        .unwrap_or(HARD_MAX_DEPTH)
+        .min(HARD_MAX_DEPTH);
     let mut source_files = 0usize;
     walk(workspace, 0, max_depth, &mut source_files)
 }
 
-fn walk(path: &Path, depth: usize, max_depth: usize, source_files: &mut usize) -> Result<(), String> {
+fn walk(
+    path: &Path,
+    depth: usize,
+    max_depth: usize,
+    source_files: &mut usize,
+) -> Result<(), String> {
     if depth > max_depth {
         return Ok(());
     }
 
-    let entries = fs::read_dir(path)
-        .map_err(|error| format!("workspace preflight cannot read `{}`: {error}", path.display()))?;
+    let entries = fs::read_dir(path).map_err(|error| {
+        format!(
+            "workspace preflight cannot read `{}`: {error}",
+            path.display()
+        )
+    })?;
 
     for entry in entries {
-        let entry = entry.map_err(|error| format!("workspace preflight directory entry failed: {error}"))?;
+        let entry = entry
+            .map_err(|error| format!("workspace preflight directory entry failed: {error}"))?;
         let child = entry.path();
         let name = entry.file_name();
         let name = name.to_string_lossy();
@@ -62,9 +83,12 @@ fn walk(path: &Path, depth: usize, max_depth: usize, source_files: &mut usize) -
             continue;
         }
 
-        let file_type = entry
-            .file_type()
-            .map_err(|error| format!("workspace preflight cannot inspect `{}`: {error}", child.display()))?;
+        let file_type = entry.file_type().map_err(|error| {
+            format!(
+                "workspace preflight cannot inspect `{}`: {error}",
+                child.display()
+            )
+        })?;
         if file_type.is_symlink() {
             return Err(format!(
                 "symlink evidence is not followed by the MVP safety contract: `{}`",
@@ -88,7 +112,12 @@ fn walk(path: &Path, depth: usize, max_depth: usize, source_files: &mut usize) -
 
         let bytes = entry
             .metadata()
-            .map_err(|error| format!("workspace preflight cannot stat `{}`: {error}", child.display()))?
+            .map_err(|error| {
+                format!(
+                    "workspace preflight cannot stat `{}`: {error}",
+                    child.display()
+                )
+            })?
             .len();
         if bytes > MAX_SOURCE_BYTES {
             return Err(format!(
