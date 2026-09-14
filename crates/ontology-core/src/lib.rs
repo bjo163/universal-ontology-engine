@@ -4,7 +4,7 @@ use std::fmt;
 pub const ONTOLOGY_VERSION: &str = "1.0.0";
 pub const LEVEL_COUNT: usize = 49;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum OntologyType {
     Universe = 1,
@@ -207,6 +207,12 @@ mod tests {
     fn canonical_levels_are_49() {
         assert_eq!(canonical_path().len(), 49);
         assert_eq!(OntologyType::from_slug("BIT"), Some(OntologyType::Bit));
+    }
+
+    #[test]
+    fn ontology_types_have_stable_numeric_order() {
+        assert!(OntologyType::Universe < OntologyType::Bit);
+        assert!(OntologyType::Entity < OntologyType::Function);
     }
 
     #[test]
