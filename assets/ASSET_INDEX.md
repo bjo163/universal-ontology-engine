@@ -233,3 +233,19 @@ Every listed item is either a canonical source of truth or an approved derivativ
 | `status-language` | `documentation/communication/status-language.md` | Canonical maturity/status language | MD | communication | **CANONICAL** |
 | `terminology` | `documentation/communication/terminology.md` | Canonical communication terminology | MD | communication | **CANONICAL** |
 | `worldview` | `documentation/communication/worldview.md` | Communication worldview | MD | communication | **APPROVED** |
+
+
+## Brand Architecture & Naming Governance
+
+| Name | Path | Purpose | Format | Variant | Status |
+|---|---|---|---|---|---|
+| `README` | `documentation/architecture/README.md` | Architecture index and authority map | MD | governance | **APPROVED** |
+| `brand-architecture` | `documentation/architecture/brand-architecture.md` | Master OX-DX brand architecture and naming governance | MD | governance | **CANONICAL** |
+| `repository-naming` | `documentation/architecture/repository-naming.md` | Repository naming and creation policy | MD | governance | **CANONICAL** |
+| `package-naming` | `documentation/architecture/package-naming.md` | Package, crate, library and CLI naming policy | MD | governance | **CANONICAL** |
+| `responsibility-matrix` | `documentation/architecture/responsibility-matrix.md` | Canonical capability ownership matrix | MD | governance | **CANONICAL** |
+| `repository-map` | `documentation/architecture/repository-map.md` | Current and planned repository ecosystem map | MD | governance | **APPROVED** |
+| `naming-anti-patterns` | `documentation/architecture/naming-anti-patterns.md` | Naming collision and semantic-drift anti-patterns | MD | governance | **APPROVED** |
+| `versioning` | `documentation/architecture/versioning.md` | Brand, engine, ontology, schema and release version policy | MD | governance | **CANONICAL** |
+| `product-naming` | `documentation/architecture/product-naming.md` | Product, tool, interface, docs and community naming policy | MD | governance | **APPROVED** |
+| `domain-architecture` | `documentation/architecture/domain-architecture.md` | Future public domain/subdomain planning | MD | governance | **APPROVED** |

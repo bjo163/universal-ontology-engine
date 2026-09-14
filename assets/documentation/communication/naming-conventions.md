@@ -1,8 +1,14 @@
 # OX-DX Naming Conventions
 
-This guide is for future names. It does not rename existing repositories, crates, ontology levels, commands, or contracts.
+This communication document is the concise naming checklist.
 
-## Product naming hierarchy
+The canonical brand/naming governance source is:
+
+**`../architecture/brand-architecture.md`**
+
+Specialized policy lives in `../architecture/`.
+
+## Canonical hierarchy
 
 ```text
 OX-DX
@@ -11,55 +17,73 @@ Universal Ontology & Experience Engine
   ↓
 Universal Ontology Engine
   ↓
-Rust crates / tools
+technical repositories / crates / tools
 ```
 
-- **OX-DX** = public brand/system identity.
-- **Universal Ontology & Experience Engine** = conceptual product descriptor.
-- **Universal Ontology Engine** = Rust implementation in this repository.
-- **Rust crates/tools** = implementation units with existing technical names.
+- **OX-DX** = umbrella public brand/system identity.
+- **Universal Ontology & Experience Engine** = conceptual product/system descriptor.
+- **Universal Ontology Engine** = current Rust technical engine.
+- **`universal-ontology-engine`** = current repository; do not rename merely for brand consistency.
+- Existing crates remain implementation-oriented names such as `ontology-core` and `ontology-graph`.
+- The current CLI package/binary remains `ontology-engine`.
 
-## Future naming rules
+## Communication naming rule
 
-Names should be:
+Use the name for the layer you actually mean.
 
-- short;
-- distinct;
-- memorable;
-- technical;
-- pronounceable when practical;
-- consistent with OX-DX;
-- specific enough to search.
+Do not use repository, crate, CLI, product, and brand names as arbitrary synonyms.
 
-## Avoid names that
+## Future public extensions
 
-- imitate scientific authority without scientific meaning;
-- borrow religious authority;
-- use hype words as identity;
-- duplicate or shadow an existing canonical ontology type;
-- reuse an edge-kind name for an unrelated product;
-- imply capability before implementation exists;
-- create a second competing brand for the same thing.
+Default pattern when a real new public responsibility exists:
 
-## Technical namespaces
+**OX-DX + clear noun**
 
-Canonical ontology TYPE names and edge kinds are reserved technical vocabulary.
+Examples as naming direction only:
+- OX-DX Web
+- OX-DX Docs
+- OX-DX CLI
+- OX-DX SDK
 
-A future tool named `BIT`, `CONTAINS`, or `OBSERVED_AT` would create avoidable ambiguity unless it is literally the corresponding technical surface.
+Potential future repository namespace:
 
-## Versioned names
+`ox-dx-<responsibility>`
 
-Put version numbers in contracts/releases, not permanent brand names, unless the version is itself the compatibility boundary.
+Do not create repositories/products for symmetry.
 
-Good: `Universal Ontology v1.0.0`.
+## Technical names
 
-Avoid: `OX-DX NextGen 2.0 Ultra`.
+The more foundational the component, the more precise the name should be.
 
-## Test
+```text
+Brand:   OX-DX
+System:  Universal Ontology & Experience Engine
+Engine:  Universal Ontology Engine
+Crate:   ontology-graph
+File:    universal-ontology-v1.0.json
+```
 
-Before approving a new name, ask:
+Do not force `ox-dx-` onto internal crates.
 
-1. Does an existing OX-DX term already mean this?
-2. Would a contributor mistake it for an ontology TYPE, KIND, or edge?
-3. Does the name imply more maturity than the implementation?
-4. Can it survive outside a launch campaign?
+## Reserved technical vocabulary
+
+Do not casually reuse ontology TYPE names, registered KIND names, graph edge names, schema identifiers, or normative specification terms as unrelated product names.
+
+## Boundaries
+
+- Quranic inspiration is philosophical, not a source of sacred technical product names.
+- Gen-Z/grunge affects voice and presentation, not foundational naming clarity.
+- Version numbers for brand, engine, ontology, and schema must not be conflated.
+- Existing names are preserved until an explicit migration is approved.
+
+## Before approving a new name
+
+1. What responsibility does it own?
+2. Does another component already own it?
+3. Which layer is this: brand, product, engine, tool, interface, repository, package, or documentation?
+4. Does it collide with existing ontology/engine vocabulary?
+5. Does it imply unimplemented capability?
+6. Does it require a new repository at all?
+7. Is migration worth the compatibility cost?
+
+For the full policy, use `../architecture/brand-architecture.md`.

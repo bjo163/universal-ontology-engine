@@ -43,3 +43,16 @@ Future contributors must derive new assets from the canonical geometry and docum
 - Status claims: `documentation/communication/status-language.md`
 
 Technical truth still comes from the repository's normative specifications, engineering standards, implementation, tests, and generated release/status evidence.
+
+
+## Brand architecture source hierarchy
+
+- Master architecture: `documentation/architecture/brand-architecture.md`
+- Responsibility ownership: `documentation/architecture/responsibility-matrix.md`
+- Repository policy: `documentation/architecture/repository-naming.md`
+- Package/CLI policy: `documentation/architecture/package-naming.md`
+- Product/interface policy: `documentation/architecture/product-naming.md`
+- Version policy: `documentation/architecture/versioning.md`
+- Domain plan: `documentation/architecture/domain-architecture.md`
+
+These documents govern naming and ownership only. They do not redefine ontology semantics or implementation behavior.
