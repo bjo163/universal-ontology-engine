@@ -22,6 +22,7 @@ jobs:
       - name: Validate JSON documents
         run: |
           python -m json.tool universe.json >/dev/null
+          python -m json.tool .ontology/self.json >/dev/null
           python -m json.tool specifications/universe-contract.json >/dev/null
           python -m json.tool specifications/universe-contract.instance.json >/dev/null
           python -m json.tool specifications/foundation-contract.json >/dev/null
@@ -45,7 +46,11 @@ jobs:
           cargo check --workspace
           cargo test --workspace --all-targets
       - name: Self inspection gate
-        run: cargo run -p ontology-engine -- self --json
+        run: |
+          cargo run -p ontology-engine -- self --json > /tmp/ontology-self.json
+          python -m json.tool /tmp/ontology-self.json >/dev/null
+          diff -u .ontology/self.json /tmp/ontology-self.json
+          cat /tmp/ontology-self.json
       - name: Smoke test ontology CLI
         run: |
           cargo run -p ontology-engine -- levels
