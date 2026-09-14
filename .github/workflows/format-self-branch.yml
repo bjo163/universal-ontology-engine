@@ -1,0 +1,33 @@
+name: Format Self Inspection Branch
+
+on:
+  push:
+    branches: [feat/self-inspection-mvp]
+
+permissions:
+  contents: write
+
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: feat/self-inspection-mvp
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: rustfmt
+      - name: Format Rust workspace
+        run: cargo fmt --all
+      - name: Commit formatting drift
+        run: |
+          if git diff --quiet; then
+            echo "rustfmt: no changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.rs'
+          git commit -m "style(rust): normalize workspace formatting"
+          git push origin HEAD:feat/self-inspection-mvp
