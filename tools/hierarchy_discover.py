@@ -11,9 +11,13 @@ from typing import Any
 from symbol_parser import parse_symbols
 
 LEVELS = [
-    "UNIVERSE", "CREATION", "COSMIC_ORDER", "REALITY", "REALM", "WORLD", "ECOSYSTEM",
-    "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE",
-    "COMPONENT", "ELEMENT", "IMPLEMENTATION",
+    "UNIVERSE", "CREATION", "ORDER", "REALITY", "REALM", "WORLD", "DOMAIN",
+    "ECOSYSTEM", "ORGANIZATION", "COMMUNITY", "REGION", "ENVIRONMENT", "NETWORK", "CONTEXT",
+    "PURPOSE", "MISSION", "OBJECTIVE", "PROGRAM", "PROJECT", "PRODUCT", "SYSTEM",
+    "REPOSITORY", "SOURCE", "UNIT", "MODULE", "SUBSYSTEM", "COMPONENT", "ELEMENT",
+    "SYMBOL", "ENTITY", "PROPERTY", "RELATION", "OPERATION", "FUNCTION", "BEHAVIOR",
+    "STATE", "EVENT", "PROCESS", "FLOW", "TRANSITION", "ACTION", "EXECUTION",
+    "INSTRUCTION", "EXPRESSION", "VALUE", "DATA", "TOKEN", "CHARACTER", "BIT",
 ]
 IGNORED = {
     ".git", ".next", ".turbo", "node_modules", "target", "dist", "build",
@@ -143,8 +147,8 @@ def component_nodes(module: Path, repo: Path, language: str | None) -> list[dict
 def element_nodes(path: Path, repo: Path, language: str | None) -> list[dict[str, Any]]:
     rel = path.relative_to(repo).as_posix()
     if not path.is_file():
-        implementation = node("IMPLEMENTATION", path.name, rel, "directory-implementation", language, metadata={"evidence": "directory-boundary", "confidence": "low"})
-        return [node("ELEMENT", path.name, rel, "native-construct-group", language, [implementation], {"evidence": "directory-boundary", "confidence": "low"})]
+        execution = node("EXECUTION", path.name, rel, "directory-execution", language, metadata={"evidence": "directory-boundary", "confidence": "low"})
+        return [node("ELEMENT", path.name, rel, "native-construct-group", language, [execution], {"evidence": "directory-boundary", "confidence": "low"})]
 
     symbols = parse_symbols(path, parser_language(path, language))
     if symbols:
@@ -157,7 +161,7 @@ def element_nodes(path: Path, repo: Path, language: str | None) -> list[dict[str
                 language,
                 [
                     node(
-                        "IMPLEMENTATION",
+                        "EXECUTION",
                         symbol["name"],
                         rel,
                         "symbol-span",
@@ -181,36 +185,12 @@ def element_nodes(path: Path, repo: Path, language: str | None) -> list[dict[str
             for symbol in symbols
         ]
 
-    implementation = node("IMPLEMENTATION", path.name, rel, "source-file", language, metadata={"evidence": "file-boundary", "confidence": "low"})
-    return [node("ELEMENT", path.stem, rel, "source-construct", language, [implementation], {"confidence": "low", "evidence": "parser-no-symbols"})]
-
-
-def _semantic_shell(ecosystems: list[dict[str, Any]]) -> dict[str, Any]:
-    """Build the six universal upper levels without inventing physical directories."""
-    world = node(
-        "WORLD", "Managed World", ".", "semantic-container", metadata={"semantic_only": True, "evidence": "foundation-contract"}
-    )
-    world["children"] = ecosystems
-    realm = node(
-        "REALM", "Managed Realm", ".", "semantic-container", children=[world],
-        metadata={"semantic_only": True, "evidence": "foundation-contract"},
-    )
-    reality = node(
-        "REALITY", "Managed Reality", ".", "semantic-container", children=[realm],
-        metadata={"semantic_only": True, "evidence": "foundation-contract"},
-    )
-    cosmic_order = node(
-        "COSMIC_ORDER", "Cosmic Order", ".", "semantic-container", children=[reality],
-        metadata={"semantic_only": True, "evidence": "foundation-contract"},
-    )
-    creation = node(
-        "CREATION", "Creation", ".", "semantic-container", children=[cosmic_order],
-        metadata={"semantic_only": True, "evidence": "foundation-contract"},
-    )
-    return creation
+    execution = node("EXECUTION", path.name, rel, "source-file", language, metadata={"evidence": "file-boundary", "confidence": "low"})
+    return [node("ELEMENT", path.stem, rel, "source-construct", language, [execution], {"confidence": "low", "evidence": "parser-no-symbols"})]
 
 
 def discover(workspace: Path, universe_id: str = "universe") -> dict[str, Any]:
+    """Discover observed structure while allowing unmaterialized canonical levels."""
     ecosystems: list[dict[str, Any]] = []
     if workspace.is_dir():
         for path in sorted(workspace.iterdir(), key=lambda p: p.name.lower()):
@@ -232,18 +212,19 @@ def discover(workspace: Path, universe_id: str = "universe") -> dict[str, Any]:
                     projects.append(node("PROJECT", child.name, child.relative_to(workspace).as_posix(), "workspace-project", children=repositories))
             ecosystems.append(node("ECOSYSTEM", eco_id, path.relative_to(workspace).as_posix(), "workspace-directory", children=projects, metadata={"discovery": "filesystem"}))
 
-    creation = _semantic_shell(ecosystems)
     return {
         "level": "UNIVERSE",
         "id": universe_id,
         "name": universe_id,
         "path": ".",
-        "children": [creation],
+        "children": ecosystems,
         "metadata": {
             "read_only": True,
             "canonical_levels": LEVELS,
+            "canonical_level_count": len(LEVELS),
             "creator_outside_model": True,
-            "semantic_upper_levels": True,
+            "intermediate_levels_may_be_unmaterialized": True,
+            "omitted_semantic_levels_are_not_invented": True,
         },
     }
 
