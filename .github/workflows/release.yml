@@ -1,0 +1,113 @@
+name: Release Channels
+
+on:
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: ${{ !startsWith(github.event.head_commit.message || '', 'chore(release):') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Resolve release channel
+        id: channel
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${GITHUB_REF_NAME}" in
+            dev)
+              echo "channel=dev" >> "$GITHUB_OUTPUT"
+              ;;
+            main)
+              echo "channel=stable" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "unsupported release branch: ${GITHUB_REF_NAME}" >&2
+              exit 1
+              ;;
+          esac
+
+      - name: Compute next version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ steps.channel.outputs.channel }}" == "dev" ]]; then
+            latest_stable="$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | grep -Ev '-' | head -n1 || true)"
+            args=(dev --serial "${GITHUB_RUN_NUMBER}")
+            if [[ -n "$latest_stable" ]]; then
+              args+=(--stable-tag "$latest_stable")
+            fi
+            python tools/version_channel.py "${args[@]}"
+          else
+            python tools/version_channel.py stable
+          fi
+
+      - name: Refresh lockfile and verify release tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          cargo generate-lockfile
+          cargo fmt --all -- --check
+          cargo check --workspace --locked
+          cargo test --workspace --all-targets --locked
+
+      - name: Commit version bump
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- Cargo.toml Cargo.lock; then
+            echo "version files already synchronized"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add Cargo.toml Cargo.lock
+            git commit -m "chore(release): v${{ steps.version.outputs.version }}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          CHANNEL: ${{ steps.channel.outputs.channel }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="v${VERSION}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "release $tag already exists"
+            exit 0
+          fi
+          target="$(git rev-parse HEAD)"
+          if [[ "$CHANNEL" == "dev" ]]; then
+            gh release create "$tag" \
+              --target "$target" \
+              --title "DEV $tag" \
+              --prerelease \
+              --generate-notes
+          else
+            gh release create "$tag" \
+              --target "$target" \
+              --title "$tag" \
+              --latest \
+              --generate-notes
+          fi
