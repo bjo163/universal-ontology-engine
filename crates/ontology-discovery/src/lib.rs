@@ -24,6 +24,7 @@ pub struct DiscoveryObservation {
 pub struct DiscoveryOptions {
     pub include_files: bool,
     pub max_depth: Option<usize>,
+    pub parse_rust_ast: bool,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -34,6 +35,8 @@ pub enum DiscoveryError {
     NotDirectory(PathBuf),
     #[error("failed to read `{path}`: {source}")]
     ReadDir { path: PathBuf, source: std::io::Error },
+    #[error("failed to read source `{path}`: {source}")]
+    ReadSource { path: PathBuf, source: std::io::Error },
     #[error("graph insertion failed: {0}")]
     Graph(#[from] ontology_core::OntologyError),
 }
@@ -208,10 +211,73 @@ fn discover_element(
     let label = path.file_stem().or_else(|| path.file_name()).and_then(|v| v.to_str()).unwrap_or("element");
     let element_id = scoped(component, &format!("element:{label}"));
     insert_node(graph, Some(component.clone()), OntologyType::Element, element_id.as_str(), true)?;
-    observations.push(DiscoveryObservation { path: rel(workspace, path), kind: "element".into(), language: language.clone(), evidence: if path.is_file() { "file boundary; symbol parsing delegated" } else { "directory boundary" }.into() });
+    observations.push(DiscoveryObservation { path: rel(workspace, path), kind: "element".into(), language: language.clone(), evidence: if path.is_file() { "file boundary" } else { "directory boundary" }.into() });
+
+    if options.parse_rust_ast && path.is_file() && path.extension().and_then(|v| v.to_str()) == Some("rs") {
+        discover_rust_semantics(graph, &element_id, path, workspace, observations)?;
+    }
+
     if options.include_files && path.is_file() {
         let execution_id = scoped(&element_id, "execution:observed");
         insert_node(graph, Some(element_id), OntologyType::Execution, execution_id.as_str(), true)?;
+    }
+    Ok(())
+}
+
+fn discover_rust_semantics(
+    graph: &mut OntologyGraph,
+    element: &NodeId,
+    path: &Path,
+    workspace: &Path,
+    observations: &mut Vec<DiscoveryObservation>,
+) -> Result<(), DiscoveryError> {
+    let source = std::fs::read_to_string(path).map_err(|source| DiscoveryError::ReadSource { path: path.to_path_buf(), source })?;
+    match ontology_rust::parse(&source) {
+        Ok(items) => {
+            let mut counts = std::collections::BTreeMap::<OntologyType, usize>::new();
+            for (ordinal, item) in items.iter().enumerate() {
+                let label = item.name.clone().unwrap_or_else(|| format!("anonymous-{ordinal}"));
+                let semantic_id = scoped(element, &format!("ast:{}:{}:{}:{}", item.ontology_type.slug().to_lowercase(), label, item.location.line_start, item.location.column_start));
+                graph.insert_node(Node {
+                    id: semantic_id.clone(),
+                    parent: None,
+                    ontology_type: item.ontology_type,
+                    kind: Some(item.native_kind.clone()),
+                    name: item.name.clone(),
+                    source_span: Some(ontology_core::SourceSpan {
+                        line_start: item.location.line_start as u32,
+                        column_start: item.location.column_start as u32,
+                        line_end: item.location.line_end as u32,
+                        column_end: item.location.column_end as u32,
+                    }),
+                    materialized: true,
+                })?;
+                graph.add_edge(element.clone(), semantic_id, ontology_core::EdgeKind::ProjectsTo)?;
+                *counts.entry(item.ontology_type).or_default() += 1;
+            }
+            observations.push(DiscoveryObservation {
+                path: rel(workspace, path),
+                kind: "rust-ast".into(),
+                language: Some("rust".into()),
+                evidence: format!("syn AST; {} semantic observations", items.len()),
+            });
+            if !counts.is_empty() {
+                observations.push(DiscoveryObservation {
+                    path: rel(workspace, path),
+                    kind: "rust-ast-summary".into(),
+                    language: Some("rust".into()),
+                    evidence: counts.into_iter().map(|(ty, count)| format!("{}={count}", ty.slug())).collect::<Vec<_>>().join(", "),
+                });
+            }
+        }
+        Err(error) => {
+            observations.push(DiscoveryObservation {
+                path: rel(workspace, path),
+                kind: "rust-ast-error".into(),
+                language: Some("rust".into()),
+                evidence: format!("parse error preserved as observation: {error}"),
+            });
+        }
     }
     Ok(())
 }
@@ -273,24 +339,38 @@ mod tests {
     use super::*;
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
+
     fn registry() -> Arc<OntologyRegistry> { Arc::new(OntologyRegistry::from_json(include_str!("../../../specifications/universal-ontology-v1.0.json")).unwrap()) }
+
     fn temp_workspace() -> PathBuf {
         let stamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
         let path = std::env::temp_dir().join(format!("ontology-discovery-{stamp}"));
         fs::create_dir_all(path.join("ecosystem-demo/project-a/repo-a/src/core")).unwrap();
         fs::write(path.join("ecosystem-demo/project-a/repo-a/Cargo.toml"), "[package]\nname='repo-a'\nversion='0.1.0'\n").unwrap();
-        fs::write(path.join("ecosystem-demo/project-a/repo-a/src/core/lib.rs"), "pub fn demo() {}\n").unwrap();
+        fs::write(path.join("ecosystem-demo/project-a/repo-a/src/core/lib.rs"), "pub struct User { id: u64 }\npub fn demo() {}\n").unwrap();
         path
     }
+
     #[test]
     fn discovers_native_workspace_without_inventing_missing_levels() {
         let path = temp_workspace();
-        let result = discover_workspace(&path, registry(), DiscoveryOptions { include_files: true, max_depth: Some(3) }).unwrap();
+        let result = discover_workspace(&path, registry(), DiscoveryOptions { include_files: true, max_depth: Some(3), parse_rust_ast: true }).unwrap();
         assert_eq!(result.graph.nodes_by_type(OntologyType::Ecosystem).count(), 1);
         assert_eq!(result.graph.nodes_by_type(OntologyType::Repository).count(), 1);
         assert_eq!(result.graph.nodes_by_type(OntologyType::Source).count(), 1);
         assert!(result.graph.nodes_by_type(OntologyType::Execution).count() >= 1);
-        assert!(result.observations.iter().any(|x| x.evidence == "Cargo.toml"));
+        assert!(result.graph.nodes_by_type(OntologyType::Entity).count() >= 1);
+        assert!(result.graph.edge_len() >= 1);
+        assert!(result.observations.iter().any(|x| x.kind == "rust-ast"));
+        fs::remove_dir_all(path).unwrap();
+    }
+
+    #[test]
+    fn rust_parse_errors_are_observations_not_graph_corruption() {
+        let path = temp_workspace();
+        fs::write(path.join("ecosystem-demo/project-a/repo-a/src/core/broken.rs"), "fn broken( {\n").unwrap();
+        let result = discover_workspace(&path, registry(), DiscoveryOptions { parse_rust_ast: true, ..Default::default() }).unwrap();
+        assert!(result.observations.iter().any(|x| x.kind == "rust-ast-error"));
         fs::remove_dir_all(path).unwrap();
     }
 }
