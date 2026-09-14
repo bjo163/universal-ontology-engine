@@ -47,3 +47,4 @@ jobs:
         run: |
           cargo run -p ontology-engine -- levels
           cargo run -p ontology-engine -- inspect 49
+          cargo run -p ontology-engine -- discover . --max-depth 2
