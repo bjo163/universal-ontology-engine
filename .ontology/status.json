@@ -1,0 +1,26 @@
+{
+  "automation": {
+    "changelog_sync": "enabled",
+    "external_scan": "manual_gated",
+    "issue_gate": "enabled",
+    "self_steward": "enabled",
+    "stable_back_sync": "enabled"
+  },
+  "branches": {
+    "model": "feature/* -> dev -> main",
+    "relation": "main_ahead"
+  },
+  "ci": "success",
+  "health": "healthy",
+  "releases": {
+    "dev": "v0.1.2-dev.6",
+    "stable": "v0.1.2"
+  },
+  "repository": "universal-ontology-engine",
+  "schema": "universal-ontology-engine/repository-status-v1",
+  "self": "healthy",
+  "versions": {
+    "dev": "0.1.2-dev.6",
+    "main": "0.1.2"
+  }
+}
