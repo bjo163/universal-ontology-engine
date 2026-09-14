@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="588" height="98" viewBox="0 0 588 98" fill="none">
+<rect width="588" height="98" fill="#07090A"/>
+<g id="field" stroke="#20252B" stroke-width="1">
+ <path d="M21 21H567M21 49H567M21 77H567"/>
+</g>
+<g id="state-0" stroke="#F5F7F8" stroke-width="3">
+ <path d="M42 21V35M42 56V77"/>
+ <path d="M91 21V28M91 49V63"/>
+</g>
+<g id="state-1" stroke="#F5F7F8" stroke-width="3">
+ <path d="M238 21V35M238 49V70"/>
+ <path d="M287 28V42M287 63V77"/>
+ <rect x="280" y="42" width="14" height="14" fill="#00D8FF" stroke="none" transform="rotate(45 287 49)"/>
+</g>
+<g id="state-2" stroke="#F5F7F8" stroke-width="3">
+ <path d="M441 21V42M441 63V77"/>
+ <path d="M490 35V49M490 70V77"/>
+ <path d="M518 28V35M518 56V70"/>
+</g>
+</svg>

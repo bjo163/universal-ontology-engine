@@ -1,0 +1,59 @@
+{
+  "version": "1.0",
+  "name": "OX-DX Sensory Token Extension",
+  "sources": [
+    "assets/documentation/technical/design-tokens.md",
+    "assets/documentation/visual/motion-grammar.md",
+    "assets/documentation/OX-DX-SENSORY-BRAND-SYSTEM-v1.0.md"
+  ],
+  "duration": {
+    "micro": "98ms",
+    "witness": "196ms",
+    "resolve": "294ms",
+    "field": "490ms"
+  },
+  "easing": {
+    "resolution": "cubic-bezier(0.21, 0.63, 0.28, 1)"
+  },
+  "intensity": {
+    "0": "NONE",
+    "1": "MICRO",
+    "2": "SUBTLE",
+    "3": "NOTICEABLE",
+    "4": "MAJOR",
+    "5": "CINEMATIC"
+  },
+  "visualEffectIntensity": "{intensity}",
+  "motionIntensity": "{intensity}",
+  "soundIntensity": "{intensity}",
+  "audioEventPriority": [
+    "BACKGROUND",
+    "CONTEXT",
+    "INTERACTION",
+    "CRITICAL"
+  ],
+  "silence": {
+    "canonical": true,
+    "defaultCandidates": [
+      "focus",
+      "loading",
+      "unknown",
+      "passive-update",
+      "routine-success",
+      "background-observation"
+    ]
+  },
+  "modes": [
+    "FULL_SENSORY",
+    "REDUCED_MOTION",
+    "SILENT",
+    "HIGH_CONTRAST"
+  ],
+  "rules": [
+    "Intensity numbers are semantic levels, not audio gain values.",
+    "Critical does not automatically mean louder.",
+    "Routine UI normally uses intensity 0-2.",
+    "Sound never carries unique meaning.",
+    "Reduced-motion and silent modes preserve semantic state."
+  ]
+}

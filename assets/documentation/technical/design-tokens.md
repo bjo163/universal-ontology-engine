@@ -104,6 +104,75 @@ Resolution easing: `cubic-bezier(0.21, 0.63, 0.28, 1)`.
 
 Reduced motion renders the final state directly.
 
+## Sensory extension v1.0
+
+The sensory system extends existing motion/visual tokens. It does not create a second timing scale.
+
+### Motion duration aliases
+
+| Sensory role | Canonical token |
+|---|---|
+| micro | `--ox-motion-micro` = 98ms |
+| witness | `--ox-motion-witness` = 196ms |
+| resolve | `--ox-motion-resolve` = 294ms |
+| field | `--ox-motion-field` = 490ms |
+
+### Transition easing
+
+Canonical sensory transition easing remains:
+
+`cubic-bezier(0.21, 0.63, 0.28, 1)`
+
+### Visual / motion intensity
+
+| Level | Name | Meaning |
+|---:|---|---|
+| 0 | NONE | static / silent |
+| 1 | MICRO | routine focus/selection |
+| 2 | SUBTLE | standard inspect/trace/observe |
+| 3 | NOTICEABLE | resolve/verify/context shift |
+| 4 | MAJOR | major product reveal/change |
+| 5 | CINEMATIC | brand film/launch/installation |
+
+Most product interactions use levels 0–2.
+
+### Sound intensity
+
+Sound uses the same 0–5 semantic intensity vocabulary.
+
+These numbers are **not gain values** and do not define decibels.
+
+Loudness is governed by the audio production specification, not by UI semantic intensity.
+
+### Audio event priority
+
+| Priority | Meaning |
+|---|---|
+| BACKGROUND | normally silent |
+| CONTEXT | optional subtle cue |
+| INTERACTION | user-triggered cue may sound |
+| CRITICAL | attention required; still not automatically louder |
+
+Priority controls whether sound is warranted, not how “important” the product claims the event is.
+
+### Silence
+
+`silent` is a canonical sensory state.
+
+Unknown, loading, focus, passive updates, and repeated routine events may intentionally produce no sound.
+
+### Accessibility
+
+Every sensory token must have:
+- reduced-motion behavior;
+- silent behavior;
+- high-contrast behavior;
+- text/geometry alternative when sound/color is absent.
+
+Machine-readable sensory aliases live in:
+
+`assets/design-tokens/sensory.json`
+
 ## Breakpoints
 
 | Token | Width |
@@ -123,3 +192,5 @@ Responsive behavior changes context/detail, not just scale.
 4. Do not invent fake technical labels.
 5. Visual grammar terms are not ontology semantics.
 6. Prefer SVG for geometric primitives.
+7. Sensory effects communicate behavior; they do not create technical semantics.
+8. Sound remains optional for comprehension.

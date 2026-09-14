@@ -350,3 +350,44 @@ Every listed item is either a canonical source of truth or an approved derivativ
 | `final-checklist` | `documentation/brand-bible/final-checklist.md` | Pre-publication quality gate | MD | v1.0 | **CANONICAL** |
 
 Legacy supporting assets marked **DEPRECATED** remain stored for history/migration and are not the source for new visual work.
+
+
+## Sensory Brand System v1.0
+
+| Name | Path | Purpose | Format | Variant | Status |
+|---|---|---|---|---|---|
+| `OX-DX-SENSORY-BRAND-SYSTEM-v1.0` | `documentation/OX-DX-SENSORY-BRAND-SYSTEM-v1.0.md` | Master sensory brand reference | MD | v1.0 | **CANONICAL** |
+| `sensory-readme` | `documentation/sensory/README.md` | Sensory-system entry point | MD | v1.0 | **CANONICAL** |
+| `sensory-principles` | `documentation/sensory/sensory-principles.md` | Canonical sensory principles | MD | v1.0 | **CANONICAL** |
+| `sensory-grammar` | `documentation/sensory/sensory-grammar.md` | Cross-sensory visual/audio/motion grammar | MD | v1.0 | **CANONICAL** |
+| `visual-sfx` | `documentation/sensory/visual-sfx.md` | Visual effect family specification | MD | v1.0 | **CANONICAL** |
+| `sonic-identity` | `documentation/sensory/sonic-identity.md` | Sonic DNA and family rules | MD | v1.0 | **CANONICAL** |
+| `sonic-logo` | `documentation/sensory/sonic-logo.md` | Sonic-logo production specification | MD | SPEC_ONLY | **APPROVED** |
+| `sfx-library` | `documentation/sensory/sfx-library.md` | Sound-effect production library | MD | SPEC_ONLY | **APPROVED** |
+| `silence-system` | `documentation/sensory/silence-system.md` | Silence and repetition policy | MD | v1.0 | **CANONICAL** |
+| `ambient-system` | `documentation/sensory/ambient-system.md` | Optional ambient identity | MD | SPEC_ONLY | **APPROVED** |
+| `voice-identity` | `documentation/sensory/voice-identity.md` | Spoken voice direction | MD | v1.0 | **APPROVED** |
+| `video-language` | `documentation/sensory/video-language.md` | Video motion/reveal language | MD | v1.0 | **APPROVED** |
+| `atmosphere` | `documentation/sensory/atmosphere.md` | Spatial/light/pace language | MD | v1.0 | **APPROVED** |
+| `distortion` | `documentation/sensory/distortion.md` | Bounded distortion rules | MD | v1.0 | **APPROVED** |
+| `texture-sound` | `documentation/sensory/texture-sound.md` | Cross-sensory texture/sound mapping | MD | v1.0 | **APPROVED** |
+| `event-map` | `documentation/sensory/event-map.md` | Master multi-sensory event vocabulary | MD | v1.0 | **CANONICAL** |
+| `sensory-accessibility` | `documentation/sensory/accessibility.md` | Full/reduced/silent/high-contrast modes | MD | v1.0 | **CANONICAL** |
+| `audio-specification` | `documentation/sensory/audio-specification.md` | Audio production defaults | MD | SPEC_ONLY | **APPROVED** |
+| `sensory-performance` | `documentation/sensory/performance.md` | Effect/animation/audio budgets | MD | v1.0 | **APPROVED** |
+| `implementation-matrix` | `documentation/sensory/implementation-matrix.md` | Primary/fallback/low-power/silent matrix | MD | v1.0 | **APPROVED** |
+| `sensory-traceability` | `documentation/sensory/brand-traceability.md` | Brand → sensory mappings | MD | v1.0 | **CANONICAL** |
+| `sensory-originality-audit` | `documentation/sensory/originality-audit.md` | Sensory originality review | MD | v1.0 | **APPROVED** |
+| `cross-sensory-audit` | `documentation/sensory/cross-sensory-audit.md` | Cross-channel consistency audit | MD | v1.0 | **APPROVED** |
+| `sensory-do-and-dont` | `documentation/sensory/do-and-dont.md` | Sensory usage rules | MD | v1.0 | **APPROVED** |
+| `sensory-tokens` | `design-tokens/sensory.json` | Machine-readable sensory token aliases | JSON | v1.0 | **CANONICAL** |
+| `vfx-trace` | `sensory/visual/trace/ox-dx-vfx-trace-v1.svg` | Trace state reference | SVG | v1 | **APPROVED** |
+| `vfx-scan` | `sensory/visual/scan/ox-dx-vfx-scan-v1.svg` | Field-scan state reference | SVG | v1 | **APPROVED** |
+| `vfx-reveal` | `sensory/visual/reveal/ox-dx-vfx-reveal-v1.svg` | Evidence reveal reference | SVG | v1 | **APPROVED** |
+| `vfx-resolve` | `sensory/visual/resolve/ox-dx-vfx-resolve-v1.svg` | Resolution reference | SVG | v1 | **APPROVED** |
+| `vfx-observe` | `sensory/visual/observe/ox-dx-vfx-observe-v1.svg` | Observation reference | SVG | v1 | **APPROVED** |
+| `vfx-signal` | `sensory/visual/signal/ox-dx-vfx-signal-v1.svg` | Signal cadence reference | SVG | v1 | **APPROVED** |
+| `vfx-distort` | `sensory/visual/distort/ox-dx-vfx-distort-v1.svg` | Bounded distortion reference | SVG | v1 | **APPROVED** |
+| `vfx-verify` | `sensory/visual/verify/ox-dx-vfx-verify-v1.svg` | Verification settle reference | SVG | v1 | **APPROVED** |
+| `vfx-transition` | `sensory/visual/transition/ox-dx-vfx-transition-v1.svg` | Context transition reference | SVG | v1 | **APPROVED** |
+| `audio-spec-only` | `sensory/audio/` | Audio naming, timing and synthesis specifications; no fake masters | MD/CSV | SPEC_ONLY | **APPROVED** |

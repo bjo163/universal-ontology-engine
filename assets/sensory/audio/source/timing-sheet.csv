@@ -1,0 +1,17 @@
+event,family,target_duration_ms,default_intensity,audio_default,notes
+focus,witness,0,0,silent,visual focus is sufficient
+select,witness,98,1,optional,micro grain
+inspect,witness,196,2,optional,dry witness transient
+observe,witness,196,1,optional,softer witness plus breath
+discover,relation,294,2,optional,grain and breath organize into rail
+trace,relation,294,2,optional,source or relation trace
+connect,relation,294,2,optional,paired rail settlement
+resolve,settle,294-490,3,optional,instability reduces while unresolved gaps remain
+verify,settle,196-294,2,optional,named verification only
+unknown,void,0,0,silent,quiet by default
+warning,friction,196,2,optional,attention required
+error,friction,196-294,3,optional,local operational failure
+success,settle,196,1,silent-preferred,routine success often needs no sound
+loading,void,0,0,silent,no fake progress audio
+transition,field,294-490,2,optional,major context transition only
+sonic-logo,identity,490,3,brand-only,fragment align settle

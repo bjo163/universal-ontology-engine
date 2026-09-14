@@ -8,6 +8,7 @@ Source of truth:
 - `assets/documentation/technical/color-system.md`
 - `assets/documentation/technical/typography.md`
 - `assets/documentation/visual/motion-grammar.md`
+- `assets/documentation/OX-DX-SENSORY-BRAND-SYSTEM-v1.0.md`
 
 This package does **not** create a second token system.
 
@@ -19,6 +20,7 @@ This package does **not** create a second token system.
 - `spacing.json` — 3 / 7 / 14 / 21 / 35 / 49 / 98 scale.
 - `geometry.json` — stroke, anchor, break, cut, radius values.
 - `motion.json` — 98 / 196 / 294 / 490 ms + canonical easing.
+- `sensory.json` — sensory intensity, event priority, silence and accessibility aliases.
 - `breakpoints.json` — 420 / 840 / 1260 / 1680 px.
 - `tokens.css` — CSS custom property handoff.
 - `tailwind-theme.json` — Tailwind-friendly theme-extension values.
@@ -26,22 +28,24 @@ This package does **not** create a second token system.
 
 ## Rule
 
-Product aliases point to canonical values. They must not drift independently.
+Product and sensory aliases point to canonical values. They must not drift independently.
 
-If a canonical token changes through Brand Bible governance, regenerate/update these mappings in the same change.
+If a canonical token changes through Brand Bible governance, update these mappings in the same change.
 
-## CSS
+## Sensory rule
 
-Import or copy the variables into the future application token layer.
+`sensory.json` contains semantic intensity/priority aliases only.
 
-Do not use these files to imply a framework choice.
+It does not define:
+- audio gain;
+- LUFS mastering values;
+- engine states;
+- ontology states.
 
-## Tailwind
+Audio production targets live in `assets/documentation/sensory/audio-specification.md`.
 
-`tailwind-theme.json` is a mapping reference. A future Tailwind configuration may consume equivalent values.
+## CSS / Tailwind / components
 
-## Component libraries
+These mappings do not select a framework.
 
-Use `component-aliases.json` as semantic intent, not as a forced component API.
-
-Accessibility/platform conventions may require additional implementation-only values such as error treatments or touch target sizing. Such values must be clearly labeled implementation/platform tokens and must not be presented as new OX-DX brand colors.
+Accessibility/platform conventions may add implementation-only values when clearly labeled and must not be presented as new OX-DX brand tokens.

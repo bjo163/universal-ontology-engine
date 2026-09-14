@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="588" height="98" viewBox="0 0 588 98" fill="none">
+<rect width="588" height="98" fill="#07090A"/>
+<g id="target" stroke="#F5F7F8" stroke-width="7">
+ <path d="M35 35H126M35 63H126"/>
+ <path d="M231 35H322M231 63H322"/>
+ <path d="M427 35H518M427 63H518"/>
+</g>
+<g id="state-1" stroke="#00D8FF" stroke-width="3">
+ <path d="M343 21V35M343 63V77M350 49H371"/>
+ <rect x="336" y="42" width="14" height="14" fill="#00D8FF" stroke="none" transform="rotate(45 343 49)"/>
+</g>
+<g id="state-2" stroke="#00D8FF" stroke-width="3">
+ <path d="M539 14V35M539 63V84M546 49H574"/>
+ <rect x="532" y="42" width="14" height="14" fill="#00D8FF" stroke="none" transform="rotate(45 539 49)"/>
+</g>
+</svg>
