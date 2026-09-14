@@ -1,0 +1,45 @@
+name: Branch Hygiene
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/branch-hygiene.yml
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap-cleanup:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Remove legacy merged branches
+        shell: bash
+        run: |
+          set -euo pipefail
+          for branch in \
+            feat/readme-auto-self-status \
+            feat/self-inspection-mvp \
+            feat/self-snapshot-baseline \
+            feature/release-automation
+          do
+            git push origin --delete "$branch" || true
+          done
+
+  merged-feature-cleanup:
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'feature/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Delete merged feature branch
+        env:
+          FEATURE_BRANCH: ${{ github.event.pull_request.head.ref }}
+        shell: bash
+        run: git push origin --delete "$FEATURE_BRANCH" || true
