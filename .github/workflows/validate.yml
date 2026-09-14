@@ -18,10 +18,15 @@ jobs:
           python-version: "3.x"
       - name: Validate JSON documents
         run: |
+          python -m json.tool universe.json >/dev/null
           python -m json.tool specifications/universe-contract.json >/dev/null
           python -m json.tool specifications/universe-contract.instance.json >/dev/null
           python -m json.tool schemas/universe.schema.json >/dev/null
       - name: Validate reference manifest
         run: python tools/validate-universe-v02.py
-      - name: Run contract tests
-        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Validate and test registry CLI
+        run: |
+          python -m compileall -q tools tests
+          python tools/universe_cli.py --manifest universe.json validate
+          python tools/universe_cli.py --manifest universe.json --json list
+          python -m unittest discover -s tests -p 'test_*.py' -v
