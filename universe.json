@@ -1,9 +1,9 @@
 {
-  "contract_version": "0.3",
+  "contract_version": "1.0",
   "universe": {
     "id": "universe",
     "name": "Universe",
-    "description": "Top-level managed boundary governed by one foundation contract from ecosystem discovery through concrete implementation."
+    "description": "Top-level managed boundary. The universal ontology descends through creation, cosmic order, reality, realm, world, ecosystem, and into concrete implementation."
   },
   "ecosystems": [
     {
