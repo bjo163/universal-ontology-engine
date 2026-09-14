@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bjo163/universal-ontology-engine/blob/main/schemas/universal-ontology.schema.json",
+  "title": "Universal Ontology v1.0 Registry",
+  "type": "object",
+  "required": ["title", "contract_version", "shape", "rules", "zones", "edge_classes", "kind_examples"],
+  "properties": {
+    "title": {"const": "Universal Ontology v1.0"},
+    "contract_version": {"const": "1.0.0"},
+    "shape": {
+      "type": "object",
+      "required": ["zones", "levels_per_zone", "canonical_levels"],
+      "properties": {
+        "zones": {"const": 7},
+        "levels_per_zone": {"const": 7},
+        "canonical_levels": {"const": 49}
+      },
+      "additionalProperties": false
+    },
+    "rules": {
+      "type": "object",
+      "required": [
+        "type_is_canonical_level",
+        "kind_is_specialization",
+        "kind_must_not_create_level",
+        "filesystem_is_not_canonical_hierarchy",
+        "projection_is_distinct_from_containment",
+        "representation_is_distinct_from_semantics",
+        "stable_identity_required",
+        "intermediate_levels_may_be_unmaterialized"
+      ],
+      "properties": {
+        "type_is_canonical_level": {"const": true},
+        "kind_is_specialization": {"const": true},
+        "kind_must_not_create_level": {"const": true},
+        "filesystem_is_not_canonical_hierarchy": {"const": true},
+        "projection_is_distinct_from_containment": {"const": true},
+        "representation_is_distinct_from_semantics": {"const": true},
+        "stable_identity_required": {"const": true},
+        "intermediate_levels_may_be_unmaterialized": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "zones": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "levels"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+          "name": {"type": "string", "minLength": 1},
+          "levels": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {
+              "type": "object",
+              "required": ["index", "type", "definition"],
+              "properties": {
+                "index": {"type": "integer", "minimum": 1, "maximum": 49},
+                "type": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+                "definition": {"type": "string", "minLength": 1}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "edge_classes": {
+      "type": "array",
+      "const": [
+        "contains", "references", "specializes", "depends_on", "invokes",
+        "produces", "consumes", "causes", "projects_to", "represented_as", "observed_at"
+      ]
+    },
+    "kind_examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "kind"],
+        "properties": {
+          "type": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+          "kind": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
