@@ -153,7 +153,10 @@ fn insert_projected_items(
         path: relative_path.into(),
         kind: "syntax".into(),
         language: language.clone(),
-        evidence: format!("deterministic syntax projection; {} observations", items.len()),
+        evidence: format!(
+            "deterministic syntax projection; {} observations",
+            items.len()
+        ),
     });
     if !counts.is_empty() {
         result.observations.push(DiscoveryObservation {
@@ -186,7 +189,12 @@ fn resolve_element(result: &DiscoveryResult, observation_path: &str) -> Option<N
                 .path_to_root(&element.id)
                 .into_iter()
                 .find(|node| node.ontology_type == OntologyType::Source)
-                .and_then(|node| node.id.as_str().rsplit_once("/source:").map(|(_, value)| value));
+                .and_then(|node| {
+                    node.id
+                        .as_str()
+                        .rsplit_once("/source:")
+                        .map(|(_, value)| value)
+                });
             let source_score = source_name
                 .is_some_and(|name| observation_path.split('/').any(|segment| segment == name));
             Some((source_score, relative.len(), element.id.clone()))
@@ -289,7 +297,13 @@ mod tests {
         assert!(result.graph.nodes_by_type(OntologyType::Entity).count() >= 1);
         assert!(result.graph.nodes_by_type(OntologyType::Function).count() >= 1);
         assert!(result.graph.nodes_by_type(OntologyType::Value).count() >= 1);
-        assert!(result.graph.nodes_by_type(OntologyType::Instruction).count() >= 1);
+        assert!(
+            result
+                .graph
+                .nodes_by_type(OntologyType::Instruction)
+                .count()
+                >= 1
+        );
         assert!(result
             .observations
             .iter()
