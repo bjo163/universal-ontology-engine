@@ -249,3 +249,88 @@ Every listed item is either a canonical source of truth or an approved derivativ
 | `versioning` | `documentation/architecture/versioning.md` | Brand, engine, ontology, schema and release version policy | MD | governance | **CANONICAL** |
 | `product-naming` | `documentation/architecture/product-naming.md` | Product, tool, interface, docs and community naming policy | MD | governance | **APPROVED** |
 | `domain-architecture` | `documentation/architecture/domain-architecture.md` | Future public domain/subdomain planning | MD | governance | **APPROVED** |
+
+
+## Original Visual Language — Interrupted Evidence Field
+
+| Name | Path | Purpose | Format | Variant | Status |
+|---|---|---|---|---|---|
+| `README` | `documentation/visual/README.md` | Original visual-language documentation | MD | original | **CANONICAL** |
+| `visual-grammar` | `documentation/visual/visual-grammar.md` | Original visual-language documentation | MD | original | **CANONICAL** |
+| `geometry-system` | `documentation/visual/geometry-system.md` | Original visual-language documentation | MD | original | **CANONICAL** |
+| `proportion-system` | `documentation/visual/proportion-system.md` | Original visual-language documentation | MD | original | **CANONICAL** |
+| `resolution-grammar` | `documentation/visual/resolution-grammar.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `observation-language` | `documentation/visual/observation-language.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `provenance-language` | `documentation/visual/provenance-language.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `evidence-language` | `documentation/visual/evidence-language.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `graph-language` | `documentation/visual/graph-language.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `typographic-grammar` | `documentation/visual/typographic-grammar.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `grid-system` | `documentation/visual/grid-system.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `negative-space` | `documentation/visual/negative-space.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `texture-system` | `documentation/visual/texture-system.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `color-semantics` | `documentation/visual/color-semantics.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `surface-system` | `documentation/visual/surface-system.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `data-visualization` | `documentation/visual/data-visualization.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `diagram-language` | `documentation/visual/diagram-language.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `iconography` | `documentation/visual/iconography.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `motion-grammar` | `documentation/visual/motion-grammar.md` | Original visual-language documentation | MD | original | **CANONICAL** |
+| `interaction-grammar` | `documentation/visual/interaction-grammar.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `responsive-grammar` | `documentation/visual/responsive-grammar.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `originality-audit` | `documentation/visual/originality-audit.md` | Original visual-language documentation | MD | original | **APPROVED** |
+| `ox-dx-symbol-witness-field` | `brand/symbols/original/ox-dx-symbol-witness-field.svg` | Original supporting symbol | SVG | original | **APPROVED** |
+| `ox-dx-symbol-interrupted-dyad` | `brand/symbols/original/ox-dx-symbol-interrupted-dyad.svg` | Original supporting symbol | SVG | original | **APPROVED** |
+| `ox-dx-symbol-provenance-tail` | `brand/symbols/original/ox-dx-symbol-provenance-tail.svg` | Original supporting symbol | SVG | original | **APPROVED** |
+| `ox-dx-symbol-relation-rail` | `brand/symbols/original/ox-dx-symbol-relation-rail.svg` | Original supporting symbol | SVG | original | **APPROVED** |
+| `ox-dx-symbol-resolution-rift` | `brand/symbols/original/ox-dx-symbol-resolution-rift.svg` | Original supporting symbol | SVG | original | **APPROVED** |
+| `ox-dx-symbol-unresolved-gap` | `brand/symbols/original/ox-dx-symbol-unresolved-gap.svg` | Original supporting symbol | SVG | original | **APPROVED** |
+| `ox-dx-glyph-witness` | `brand/glyphs/original/ox-dx-glyph-witness.svg` | Original compact visual glyph | SVG | original | **APPROVED** |
+| `ox-dx-glyph-break` | `brand/glyphs/original/ox-dx-glyph-break.svg` | Original compact visual glyph | SVG | original | **APPROVED** |
+| `ox-dx-glyph-field-cut` | `brand/glyphs/original/ox-dx-glyph-field-cut.svg` | Original compact visual glyph | SVG | original | **APPROVED** |
+| `ox-dx-glyph-carrier` | `brand/glyphs/original/ox-dx-glyph-carrier.svg` | Original compact visual glyph | SVG | original | **APPROVED** |
+| `ox-dx-glyph-density-shift` | `brand/glyphs/original/ox-dx-glyph-density-shift.svg` | Original compact visual glyph | SVG | original | **APPROVED** |
+| `ox-dx-glyph-grain` | `brand/glyphs/original/ox-dx-glyph-grain.svg` | Original compact visual glyph | SVG | original | **APPROVED** |
+| `ox-dx-glyph-provenance` | `brand/glyphs/original/ox-dx-glyph-provenance.svg` | Original compact visual glyph | SVG | original | **APPROVED** |
+| `ox-dx-glyph-rail` | `brand/glyphs/original/ox-dx-glyph-rail.svg` | Original compact visual glyph | SVG | original | **APPROVED** |
+| `ox-dx-pattern-interrupted-field` | `vector/original/patterns/ox-dx-pattern-interrupted-field.svg` | Original deterministic pattern | SVG | original | **APPROVED** |
+| `ox-dx-pattern-witness-lattice` | `vector/original/patterns/ox-dx-pattern-witness-lattice.svg` | Original deterministic pattern | SVG | original | **APPROVED** |
+| `ox-dx-pattern-density-echo` | `vector/original/patterns/ox-dx-pattern-density-echo.svg` | Original deterministic pattern | SVG | original | **APPROVED** |
+| `ox-dx-pattern-trace-erosion` | `vector/original/patterns/ox-dx-pattern-trace-erosion.svg` | Original deterministic pattern | SVG | original | **APPROVED** |
+| `ox-dx-pattern-resolution-rift` | `vector/original/patterns/ox-dx-pattern-resolution-rift.svg` | Original deterministic pattern | SVG | original | **APPROVED** |
+| `ox-dx-pattern-asymmetric-anchor` | `vector/original/patterns/ox-dx-pattern-asymmetric-anchor.svg` | Original deterministic pattern | SVG | original | **APPROVED** |
+| `ox-dx-texture-signal-loss` | `vector/original/textures/ox-dx-texture-signal-loss.svg` | Deterministic disturbed-surface texture | SVG | original | **APPROVED** |
+| `ox-dx-texture-trace-erosion` | `vector/original/textures/ox-dx-texture-trace-erosion.svg` | Deterministic disturbed-surface texture | SVG | original | **APPROVED** |
+| `ox-dx-texture-compression-scar` | `vector/original/textures/ox-dx-texture-compression-scar.svg` | Deterministic disturbed-surface texture | SVG | original | **APPROVED** |
+| `ox-dx-texture-scan-break` | `vector/original/textures/ox-dx-texture-scan-break.svg` | Deterministic disturbed-surface texture | SVG | original | **APPROVED** |
+| `ox-dx-texture-boundary-wear` | `vector/original/textures/ox-dx-texture-boundary-wear.svg` | Deterministic disturbed-surface texture | SVG | original | **APPROVED** |
+| `ox-dx-diagram-frame-node` | `vector/original/diagrams/ox-dx-diagram-frame-node.svg` | Diagram primitive | SVG | original | **APPROVED** |
+| `ox-dx-diagram-witness-node` | `vector/original/diagrams/ox-dx-diagram-witness-node.svg` | Diagram primitive | SVG | original | **APPROVED** |
+| `ox-dx-diagram-relation-rail` | `vector/original/diagrams/ox-dx-diagram-relation-rail.svg` | Diagram primitive | SVG | original | **APPROVED** |
+| `ox-dx-diagram-projection-bridge` | `vector/original/diagrams/ox-dx-diagram-projection-bridge.svg` | Diagram primitive | SVG | original | **APPROVED** |
+| `ox-dx-diagram-provenance-tail` | `vector/original/diagrams/ox-dx-diagram-provenance-tail.svg` | Diagram primitive | SVG | original | **APPROVED** |
+| `ox-dx-data-count-rail` | `vector/original/data/ox-dx-data-count-rail.svg` | Data-visualization primitive | SVG | original | **APPROVED** |
+| `ox-dx-data-resolution-field` | `vector/original/data/ox-dx-data-resolution-field.svg` | Data-visualization primitive | SVG | original | **APPROVED** |
+| `ox-dx-data-state-cut` | `vector/original/data/ox-dx-data-state-cut.svg` | Data-visualization primitive | SVG | original | **APPROVED** |
+| `ox-dx-data-event-trace` | `vector/original/data/ox-dx-data-event-trace.svg` | Data-visualization primitive | SVG | original | **APPROVED** |
+| `ox-dx-data-provenance-key` | `vector/original/data/ox-dx-data-provenance-key.svg` | Data-visualization primitive | SVG | original | **APPROVED** |
+| `ox-dx-motion-field-to-rift` | `vector/original/motion/ox-dx-motion-field-to-rift.svg` | Motion storyboard/reference | SVG | original | **APPROVED** |
+| `ox-dx-motion-rift-to-trace` | `vector/original/motion/ox-dx-motion-rift-to-trace.svg` | Motion storyboard/reference | SVG | original | **APPROVED** |
+| `ox-dx-motion-trace-to-pulse` | `vector/original/motion/ox-dx-motion-trace-to-pulse.svg` | Motion storyboard/reference | SVG | original | **APPROVED** |
+| `ox-dx-motion-pulse-to-grain` | `vector/original/motion/ox-dx-motion-pulse-to-grain.svg` | Motion storyboard/reference | SVG | original | **APPROVED** |
+| `ox-dx-motion-witness` | `vector/original/motion/ox-dx-motion-witness.svg` | Motion storyboard/reference | SVG | original | **APPROVED** |
+| `ox-dx-field-void` | `web/backgrounds/original/ox-dx-field-void.svg` | Original background field | SVG | original | **APPROVED** |
+| `ox-dx-field-graphite` | `web/backgrounds/original/ox-dx-field-graphite.svg` | Original background field | SVG | original | **APPROVED** |
+| `ox-dx-field-light` | `web/backgrounds/original/ox-dx-field-light.svg` | Original background field | SVG | original | **APPROVED** |
+| `ox-dx-field-high-contrast` | `web/backgrounds/original/ox-dx-field-high-contrast.svg` | Original background field | SVG | original | **APPROVED** |
+| `ox-dx-divider-witness` | `web/dividers/original/ox-dx-divider-witness.svg` | Original section divider | SVG | original | **APPROVED** |
+| `ox-dx-divider-void` | `web/dividers/original/ox-dx-divider-void.svg` | Original section divider | SVG | original | **APPROVED** |
+| `ox-dx-divider-persistence` | `web/dividers/original/ox-dx-divider-persistence.svg` | Original section divider | SVG | original | **APPROVED** |
+| `ox-dx-example-blank-canvas` | `web/examples/original/ox-dx-example-blank-canvas.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `ox-dx-example-logo-environment` | `web/examples/original/ox-dx-example-logo-environment.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `ox-dx-example-github-banner` | `web/examples/original/ox-dx-example-github-banner.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `ox-dx-example-readme-section` | `web/examples/original/ox-dx-example-readme-section.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `ox-dx-example-architecture-diagram` | `web/examples/original/ox-dx-example-architecture-diagram.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `ox-dx-example-ontology-spine` | `web/examples/original/ox-dx-example-ontology-spine.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `ox-dx-example-technical-document` | `web/examples/original/ox-dx-example-technical-document.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `ox-dx-example-release-card` | `web/examples/original/ox-dx-example-release-card.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `ox-dx-example-social-preview` | `web/examples/original/ox-dx-example-social-preview.svg` | Visual-language application example | SVG | original | **APPROVED** |
+| `original-visual-tokens` | `source/design/original-visual-tokens.json` | Machine-readable original visual tokens | JSON | original | **CANONICAL** |

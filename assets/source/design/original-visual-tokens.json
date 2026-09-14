@@ -1,0 +1,23 @@
+{
+  "system": "OX-DX Interrupted Evidence Field",
+  "version": 1,
+  "units": {"micro": 3, "u": 7, "observation": 21, "field": 49},
+  "spacing": [3, 7, 14, 21, 35, 49, 98],
+  "strokes": {"hair": 1, "relation": 3, "structure": 7},
+  "anchors": {"small": 7, "medium": 14, "large": 21},
+  "breaks": {"local": 7, "relation": 14, "unresolved": 21},
+  "colors": {
+    "void": "#07090A",
+    "charcoal": "#111418",
+    "graphite": "#20252B",
+    "white": "#F5F7F8",
+    "muted": "#99A2AA",
+    "cyan": "#00D8FF",
+    "acid": "#8CFF00",
+    "ultraviolet": "#9C4DFF"
+  },
+  "motion_ms": {"micro": 98, "witness": 196, "resolve": 294, "field": 490},
+  "breakpoints_px": {"compact": 420, "medium": 840, "wide": 1260, "ultra": 1680},
+  "resolution_visual_states": ["FIELD", "RIFT", "TRACE", "PULSE", "GRAIN"],
+  "semantic_boundary": "Visual states and primitives are graphic concepts only; they are not ontology types, kinds, edges, or engine phases."
+}

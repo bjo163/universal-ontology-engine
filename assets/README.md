@@ -13,6 +13,12 @@ This directory contains the canonical OX-DX brand foundation, visual language, a
 
 ## Visual language
 
+- Canonical original visual grammar: `documentation/visual/README.md`
+- Original supporting symbols: `brand/symbols/original/`
+- Original compact glyphs: `brand/glyphs/original/`
+- Original patterns / textures / diagram / data / motion primitives: `vector/original/`
+- Original backgrounds / dividers / application examples: `web/*/original/`
+
 - Patterns: `vector/patterns/`
 - Controlled grunge textures: `vector/textures/`
 - Web backgrounds: `web/backgrounds/`
@@ -56,3 +62,14 @@ Technical truth still comes from the repository's normative specifications, engi
 - Domain plan: `documentation/architecture/domain-architecture.md`
 
 These documents govern naming and ownership only. They do not redefine ontology semantics or implementation behavior.
+
+
+## Original visual-system source
+
+- Implementation tokens: `source/design/original-visual-tokens.json`
+- Visual grammar: `documentation/visual/visual-grammar.md`
+- Geometry: `documentation/visual/geometry-system.md`
+- Proportion: `documentation/visual/proportion-system.md`
+- Originality audit: `documentation/visual/originality-audit.md`
+
+The master logo remains `brand/logo/ox-dx-logo-primary.svg`. Supporting-system evolution must not mutate it.

@@ -1,56 +1,42 @@
 # OX-DX Motion Language
 
-## Core principle
+This technical document is the implementation bridge for motion.
 
-**RESOLVE, DON'T DECORATE.**
+The canonical visual-motion grammar is:
 
-Motion exists to explain changing resolution, relation, observation, or state. It should never become ambient spectacle.
+**`../visual/motion-grammar.md`**
 
-## Motion sequence
+## Core rule
 
-`FRAGMENT → STRUCTURE → RELATION → OBSERVATION → RESOLUTION`
+**MOTION IS RESOLUTION.**
 
-The sequence is conceptual, not a mandatory technical pipeline.
+Motion should change continuity, persistence, density, provenance visibility, or witness state while preserving at least one spatial invariant.
 
-## Timing tokens
+## Canonical tokens
 
 | Token | Duration | Use |
 |---|---:|---|
-| snap | 120 ms | tiny state confirmation / glyph response |
-| quick | 180 ms | hover, focus, compact reveal |
-| resolve | 280 ms | structural transition / relation appearance |
-| deep | 420 ms | hero or section-level resolution reveal |
+| micro | 98 ms | compact response |
+| witness | 196 ms | hover / focus / observation cue |
+| resolve | 294 ms | relation / local resolution |
+| field | 490 ms | major field transformation |
 
-Recommended easing: `cubic-bezier(0.22, 1, 0.36, 1)` for resolution; use linear only for signal scanning where constant speed carries meaning.
+Resolution easing:
 
-## Entry
+`cubic-bezier(0.21, 0.63, 0.28, 1)`
 
-Fragments or low-opacity lines appear first, then align into the stable frame. The observation node appears last. Avoid scale-from-zero gimmicks.
+## Canonical visual states
 
-## Exit
+`FIELD → RIFT → TRACE → PULSE → GRAIN`
 
-Reverse emphasis rather than explode the system: node fades, relations thin, frame releases. Keep exit shorter than entry.
+These are visual states only, not engine phases or ontology levels.
 
-## Hover
+## Required behavior
 
-Use one controlled response: line-weight shift, 1–2 px translation, or accent-node activation. Do not combine all three.
+- preserve an anchor, axis, source, or break coordinate during transformation;
+- avoid generic slide/fade as the primary motion language;
+- avoid scale-from-zero, particles, ambient parallax, and decorative glitch loops;
+- respect `prefers-reduced-motion: reduce`;
+- never hide required information behind animation.
 
-## Scroll
-
-Reveal resolution in discrete stages tied to content. No perpetual parallax and no decorative particle field.
-
-## Loading
-
-Prefer a bounded scan or staged frame resolution. The animation must communicate waiting without implying fake progress.
-
-## Transition
-
-Preserve spatial continuity. Relations should connect before a new detail layer becomes dominant.
-
-## Reveal
-
-Use masks / clipping or opacity to expose ordered geometry from noisy surface, reinforcing **ORDER INSIDE CHAOS**.
-
-## Reduced motion
-
-Respect `prefers-reduced-motion: reduce`. Replace motion sequences with immediate state changes or a single short opacity transition. No required information may exist only in animation.
+For detailed interaction behavior see `../visual/interaction-grammar.md`.
