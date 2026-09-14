@@ -2,6 +2,35 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.3 — STABLE — 2026-09-14
+
+## What's Changed
+* feat: complete automation P5-P10 by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/7
+* release: promote automation P5-P10 to stable by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/8
+* fix: harden P5 back-sync lifecycle by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/10
+* chore: reconcile stable generated state into dev by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/12
+* release: promote P5 back-sync hardening by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/11
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.1...v0.1.3
+
+## v0.1.3-dev.9 — DEV — 2026-09-14
+
+## What's Changed
+* release: promote automation P5-P10 to stable by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/8
+* chore: reconcile stable generated state into dev by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/12
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.3-dev.8...v0.1.3-dev.9
+
+## v0.1.3-dev.8 — DEV — 2026-09-14
+
+## What's Changed
+* fix: harden P5 back-sync lifecycle by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/10
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.2-dev.6...v0.1.3-dev.8
+
 ## v0.1.2 — STABLE — 2026-09-14
 
 ## What's Changed

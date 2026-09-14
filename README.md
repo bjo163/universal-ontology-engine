@@ -43,11 +43,11 @@ cargo run -p ontology-engine -- self --json
 |---|---:|
 | Health | **HEALTHY** |
 | CI | `success` |
-| Stable release | `v0.1.2` |
-| Dev release | `v0.1.2-dev.6` |
-| Main version | `0.1.2` |
-| Dev version | `0.1.2-dev.6` |
-| Branch relation | `main_ahead` |
+| Stable release | `v0.1.3` |
+| Dev release | `v0.1.3-dev.9` |
+| Main version | `0.1.3` |
+| Dev version | `0.1.3` |
+| Branch relation | `aligned` |
 | Branch model | `feature/* -> dev -> main` |
 
 See [`CHANGELOG.md`](CHANGELOG.md) for generated release history.
