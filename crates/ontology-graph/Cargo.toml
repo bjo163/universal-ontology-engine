@@ -6,5 +6,6 @@ license.workspace = true
 
 [dependencies]
 ontology-core = { path = "../ontology-core" }
+ontology-registry = { path = "../ontology-registry" }
 serde.workspace = true
 thiserror.workspace = true
