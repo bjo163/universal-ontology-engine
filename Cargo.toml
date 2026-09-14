@@ -4,6 +4,7 @@ members = [
   "crates/ontology-graph",
   "crates/ontology-registry",
   "crates/ontology-discovery",
+  "crates/ontology-rust",
   "crates/ontology-cli",
 ]
 resolver = "2"
@@ -18,3 +19,4 @@ serde = { version = "1", features = ["derive"] }
 thiserror = "2"
 clap = { version = "4", features = ["derive"] }
 serde_json = "1"
+syn = { version = "2", features = ["full", "visit", "extra-traits"] }
