@@ -1,44 +1,36 @@
 {
-  "version": "1.0",
+  "version": "1.0.0",
+  "ontology": "Universal Ontology v1.0.0",
+  "zones": 7,
+  "levelsPerZone": 7,
+  "canonicalLevels": 49,
   "hierarchy": [
-    "UNIVERSE",
-    "CREATION",
-    "COSMIC_ORDER",
-    "REALITY",
-    "REALM",
-    "WORLD",
-    "ECOSYSTEM",
-    "ORGANIZATION",
-    "DOMAIN",
-    "PROJECT",
-    "REPOSITORY",
-    "SOURCE",
-    "UNIT",
-    "MODULE",
-    "COMPONENT",
-    "ELEMENT",
-    "IMPLEMENTATION"
+    "UNIVERSE", "CREATION", "ORDER", "REALITY", "REALM", "WORLD", "DOMAIN",
+    "ECOSYSTEM", "ORGANIZATION", "COMMUNITY", "REGION", "ENVIRONMENT", "NETWORK", "CONTEXT",
+    "PURPOSE", "MISSION", "OBJECTIVE", "PROGRAM", "PROJECT", "PRODUCT", "SYSTEM",
+    "REPOSITORY", "SOURCE", "UNIT", "MODULE", "SUBSYSTEM", "COMPONENT", "ELEMENT",
+    "SYMBOL", "ENTITY", "PROPERTY", "RELATION", "OPERATION", "FUNCTION", "BEHAVIOR",
+    "STATE", "EVENT", "PROCESS", "FLOW", "TRANSITION", "ACTION", "EXECUTION",
+    "INSTRUCTION", "EXPRESSION", "VALUE", "DATA", "TOKEN", "CHARACTER", "BIT"
   ],
-  "optionalLayers": ["ORGANIZATION", "DOMAIN"],
+  "optionalLevels": [
+    "ORGANIZATION", "DOMAIN"
+  ],
   "supportingDimensions": [
     "tests", "examples", "fixtures", "tools", "scripts", "configuration", "data",
     "documentation", "specifications", "infrastructure", "deployment", "assets",
     "observations", "relationships", "provenance"
   ],
-  "nativeMappings": {
-    "rust": ["crate", "module", "function", "struct", "trait", "impl"],
-    "node": ["package", "application", "library", "module", "function", "class"],
-    "go": ["package", "command", "service", "function", "type", "method"],
-    "python": ["package", "module", "class", "function", "method"],
-    "java": ["module", "package", "application", "class", "method", "interface"]
-  },
   "rules": {
     "singleFoundation": true,
     "semanticDirectories": false,
     "externalSystems": "relationship",
     "stableIdentity": true,
-    "parentScopedIdentity": true,
-    "creatorOutsideModel": true,
-    "tokenIsParserDetail": true
+    "typeIsCanonicalLevel": true,
+    "kindIsSpecialization": true,
+    "projectionDistinctFromContainment": true,
+    "representationDistinctFromSemantics": true,
+    "intermediateLevelsMayBeUnmaterialized": true,
+    "creatorOutsideModel": true
   }
 }
