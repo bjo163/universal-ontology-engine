@@ -227,7 +227,7 @@ fn discover_rust_semantics(
                 let semantic_id = NodeId::scoped(element, &format!("ast:{}:{}:{}:{}", item.ontology_type.slug().to_lowercase(), label, item.location.line_start, item.location.column_start));
                 graph.insert_node(Node {
                     id: semantic_id.clone(), parent: None, ontology_type: item.ontology_type,
-                    kind: Some(item.native_kind.clone()), name: item.name.clone(),
+                    kind: None, name: item.name.clone(),
                     source_span: Some(SourceSpan {
                         line_start: item.location.line_start as u32, column_start: item.location.column_start as u32,
                         line_end: item.location.line_end as u32, column_end: item.location.column_end as u32,
@@ -235,6 +235,10 @@ fn discover_rust_semantics(
                     materialized: true,
                 })?;
                 graph.add_edge(element.clone(), semantic_id, EdgeKind::ProjectsTo)?;
+                observations.push(DiscoveryObservation {
+                    path: rel(workspace, path), kind: "rust-ast-item".into(), language: Some("rust".into()),
+                    evidence: format!("native_kind={}; ontology_type={}", item.native_kind, item.ontology_type.slug()),
+                });
                 *counts.entry(item.ontology_type).or_default() += 1;
             }
             observations.push(DiscoveryObservation {
