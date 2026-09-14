@@ -34,7 +34,7 @@ pub struct ProjectionRule {
     pub missing_required_outcome: UnresolvedCode,
 }
 
-[derive(Debug, thiserror::Error, PartialEq, Eq)]
+#[derive(Debug, thiserror::Error, PartialEq, Eq)]
 pub enum RuleContractError {
     #[error("rule id must not be empty")]
     EmptyRuleId,
@@ -69,7 +69,7 @@ impl ProjectionRule {
     }
 
     pub fn evaluate(&self, evidence: &ProjectionEvidence) -> Result<RuleEvaluation, RuleContractError> {
-        self.validate()?
+        self.validate()?;
         let accepted: BTreeSet<_> = self.required_evidence.union(&self.optional_evidence).copied().collect();
         if evidence.evidence_kinds.is_disjoint(&accepted) {
             return Ok(RuleEvaluation::Unresolved(UnresolvedResult::single(evidence.source_id.clone(), UnresolvedCode::Unsupported, self.rule_id.clone())));
