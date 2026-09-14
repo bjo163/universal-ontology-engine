@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bjo163/universe-foundation/blob/main/specifications/universal-ontology-v1.0.json",
+  "title": "Universal Ontology v1.0",
+  "description": "Canonical 7-zone x 7-level ontology registry. Quran Inspired ALLAH my Beloved is a philosophical inspiration statement, not a technical or theological prescription.",
+  "contract_version": "1.0.0",
+  "shape": {"zones": 7, "levels_per_zone": 7, "canonical_levels": 49},
+  "rules": {
+    "type_is_canonical_level": true,
+    "kind_is_specialization": true,
+    "kind_must_not_create_level": true,
+    "filesystem_is_not_canonical_hierarchy": true,
+    "projection_is_distinct_from_containment": true,
+    "representation_is_distinct_from_semantics": true,
+    "stable_identity_required": true,
+    "intermediate_levels_may_be_unmaterialized": true
+  },
+  "zones": [
+    {"id":"existence","name":"EXISTENCE","levels":[
+      {"index":1,"type":"UNIVERSE","definition":"Total managed boundary for the ontology instance."},
+      {"index":2,"type":"CREATION","definition":"Origin, generation, or establishment boundary of a modeled thing."},
+      {"index":3,"type":"ORDER","definition":"Governing arrangement, rule, or organizing structure."},
+      {"index":4,"type":"REALITY","definition":"The modeled state or world being represented."},
+      {"index":5,"type":"REALM","definition":"A bounded class or sphere within the modeled reality."},
+      {"index":6,"type":"WORLD","definition":"A coherent environment or operationally meaningful whole."},
+      {"index":7,"type":"DOMAIN","definition":"A bounded subject, concern, or semantic area."}
+    ]},
+    {"id":"context","name":"CONTEXT","levels":[
+      {"index":8,"type":"ECOSYSTEM","definition":"Coherent collection of related systems, products, or resources."},
+      {"index":9,"type":"ORGANIZATION","definition":"Ownership or governance boundary."},
+      {"index":10,"type":"COMMUNITY","definition":"Group of participating people, agents, or stakeholders."},
+      {"index":11,"type":"REGION","definition":"Bounded scope by place, partition, tenancy, or deployment locality."},
+      {"index":12,"type":"ENVIRONMENT","definition":"Runtime, development, test, production, or other execution context."},
+      {"index":13,"type":"NETWORK","definition":"Connected topology of participating resources."},
+      {"index":14,"type":"CONTEXT","definition":"Immediate contextual boundary required to interpret a resource."}
+    ]},
+    {"id":"intent","name":"INTENT","levels":[
+      {"index":15,"type":"PURPOSE","definition":"Fundamental reason for existence."},
+      {"index":16,"type":"MISSION","definition":"Intended directed outcome or responsibility."},
+      {"index":17,"type":"OBJECTIVE","definition":"Concrete target that can be evaluated."},
+      {"index":18,"type":"PROGRAM","definition":"Coordinated body of related objectives or work."},
+      {"index":19,"type":"PROJECT","definition":"Bounded initiative or engineering effort."},
+      {"index":20,"type":"PRODUCT","definition":"Delivered capability or user-facing result."},
+      {"index":21,"type":"SYSTEM","definition":"Coordinated set of capabilities operating as a whole."}
+    ]},
+    {"id":"structure","name":"STRUCTURE","levels":[
+      {"index":22,"type":"REPOSITORY","definition":"Version-controlled artifact boundary."},
+      {"index":23,"type":"SOURCE","definition":"Source-material boundary from which implementation can be derived."},
+      {"index":24,"type":"UNIT","definition":"Native implementation container such as crate, package, module root, command, or service."},
+      {"index":25,"type":"MODULE","definition":"Cohesive logical grouping inside a unit."},
+      {"index":26,"type":"SUBSYSTEM","definition":"Coordinated structural part with a distinct responsibility."},
+      {"index":27,"type":"COMPONENT","definition":"Cohesive implementation part with a defined responsibility."},
+      {"index":28,"type":"ELEMENT","definition":"Addressable construct inside a component or structural scope."}
+    ]},
+    {"id":"semantic","name":"SEMANTIC","levels":[
+      {"index":29,"type":"SYMBOL","definition":"Named or otherwise identifiable semantic reference."},
+      {"index":30,"type":"ENTITY","definition":"Distinct thing represented in the model."},
+      {"index":31,"type":"PROPERTY","definition":"Characteristic, attribute, or measurable feature of an entity."},
+      {"index":32,"type":"RELATION","definition":"Semantic connection between identifiable resources."},
+      {"index":33,"type":"OPERATION","definition":"Defined transformation or capability over inputs or state."},
+      {"index":34,"type":"FUNCTION","definition":"Reusable mapping or computational behavior with defined inputs and outputs."},
+      {"index":35,"type":"BEHAVIOR","definition":"Observable semantic effect of a resource or operation."}
+    ]},
+    {"id":"dynamic","name":"DYNAMIC","levels":[
+      {"index":36,"type":"STATE","definition":"Condition of a resource at a point or interval."},
+      {"index":37,"type":"EVENT","definition":"Occurrence that can be observed or recorded."},
+      {"index":38,"type":"PROCESS","definition":"Ongoing or ordered activity that transforms state or resources."},
+      {"index":39,"type":"FLOW","definition":"Ordered movement of control, data, or resources."},
+      {"index":40,"type":"TRANSITION","definition":"Change from one state to another."},
+      {"index":41,"type":"ACTION","definition":"An invoked or performed unit of work."},
+      {"index":42,"type":"EXECUTION","definition":"A concrete runtime realization of computation."}
+    ]},
+    {"id":"representation","name":"REPRESENTATION","levels":[
+      {"index":43,"type":"INSTRUCTION","definition":"Machine- or runtime-level directive describing work to perform."},
+      {"index":44,"type":"EXPRESSION","definition":"Syntactic or evaluable form that denotes computation or value."},
+      {"index":45,"type":"VALUE","definition":"Concrete result or literal datum with an interpretable type or meaning."},
+      {"index":46,"type":"DATA","definition":"Encoded or structured information being stored, moved, or processed."},
+      {"index":47,"type":"TOKEN","definition":"Lexical or protocol-level unit of representation."},
+      {"index":48,"type":"CHARACTER","definition":"Encoded character, code point, or character-level representation."},
+      {"index":49,"type":"BIT","definition":"Single binary information unit."}
+    ]}
+  ],
+  "edge_classes": [
+    "contains","references","specializes","depends_on","invokes","produces","consumes","causes","projects_to","represented_as","observed_at"
+  ],
+  "kind_examples": [
+    {"type":"UNIT","kind":"rust-crate"},
+    {"type":"UNIT","kind":"node-package"},
+    {"type":"ELEMENT","kind":"function"},
+    {"type":"ELEMENT","kind":"struct"},
+    {"type":"EVENT","kind":"http-request"},
+    {"type":"DATA","kind":"utf8-bytes"}
+  ]
+}
