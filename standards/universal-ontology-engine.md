@@ -1,172 +1,187 @@
-# Universal Ontology Engine Architecture
+# Universal Ontology Engine Standard
 
-## Purpose
+This document defines the engineering rules that keep the reference engine aligned with **Universal Ontology v1.0**.
 
-The reference engine is a Rust implementation of Universal Ontology v1.0. It discovers, normalizes, relates, validates, queries, and renders resources across the 49-level canonical resolution spine.
+> **Quran Inspired ALLAH my Beloved**
+>
+> Philosophical inspiration only. The technical ontology is not presented as a Qur'anic prescription.
 
-The foundation contract defines vocabulary and invariants; the engine defines how those invariants are observed from real systems.
+## 1. Scope
 
-## Fundamental model
+The engine is a Rust implementation for discovering, normalizing, relating, and validating resources against a canonical **7 zones × 7 levels = 49 levels** resolution spine.
+
+The ontology is an interoperability vocabulary over a graph. It is **not** a universal filesystem tree, AST schema, compiler IR, or binary layout.
+
+## 2. Normative separation
+
+These rules are non-negotiable:
+
+| Concept | Meaning |
+|---|---|
+| `TYPE` | Exactly one canonical ontology level |
+| `KIND` | Specialization/native evidence owned by a canonical `TYPE`; never a new level |
+| `parent` | Structural ownership only |
+| `CONTAINS` | Explicit structural ownership relation; must agree with `parent` |
+| `PROJECTS_TO` | Semantic projection; never structural containment |
+| `REPRESENTED_AS` | Representation/encoding relation; never semantic ownership |
+| `REFERENCES`, `CAUSES`, `OBSERVED_AT`, etc. | Graph relations; never implicit tree children |
+| `SourceSpan` | Provenance/evidence; never identity |
+
+A parser, directory layout, runtime, byte sequence, or external system may provide evidence, but none of them silently redefine the ontology.
+
+## 3. Canonical resolution model
+
+The 49 levels are a canonical **resolution spine**:
 
 ```text
-                         UNIVERSAL ONTOLOGY
-                                │
-                    canonical 49-level spine
-                                │
-                ┌───────────────┴───────────────┐
-                │                               │
-           CONTAINMENT                       GRAPH
-                │                               │
-        structural ownership       references / projection / events
-                │                               │
-                └───────────────┬───────────────┘
-                                │
-                          REPRESENTATION
-                                │
-               source → syntax → runtime → binary
-                                │
-                                ▼
-                               BIT
+01–07   EXISTENCE
+08–14   CONTEXT
+15–21   INTENT
+22–28   STRUCTURE
+29–35   SEMANTIC
+36–42   DYNAMIC
+43–49   REPRESENTATION
 ```
 
-The canonical spine is a resolution vocabulary over a graph. It is not a universal filesystem hierarchy and does not require all 49 levels to materialize for every resource.
+Every resource does not have to materialize every level. An omitted intermediate level is valid when evidence is insufficient or the native system has no meaningful equivalent.
 
-## Non-negotiable separation
+## 4. Phase 1–6 certification contract
 
-The engine MUST NOT pretend that an AST is the ontology itself. A parser yields evidence from which ontology nodes and relations can be projected.
+### Phase 1 — Core ontology
 
-Likewise, bytes are evidence of representation; they do not determine semantic meaning without decoding context.
+The compiled core MUST contain exactly 49 ordered `OntologyType` values with stable numeric positions and slugs. Core identity primitives MUST be semantic values; source coordinates remain provenance.
 
-`TYPE` is a canonical level. `KIND` is a specialization/evidence field owned by a canonical type and never creates another level.
+### Phase 2 — Registry and schema
 
-`parent` and `contains` represent structural ownership only. `projects_to`, `represented_as`, `references`, `causes`, `observed_at`, and the other graph edges never create implicit tree children.
+The versioned registry and JSON Schema MUST agree on:
 
-## Phase 1–6 certification contract
+- version and title;
+- 7 zones, 7 levels per zone, 49 total levels;
+- canonical ordering and zone ownership;
+- canonical edge classes;
+- hard rules and kind ownership.
 
-### Phase 1 — core
+Registry loading MUST reject contract drift.
 
-The compiled `OntologyType` set MUST contain exactly 49 ordered canonical levels with stable slugs and stable numeric ordering. Core IDs MUST be semantic values; source spans are provenance.
+### Phase 3 — Typed graph
 
-### Phase 2 — registry
+Graph insertion MUST enforce:
 
-The versioned registry and schema MUST describe the same 7×7×49 shape, canonical ordering, zone ownership, edge classes, and hard rules. Registry loading MUST reject version/shape/type/zone/rule drift.
+- non-empty unique node IDs;
+- valid parent existence and ascending canonical level order;
+- canonical `KIND` ownership where registered;
+- declared edge kinds only;
+- no self-edges or duplicate edges;
+- `CONTAINS` agreement with `parent`;
+- semantic relations independent from structural traversal;
+- deterministic storage and traversal.
 
-### Phase 3 — graph
+### Phase 4 — Discovery
 
-Graph insertion MUST enforce non-empty unique node IDs, valid parent ordering, canonical kind ownership where known, declared edge kinds, explicit containment agreement with `parent`, no self edges, and deterministic storage/traversal.
+Discovery MUST be read-only and observational.
 
-### Phase 4 — discovery
+It may identify ecosystem, project, repository, and source boundaries from explicit evidence. Generic directories such as `src/` MUST NOT manufacture `UNIT` or `MODULE` nodes. Those levels remain unmaterialized unless native evidence justifies them.
 
-Discovery MUST be observational and read-only. It may recognize ecosystem/project/repository/source boundaries from explicit workspace or repository evidence. A generic `src/` or similar directory MUST NOT automatically become `UNIT` or `MODULE`. Those levels remain unmaterialized unless native evidence justifies them.
+Source files may be represented as `COMPONENT`/`ELEMENT` observations as an implementation bridge into syntax adapters. This is an observation boundary, not a claim that all languages share the same physical structure.
 
-Source-file boundaries may be represented as `COMPONENT`/`ELEMENT` observations as a bridge into syntax parsing. Runtime `EXECUTION` observations are standalone dynamic nodes linked with `OBSERVED_AT`; they MUST NOT be structural children.
+`EXECUTION` is a dynamic observation. It MUST NOT be a structural child of an `ELEMENT`; when an observation targets an element, it is represented as:
+
+```text
+EXECUTION ──OBSERVED_AT──> ELEMENT
+```
 
 ### Phase 5 — Rust syntax
 
-The Rust adapter uses the native `syn` AST and preserves `native_kind`, canonical mapping, names, and spans. Syntax observations are not semantic truth.
+The Rust adapter uses native `syn` syntax and exposes canonical mapping, native construct kind, semantic name, and source span.
 
-AST projection IDs MUST NOT use source line/column as identity. Named constructs use semantic parent-scoped keys based on canonical type + native kind + semantic name, with deterministic duplicate suffixes; anonymous constructs use deterministic ordinals. Spans remain provenance.
+AST projection identity MUST NOT depend on line/column coordinates. Named observations use a parent-scoped semantic key based on canonical type + native construct kind + name, with deterministic duplicate disambiguation. Anonymous observations use deterministic ordinals. Spans remain provenance.
 
-### Phase 6 — cross-language syntax
+Native syntax kinds stay in evidence/metadata unless a kind is explicitly owned by the registry.
 
-Adapters for TypeScript, JavaScript, Python, Go, Java, and Kotlin normalize common declaration syntax while preserving native kind and source span evidence. They MUST map only to existing canonical `TYPE`s and MUST remain syntax-boundary adapters.
+### Phase 6 — Cross-language syntax
 
-Phase 6 does not claim compiler-grade semantic analysis. Type checking, symbol resolution, control/data flow, meaning assignment, and cross-reference projection belong to Phase 7.
+Phase 6 provides deterministic normalized syntax evidence for:
 
-## Evidence and provenance
+```text
+TypeScript · JavaScript · Python · Go · Java · Kotlin
+```
 
-Every discovered lower-level node should be traceable to evidence:
+Adapters MUST preserve native construct kind and source-span evidence, map only to existing canonical types, remain deterministic, and avoid inventing levels or artificial structural folders.
+
+Phase 6 is intentionally **not** compiler-grade semantic analysis. Symbol resolution, type inference, control/data flow, semantic linking, and meaning assignment belong to Phase 7.
+
+## 5. Evidence and provenance
+
+Discovered nodes should remain traceable to the evidence that produced them:
 
 ```text
 Node
- └── Provenance / Observation
-      ├── source URI/path
-      ├── repository revision when available
-      ├── parser/adapter
-      ├── byte/character/source span
-      ├── observation metadata
-      └── confidence/error information
+ └─ observation / provenance
+    ├─ source path or URI
+    ├─ repository revision, when available
+    ├─ adapter/parser
+    ├─ source span or byte range
+    ├─ native syntax metadata
+    └─ warning/error/confidence information
 ```
 
-The engine reports what it observed and how it derived it. It must not silently promote an observation into an asserted semantic truth.
+The engine MUST distinguish **what was observed** from **what was semantically projected**.
 
-## Adapter architecture
+## 6. Determinism
 
-```text
-Rust       ─┐
-TypeScript ─┤
-JavaScript ├─> Syntax Adapter ─> NormalizedSyntaxEvidence ─> Phase 7 projection
-Python     ─┤
-Go         ─┤
-Java       ─┘
-Kotlin      ┘
+For a fixed input revision and environment, discovery and syntax observation MUST be deterministic.
 
-ELF / PE / Mach-O / raw binary ─> BinaryAdapter ─> RepresentationProjection
-UTF-8 / UTF-16 / bytes          ─> EncodingAdapter ─> Character/BIT projection
-```
+Filesystem enumeration is never semantic order. Implementations MUST use stable ordering and deterministic duplicate disambiguation. Paths, timestamps, and line numbers may be provenance but MUST NOT be the sole identity of a semantic node.
 
-External parser/encoding ecosystems are inputs to adapters, not owners of the canonical ontology vocabulary.
+## 7. Representation boundary
 
-## Runtime layer
-
-Runtime inspection is observation, not compile-time structure.
-
-```text
-PROGRAM / SYSTEM
-  ↓
-EXECUTION
-  ├── STATE snapshots
-  ├── EVENT occurrences
-  ├── PROCESS activity
-  ├── FLOW movement
-  └── TRANSITION changes
-```
-
-Runtime data should include timestamps and execution context where available. An observed state/event MUST NOT overwrite source-level structural identity.
-
-## Binary and bit layer
-
-The representation levels are projection paths, not a universal physical stack:
+The representation levels are a graph projection path, not a universal physical chain:
 
 ```text
 INSTRUCTION → EXPRESSION → VALUE → DATA → TOKEN → CHARACTER → BIT
 ```
 
-Different encodings and binaries can branch into different graph paths. The engine must not force every representation through one physical chain.
+`CHARACTER` requires encoding context. `BIT` is the representation boundary and must not be treated as the semantic child of a source-level construct.
 
-## Encoding rule
+Future binary/encoding readers MUST support bounded inspection, malformed-input detection, streaming operation, explicit decoding metadata, and cancellation for large inputs.
 
-`CHARACTER` is context-sensitive. The engine MUST record the encoding used to derive character information; byte sequences alone do not establish character semantics.
+## 8. Pre-Phase-7 certification gate
 
-## Bit inspection safety
+Phase 7 MUST NOT begin until CI proves all of the following:
 
-The bit reader MUST support bounded inspection, streaming rather than unbounded loading, malformed-input detection, explicit endianness/encoding metadata, cancellation for large inputs, and passive inspection without executable interpretation.
+```text
+registry ↔ schema consistency
+        AND
+no synthetic UNIT/MODULE from generic directories
+        AND
+EXECUTION is non-structural + OBSERVED_AT
+        AND
+projection does not mutate parent/containment
+        AND
+AST identity survives line/whitespace movement
+        AND
+native syntax kind remains evidence/metadata
+        AND
+discovery/traversal is deterministic
+        AND
+malformed input remains observable
+```
 
-## Query model
+This gate is an engineering release boundary.
 
-Queries operate over type, kind, identity, edges, and provenance. Query output must report omitted/unmaterialized canonical levels instead of fabricating nodes.
+## 9. Phase 7 boundary
 
-## Determinism
+Phase 7 may consume the evidence emitted by Phases 4–6 and create explicit semantic projections. It may not retroactively redefine the structural or identity rules above.
 
-Discovery and syntax observation MUST be deterministic for a fixed repository revision and environment. Filesystem enumeration order is never semantic order; stable sorting and deterministic duplicate disambiguation are required.
+## 10. Canonical sources
 
-A scan result should include ontology/engine versions, input revision when available, adapter versions, node/edge counts, warnings, and errors.
+The normative source set is:
 
-## Pre-Phase-7 gate
+```text
+specifications/universal-ontology-v1.0.json
+schemas/universal-ontology.schema.json
+specifications/universal-ontology-v1.0.md
+standards/universal-ontology-engine.md
+```
 
-Phase 7 may start only after CI proves:
-
-1. the canonical registry and schema are consistent;
-2. no generic directory creates fake `UNIT`/`MODULE` nodes;
-3. runtime observations do not become structural children;
-4. `PROJECTS_TO` preserves structural `parent` boundaries;
-5. AST IDs survive whitespace/line movement;
-6. native syntax kinds remain evidence/metadata;
-7. malformed input remains observable failure/evidence;
-8. repeated discovery produces deterministic node and edge ordering.
-
-This gate is a release boundary, not a documentation suggestion.
-
-## Certification target
-
-A compliant engine can discover topological boundaries, map native structures to canonical types without forced folders, retain stable identity/provenance, represent relations independently from containment, and emit deterministic machine-readable evidence suitable for the next semantic projection phase.
+Implementation architecture is documented separately in `docs/architecture.md`; the repository README is the concise entry point, not a second normative specification.
