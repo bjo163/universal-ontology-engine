@@ -11,10 +11,11 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "universe.json"
 CONTRACT = ROOT / "specifications" / "foundation-contract.instance.json"
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
-CONTRACT_VERSION = "0.3"
+CONTRACT_VERSION = "1.0"
 CANONICAL_HIERARCHY = [
-    "UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY",
-    "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION",
+    "UNIVERSE", "CREATION", "COSMIC_ORDER", "REALITY", "REALM", "WORLD", "ECOSYSTEM",
+    "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE",
+    "COMPONENT", "ELEMENT", "IMPLEMENTATION",
 ]
 FORBIDDEN_FOUNDATION_REFS = {"ecosystem-foundation", "project-foundation", "repository-foundation"}
 
@@ -49,14 +50,18 @@ def main() -> int:
         fail("optional foundation layers are invalid")
 
     rules = contract.get("rules", {})
-    if rules.get("singleFoundation") is not True:
-        fail("singleFoundation rule must be true")
-    if rules.get("semanticDirectories") is not False:
-        fail("semanticDirectories rule must be false")
-    if rules.get("externalSystems") != "relationship":
-        fail("externalSystems rule must be relationship")
-    if rules.get("stableIdentity") is not True or rules.get("parentScopedIdentity") is not True:
-        fail("stable identity rules must be enabled")
+    expected_rules = {
+        "singleFoundation": True,
+        "semanticDirectories": False,
+        "externalSystems": "relationship",
+        "stableIdentity": True,
+        "parentScopedIdentity": True,
+        "creatorOutsideModel": True,
+        "tokenIsParserDetail": True,
+    }
+    for name, expected in expected_rules.items():
+        if rules.get(name) != expected:
+            fail(f"{name} rule is invalid")
 
     universe = data.get("universe")
     if not isinstance(universe, dict) or not universe.get("id") or not universe.get("name"):
@@ -64,7 +69,7 @@ def main() -> int:
     if not ID_PATTERN.fullmatch(str(universe["id"])):
         fail("universe id must use lowercase kebab-case")
 
-    # The registry itself must not delegate the foundation contract downward.
+    # The registry itself must not delegate the normative foundation contract downward.
     serialized = json.dumps(data, sort_keys=True)
     for forbidden in FORBIDDEN_FOUNDATION_REFS:
         if forbidden in serialized:
@@ -97,7 +102,7 @@ def main() -> int:
         ids.add(ecosystem_id)
         paths.add(path)
 
-    print(f"Universe Foundation v{CONTRACT_VERSION} valid: {len(ecosystems)} ecosystem(s); single foundation; full hierarchy")
+    print(f"Universe Foundation v{CONTRACT_VERSION} valid: {len(ecosystems)} ecosystem(s); 17-level ontology; single foundation")
     return 0
 
 
