@@ -19,9 +19,7 @@ UNIVERSE
                                         └── IMPLEMENTATION
 ```
 
-This is one continuous semantic hierarchy. There is no required `ecosystem-foundation` repository, sub-foundation, or second governance layer.
-
-`DOMAIN` and `ORGANIZATION` may be omitted when they do not apply. The remaining concepts retain their meaning without requiring artificial wrapper layers.
+This is one continuous semantic hierarchy. There is no required ecosystem-foundation repository, sub-foundation, or second normative contract.
 
 ## What this foundation owns
 
@@ -29,58 +27,39 @@ Universe Foundation defines and validates:
 
 - identity and ownership boundaries for every canonical layer;
 - discovery and workspace topology;
-- repository and source boundaries;
-- universal internal implementation vocabulary;
-- native-language/framework mappings;
-- relationships between layers and across ecosystems;
+- project, repository, and source boundaries;
+- universal implementation vocabulary from Unit through Implementation;
+- native language/framework mappings;
+- relationships within and across ecosystems;
 - validation, health, and orchestration contracts.
 
-A concrete repository may use native structures such as `src`, `apps`, `packages`, `crates`, `cmd`, `pkg`, `internal`, `modules`, and `components`. These are implementation mappings, not mandatory universal directory names.
+Native structures remain valid. `src`, `apps`, `packages`, `crates`, `cmd`, `pkg`, `internal`, `modules`, and `components` are implementation mappings, not mandatory universal directories.
 
-## Native mapping
+## Universal identity
 
-```text
-UNIT
-├── Rust      → crate
-├── Node      → package / application / library
-├── Go        → package / command / service
-├── Python    → package / module
-└── Java      → module / package / application
-```
+Every canonical node SHOULD have a stable identifier within its parent scope. Paths and directory names are operational metadata unless explicitly declared as identity.
 
-Likewise, `function`, `method`, `type`, `class`, `handler`, and similar language constructs are mapped to `ELEMENT` or `IMPLEMENTATION` according to the relevant profile.
-
-The contract MUST NOT force a repository to create physical directories named `unit/`, `module/`, `component/`, `element/`, or `implementation/`.
+The generic node contract is `schemas/foundation-node.schema.json`.
 
 ## Registry
 
-The canonical top-level registry is `universe.json`. It identifies ecosystems and their operational locations. Internal ecosystem/project/repository details are discovered from those boundaries rather than by introducing another foundation repository.
+`universe.json` is the top-level registry. It identifies ecosystems and their operational locations. Lower-level entities are discovered through explicit parent/child references rather than a second foundation contract.
 
-An `ecosystem.json` file may be used as an optional lightweight discovery manifest at an ecosystem root. It is metadata, not a second foundation contract.
+An `ecosystem.json` file MAY be used as an optional local discovery manifest, but it is metadata only and MUST NOT redefine the canonical hierarchy.
 
-## Repository layout
+## Foundation contract
 
-```text
-universe-foundation/
-├── governance/
-├── specifications/
-├── standards/
-├── schemas/
-├── tools/
-├── tests/
-└── README.md
-```
+The normative contract is v0.3 and is represented by:
 
-## Specifications
-
-- `governance/hierarchy.md` — normative semantic hierarchy and ownership rules.
-- `specifications/universe-contract.md` — complete foundation contract.
+- `governance/hierarchy.md` — canonical hierarchy and ownership rules.
+- `specifications/universe-contract.md` — complete normative contract.
 - `specifications/universe-contract.json` — machine-readable contract schema.
-- `specifications/universe-contract.instance.json` — reference instance.
-- `specifications/foundation-contract.md` — universal lower-layer semantics and native mapping.
-- `specifications/foundation-contract.json` — machine-readable hierarchy contract.
-- `schemas/universe.schema.json` — registry schema.
-- `standards/workspace.md` — workspace and discovery conventions.
+- `specifications/universe-contract.instance.json` — reference contract instance.
+- `specifications/foundation-contract.md` — universal lower-layer semantics and mappings.
+- `specifications/foundation-contract.json` — machine-readable foundation schema.
+- `specifications/hierarchy-model.md` — canonical node/parent/discovery model.
+- `schemas/universe.schema.json` — Universe registry schema.
+- `schemas/foundation-node.schema.json` — generic canonical node schema.
 
 ## CLI
 
@@ -95,36 +74,17 @@ python tools/universe_cli.py doctor X:\REPO\universe
 
 Use `--json` for launcher/orchestrator integration.
 
-## Foundation chain
-
-The complete model is intentionally a single chain:
+## Native mapping
 
 ```text
-universe-foundation
-        ↓
-UNIVERSE
-        ↓
-ECOSYSTEM
-        ↓
-ORGANIZATION?
-        ↓
-DOMAIN?
-        ↓
-PROJECT
-        ↓
-REPOSITORY
-        ↓
-SOURCE
-        ↓
 UNIT
-        ↓
-MODULE
-        ↓
-COMPONENT
-        ↓
-ELEMENT
-        ↓
-IMPLEMENTATION
+├── Rust      → crate
+├── Node      → package / application / library
+├── Go        → package / command / service
+├── Python    → package / module
+└── Java      → module / package / application
 ```
 
-No lower-level foundation repository is required. Native repositories remain implementation containers governed by this same universal contract.
+Lower constructs such as module, class, struct, function, method, interface, handler, and concrete logic are mapped semantically to `MODULE`, `COMPONENT`, `ELEMENT`, and `IMPLEMENTATION` as appropriate for the language/framework.
+
+The foundation never requires artificial `unit/`, `module/`, `component/`, `element/`, or `implementation/` directories.
