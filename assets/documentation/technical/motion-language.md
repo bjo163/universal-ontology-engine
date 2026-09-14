@@ -1,16 +1,20 @@
-# OX-DX Motion Language
+# OX-DX Motion Language — Implementation Bridge
 
-This technical document is the implementation bridge for motion.
+Brand Bible authority:
 
-The canonical visual-motion grammar is:
+`../OX-DX-BRAND-BIBLE-v1.0.md`
 
-**`../visual/motion-grammar.md`**
+Canonical visual grammar:
 
-## Core rule
+`../visual/motion-grammar.md`
+
+## Axiom
 
 **MOTION IS RESOLUTION.**
 
-Motion should change continuity, persistence, density, provenance visibility, or witness state while preserving at least one spatial invariant.
+## Operational rule
+
+**RESOLVE, DON'T DECORATE.**
 
 ## Canonical tokens
 
@@ -25,7 +29,7 @@ Resolution easing:
 
 `cubic-bezier(0.21, 0.63, 0.28, 1)`
 
-## Canonical visual states
+Canonical visual states:
 
 `FIELD → RIFT → TRACE → PULSE → GRAIN`
 
@@ -33,10 +37,8 @@ These are visual states only, not engine phases or ontology levels.
 
 ## Required behavior
 
-- preserve an anchor, axis, source, or break coordinate during transformation;
-- avoid generic slide/fade as the primary motion language;
+- preserve an anchor, axis, source, or break coordinate;
+- avoid generic slide/fade as the primary identity behavior;
 - avoid scale-from-zero, particles, ambient parallax, and decorative glitch loops;
 - respect `prefers-reduced-motion: reduce`;
 - never hide required information behind animation.
-
-For detailed interaction behavior see `../visual/interaction-grammar.md`.

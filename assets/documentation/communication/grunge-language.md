@@ -1,10 +1,14 @@
 # OX-DX Grunge Language
 
-Grunge is the rebellious edge of OX-DX communication.
+Grunge is controlled resistance to false certainty, artificial structure, bloated language, and polished claims unsupported by evidence.
 
-It is controlled.
+## Canonical visual expression
 
-The target is not aggression. The target is resistance to false certainty, artificial structure, bloated language, and polished claims that the evidence cannot support.
+**CLEAN STRUCTURE. DIRTY SURFACE.**
+
+“Dirty” is the public brand phrase.
+
+In implementation, dirt means deterministic friction such as trace erosion, signal loss, scan breaks, compression scars, or boundary wear—not random visual noise.
 
 ## Core attitudes
 
@@ -18,17 +22,9 @@ The target is not aggression. The target is resistance to false certainty, artif
 
 ## Approved pressure lines
 
-**DON'T FORCE THE SHAPE.**
+Use the canonical copy library:
 
-**READ THE EVIDENCE.**
-
-**DON'T REWRITE THE WORLD.**
-
-**BAD ASSUMPTIONS CREATE CLEAN LIES.**
-
-**KEEP THE TRACE.**
-
-Use one when it sharpens the technical point. Do not stack them as decoration.
+`../brand-bible/canonical-copy.md`
 
 ## Pattern
 
@@ -36,19 +32,13 @@ Use one when it sharpens the technical point. Do not stack them as decoration.
 2. The next paragraph states the engineering consequence.
 3. The technical source remains authoritative.
 
-Example:
-
-**Don't rewrite the world.**
-
-Discovery is read-only. Native structures remain authoritative, and canonical projection must not silently mutate the target repository.
-
 ## Avoid
 
 - hostility toward contributors;
-- “us versus them” posture;
 - profanity as a substitute for clarity;
 - constant negation;
-- fake underground aesthetics in technical status;
-- using rebellion to ignore standards or evidence.
+- fake underground aesthetics;
+- random dirt/VHS/scratch treatment;
+- using rebellion to ignore evidence or standards.
 
-**Grunge is attitude, not noise.**
+**Grunge is friction, not noise.**

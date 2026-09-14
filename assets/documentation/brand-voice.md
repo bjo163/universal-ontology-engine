@@ -1,74 +1,86 @@
 # OX-DX Brand Voice
 
-## Voice
+Brand Bible v1.0 is the master authority:
 
-OX-DX sounds like **ancient questions meeting modern machines**: clear, sharp, reflective, slightly mysterious, raw, precise, and confident.
+`OX-DX-BRAND-BIBLE-v1.0.md`
 
-It never needs startup hype to sound important. The system should feel intelligent because it makes careful distinctions.
+This file is the canonical **voice specialist**.
 
-## Tone
+## Voice formula
 
-- **Technical:** exact, testable, bounded. State what exists and what does not.
-- **Philosophical:** concise and grounded. Ask large questions without pretending they are engineering proof.
-- **Community / open source:** direct, respectful, inspectable. Prefer evidence over authority.
-- **Release:** calm and factual. Celebrate progress without implying unimplemented capability.
-- **Failure / warning:** explicit. Do not hide uncertainty behind polished language.
+**QURANIC DEPTH × GEN-Z CLARITY × GRUNGE ATTITUDE × INTELLIGENT PRECISION**
 
-## Words we use
+## Quranic Depth
 
-`evidence`, `trace`, `observe`, `resolve`, `relation`, `graph`, `structure`, `context`, `provenance`, `identity`, `representation`, `scale`, `bounded`, `testable`, `reviewable`.
+Reflective, measured, aware of questions around creation, order, measure, sign, knowledge, relation, observation, layers, and meaning.
 
-## Words we avoid
+Never use philosophical inspiration as technical authority.
 
-Avoid generic marketing language such as `revolutionary`, `magic`, `AI-powered`, `game-changing`, `disruptive`, `ultimate`, `world-changing`, and unsupported `intelligent` claims.
+## Gen-Z Clarity
 
-Avoid preaching language, invented scripture, and claims that the technical ontology is divinely specified.
+Direct.
 
-Avoid bureaucracy when one exact sentence works.
+Fast.
 
-## Sentence rhythm
+Confident.
 
-Use short declarative sentences to establish principles.
+Unbloated.
 
-**Systems are messy.**
+No forced slang, memes, or manufactured irony.
 
-Then use one precise explanatory sentence when the distinction matters.
+## Grunge Attitude
 
-**Something happening is not the same as something being.** Runtime observation therefore does not become structural ownership.
+Anti-hype.
 
-Use fragments sparingly as editorial pressure, not as a gimmick.
+Anti-bloat.
 
-**Evidence first.**  
-**Don't flatten the world.**  
-**The graph connects.**
+Anti-false-certainty.
 
-## Technical language
+Raw enough to preserve friction.
 
-Prefer canonical repository terminology. Distinguish containment, projection, representation, observation, type, kind, identity, and provenance. Never invent ontology levels for branding.
+Never hostile.
 
-When a feature is planned, say **planned**. When gated, say **gated**. When evidence is missing, say **unmaterialized** or **not established**, according to the technical source.
+## Intelligent Precision
 
-## Philosophical language
+State the observation.
 
-Philosophical language may speak about order, signs, scale, relation, measure, observation, and trace. It must remain clearly separate from normative engineering claims.
+State the distinction.
 
-The desired tension is:
+State the consequence.
 
-**deep enough to make you think; precise enough to inspect.**
+Use canonical terminology.
 
+Do not decorate intelligence with fake equations, fake code, or pseudo-scientific language.
 
-## Communication source routing
+## Sentence rules
 
-This file remains the canonical source for **voice and tone**.
+- prefer short sentences;
+- use strong verbs;
+- make concrete claims;
+- use conceptual contrasts;
+- allow controlled mystery;
+- name uncertainty honestly;
+- keep current implementation separate from roadmap.
 
-Operational communication rules are intentionally separated by concern:
+## Poetic rule
 
-- `communication/messaging-framework.md` — message depth and public explanation hierarchy.
-- `communication/terminology.md` — canonical definitions and technical wording.
-- `communication/conceptual-boundaries.md` — distinctions that must not be conflated.
-- `communication/quranic-inspiration.md` — philosophical/engineering boundary.
-- `communication/status-language.md` — maturity claims.
-- `communication/github-language.md` and `communication/release-language.md` — operational surfaces.
-- `communication/checklist.md` — pre-publication audit.
+A poetic line must point toward a real concept.
 
-Do not duplicate the full voice definition inside those files. They apply this voice to narrower communication concerns.
+Beautiful language must never hide missing evidence.
+
+## Surface rule
+
+A social post may be shorter than documentation.
+
+It may not be more certain.
+
+## Final voice test
+
+Does it sound:
+- deep without being pretentious?
+- young without being childish?
+- raw without being messy?
+- philosophically inspired without claiming religious authority?
+- technical without being cold?
+
+If not, revise.

@@ -1,5 +1,7 @@
 # OX-DX Status Language
 
+Brand Bible v1.0 is the master brand authority. This file remains the specialist for technical maturity wording.
+
 Technical maturity words are claims. Use them only when repository evidence supports them.
 
 ## Allowed statuses
@@ -49,8 +51,8 @@ unless the repository defines and proves an equivalent claim.
 ## Current repository truth at audit time
 
 - Universal Ontology contract: **v1.0.0**.
-- Stable implementation release in the dated audit snapshot (2026-09-14 06:41 UTC): **v0.1.4**.
-- Latest prerelease in that snapshot: **v0.1.4-dev.15**. After promotion, `dev/Cargo.toml` reports **0.1.4**.
+- Stable implementation release in the Brand Bible audit snapshot (2026-09-14 07:14 UTC): **v0.1.7**.
+- Latest preceding prerelease in that snapshot: **v0.1.7-dev.21**. `main/Cargo.toml` reports **0.1.7**.
 - README/engineering status describes Phases 1–6 as **HARDENED**, Phase 7 as **GATED**, and later phases as **PLANNED**.
 
 Release versions change faster than communication policy. For live status, trust generated repository metadata and GitHub Releases instead of copying these audit-time values into general marketing copy.

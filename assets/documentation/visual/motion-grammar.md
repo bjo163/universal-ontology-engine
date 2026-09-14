@@ -1,33 +1,68 @@
 # OX-DX Motion Grammar
 
+## Axiom
+
 **MOTION IS RESOLUTION.**
 
-Motion reveals evidence relationships, not ambient spectacle.
+## Operational rule
+
+**RESOLVE, DON'T DECORATE.**
+
+Motion reveals evidence relationships. It is not ambient spectacle.
 
 ## Motion primitives
-**Persist** — broken rail gains continuity in measured segments.
 
-**Rift** — carrier opens deliberate gaps while anchor remains fixed.
+### Persist
+A broken rail gains continuity in measured segments.
 
-**Trace** — provenance rail appears from anchor toward source.
+### Rift
+A stable carrier opens deliberate gaps while its anchor remains fixed.
 
-**Pulse** — continuous rail resolves into cadence.
+### Trace
+A provenance rail appears from anchor toward source.
 
-**Grain** — cadence resolves into discrete square/diamond units.
+### Pulse
+A continuous rail resolves into cadence.
 
-**Witness** — offset observation bracket appears without moving observed object.
+### Grain
+Cadence resolves into discrete square/diamond units.
+
+### Witness
+An offset observation bracket appears without moving the observed object.
 
 ## Timing
-- 98 ms — micro response
-- 196 ms — witness / hover / focus
-- 294 ms — relation / local resolution
-- 490 ms — large field transformation
 
-Recommended easing: `cubic-bezier(0.21, 0.63, 0.28, 1)`.
+- `98ms` — micro response
+- `196ms` — witness / hover / focus
+- `294ms` — relation / local resolution
+- `490ms` — large field transformation
+
+Resolution easing:
+
+`cubic-bezier(0.21, 0.63, 0.28, 1)`
 
 ## Transition law
-At least one invariant stays fixed: anchor, axis, source, or break coordinate.
 
-Avoid generic slide-in, scale-from-zero, particles, parallax, decorative glitch loops, and opacity-only resolution.
+At least one invariant remains fixed:
+- anchor;
+- axis;
+- source;
+- break coordinate.
 
-Under `prefers-reduced-motion: reduce`, render final state immediately or use one short opacity transition; no information may depend on motion.
+## Avoid
+
+- generic slide/fade as the identity language;
+- scale-from-zero;
+- perpetual particles;
+- ambient parallax;
+- decorative glitch loops;
+- opacity-only “resolution”;
+- fake progress.
+
+## Reduced motion
+
+Under `prefers-reduced-motion: reduce`:
+- render the final state directly where practical;
+- preserve witness/break/rail distinctions;
+- use at most one short opacity transition;
+- never hide information behind motion.

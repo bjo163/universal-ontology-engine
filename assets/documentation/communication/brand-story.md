@@ -1,29 +1,47 @@
-# OX-DX Brand Story
+# OX-DX Extended Brand Story
 
-Reality is complicated. Software is not much cleaner.
+**Role:** extended narrative.
 
-A repository can expose directories, manifests, source syntax, names, spans, dependencies, state, events, and encoded data. Another system exposes a different shape. If we force both into one artificial tree too early, the diagram becomes cleaner while the model becomes less honest.
+**Master authority:** `../OX-DX-BRAND-BIBLE-v1.0.md`
 
-OX-DX starts somewhere else.
+**Canonical essence:** `../brand-bible/brand-essence.md`
 
-It starts with what can be observed.
+This file may expand the story, but it must not redefine brand identity, promise, technical status, Quranic boundaries, or canonical terminology.
 
-Native evidence stays native. Provenance stays attached to where something was seen. Identity is kept separate from location. Structural ownership is kept separate from relations that reference, project, represent, invoke, cause, or observe.
+## Story
 
-Then the graph connects what relates.
+Reality does not arrive pre-sorted.
 
-The Universal Ontology gives those observations a common vocabulary: 49 canonical types arranged as a resolution spine over a graph. The sequence provides order without demanding that every resource physically materialize every level.
+Software does not either.
 
-The current Rust implementation focuses on software evidence: registry validation, typed graph invariants, read-only discovery, Rust AST observation, and deterministic syntax observation across supported languages. Semantic projection beyond the hardened bridge remains gated. Runtime observation, deeper representation readers, bounded bit inspection, and query/certification remain later work.
+A repository leaves traces: directories, manifests, source constructs, names, spans, dependencies, state, events, data, and representation. Different ecosystems describe those traces differently.
 
-That boundary matters.
+OX-DX begins with a refusal: **do not force those differences into one artificial shape just because a clean diagram is convenient.**
 
-OX-DX is ambitious, but ambition is not permission to invent certainty.
+Observe first.
 
-**EVIDENCE FIRST.**
+Preserve the source.
 
-Observe what exists. Preserve the trace. Connect the relation. Resolve only what the evidence supports.
+Keep provenance separate from identity.
 
-That is how OX-DX moves **FROM STRUCTURE TO EXPERIENCE.**
+Use explicit graph relations instead of turning every connection into ownership.
 
-That is why its scale can be described **FROM UNIVERSE TO BIT.**
+Project only what evidence supports.
+
+The Universal Ontology gives a shared vocabulary across scales. The graph keeps containment, projection, observation, representation, reference, and causation distinguishable. The Rust engine implements the current evidence/ontology/graph contract at its stated repository scope.
+
+The broader OX-DX horizon asks how structure becomes interpretable experience without erasing the trace that produced it.
+
+That is why the identity holds both:
+
+**FROM STRUCTURE TO EXPERIENCE.**
+
+and:
+
+**FROM UNIVERSE TO BIT.**
+
+Ancient questions sharpen the inquiry.
+
+Modern machines execute the work.
+
+Evidence decides the technical claim.

@@ -1,6 +1,14 @@
 # OX-DX Assets
 
-This directory contains the canonical OX-DX brand foundation, visual language, and derived asset system.
+This directory contains the OX-DX identity, canonical Brand Bible, communication system, naming architecture, original visual grammar, and derived assets.
+
+## Start here
+
+**Master brand reference:**
+
+`documentation/OX-DX-BRAND-BIBLE-v1.0.md`
+
+Do not start a new brand subsystem before checking the Brand Bible.
 
 ## Canonical identity
 
@@ -8,68 +16,46 @@ This directory contains the canonical OX-DX brand foundation, visual language, a
 - Master icon: `brand/icon/ox-dx-icon.svg`
 - Wordmark: `brand/wordmark/ox-dx-wordmark.svg`
 - Lockups: `brand/lockups/`
-- Approved visual symbols: `brand/symbols/`
-- Compact glyph notation: `brand/glyphs/`
+- Editable master geometry: `source/design/ox-dx-master-geometry.svg`
 
-## Visual language
+## Canonical supporting visual language
 
-- Canonical original visual grammar: `documentation/visual/README.md`
-- Original supporting symbols: `brand/symbols/original/`
-- Original compact glyphs: `brand/glyphs/original/`
-- Original patterns / textures / diagram / data / motion primitives: `vector/original/`
-- Original backgrounds / dividers / application examples: `web/*/original/`
+- Visual grammar: `documentation/visual/`
+- New supporting symbols: `brand/symbols/original/`
+- New glyphs: `brand/glyphs/original/`
+- Patterns/textures/diagrams/data/motion: `vector/original/`
+- Backgrounds/dividers/application examples: `web/*/original/`
+- Design tokens: `documentation/technical/design-tokens.md`
 
-- Patterns: `vector/patterns/`
-- Controlled grunge textures: `vector/textures/`
-- Web backgrounds: `web/backgrounds/`
-- Header / hero / footer: `web/header/`, `web/hero/`, `web/footer/`
-- GitHub system: `web/github/`
-- README system: `web/readme/`
-- Release system: `web/releases/`
-- Social / OpenGraph system: `web/social/`
+The system is the **Interrupted Evidence Field**.
 
-## Documentation
+## Brand source hierarchy
 
-Start with `documentation/brand-guidelines.md`, then use the manifesto, voice, tagline, logo, governance, color, typography, token, and motion specifications as the shared language for future website, documentation, UI, release, and product work.
+1. `documentation/OX-DX-BRAND-BIBLE-v1.0.md`
+2. `documentation/brand-bible/`
+3. canonical specialist docs referenced by the Bible
+4. approved application docs/assets
+5. deprecated legacy supporting assets
+6. experimental work
 
-## Source / editable
+Technical truth still comes from normative specification/schema/standards/implementation/tests, not brand prose.
 
-- Existing deterministic base renderer: `source/design/render_brand_assets.py`
-- Brand-system renderer: `source/design/render_brand_system.py`
-- Approved master geometry: `source/design/ox-dx-master-geometry.svg`
+## Specialist sources
 
-Future contributors must derive new assets from the canonical geometry and documented tokens. Do not redraw the symbol, modify the wordmark, invent palette values, or embed new technical ontology semantics in decorative graphics.
-
-## Communication source hierarchy
-
-- Voice and tone: `documentation/brand-voice.md`
-- Message hierarchy: `documentation/communication/messaging-framework.md`
-- Canonical terminology: `documentation/communication/terminology.md`
-- Philosophical/engineering boundary: `documentation/communication/quranic-inspiration.md`
-- Status claims: `documentation/communication/status-language.md`
-
-Technical truth still comes from the repository's normative specifications, engineering standards, implementation, tests, and generated release/status evidence.
-
-
-## Brand architecture source hierarchy
-
-- Master architecture: `documentation/architecture/brand-architecture.md`
-- Responsibility ownership: `documentation/architecture/responsibility-matrix.md`
-- Repository policy: `documentation/architecture/repository-naming.md`
-- Package/CLI policy: `documentation/architecture/package-naming.md`
-- Product/interface policy: `documentation/architecture/product-naming.md`
-- Version policy: `documentation/architecture/versioning.md`
-- Domain plan: `documentation/architecture/domain-architecture.md`
-
-These documents govern naming and ownership only. They do not redefine ontology semantics or implementation behavior.
-
-
-## Original visual-system source
-
-- Implementation tokens: `source/design/original-visual-tokens.json`
+- Voice: `documentation/brand-voice.md`
+- Naming: `documentation/architecture/brand-architecture.md`
 - Visual grammar: `documentation/visual/visual-grammar.md`
-- Geometry: `documentation/visual/geometry-system.md`
-- Proportion: `documentation/visual/proportion-system.md`
-- Originality audit: `documentation/visual/originality-audit.md`
+- Color: `documentation/technical/color-system.md`
+- Typography: `documentation/technical/typography.md`
+- Governance: `documentation/brand-bible/governance.md`
+- Asset governance: `documentation/asset-governance.md`
 
-The master logo remains `brand/logo/ox-dx-logo-primary.svg`. Supporting-system evolution must not mutate it.
+## Source/editable
+
+- Master geometry: `source/design/ox-dx-master-geometry.svg`
+- Original visual tokens: `source/design/original-visual-tokens.json`
+- Original visual source notes: `source/design/original-visual-system.md`
+
+Do not redraw the master symbol, modify the wordmark, invent palette values, or embed technical ontology semantics into decorative graphics.
+
+**CONVERGENCE, NOT ACCUMULATION.**

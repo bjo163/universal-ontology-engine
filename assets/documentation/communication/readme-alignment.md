@@ -1,5 +1,7 @@
 # README Communication Alignment
 
+> **Historical audit note:** this document records an earlier communication-alignment pass. Brand Bible v1.0 and live generated repository status supersede its volatile release snapshot. Do not treat version numbers below as current unless revalidated.
+
 This document records recommended future README alignment. It intentionally does **not** rewrite `README.md`.
 
 Audit basis: repository state inspected on **2026-09-14**.

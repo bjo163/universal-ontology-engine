@@ -1,57 +1,11 @@
 # OX-DX Canonical Phrases
 
-Use this list to prevent slogan drift.
+**Compatibility pointer — Brand Bible v1.0**
 
-## Primary identity
+The canonical phrase and copy library is:
 
-**OX-DX**
+`../brand-bible/canonical-copy.md`
 
-**Universal Ontology & Experience Engine**
+Do not create a competing phrase list here.
 
-## Primary brand statement
-
-**FROM STRUCTURE TO EXPERIENCE.**
-
-## Secondary scale statement
-
-**FROM UNIVERSE TO BIT.**
-
-## Core principle
-
-**EVIDENCE FIRST.**
-
-## Core attitude
-
-**DON'T FORCE THE SHAPE.**
-
-## Core method
-
-**OBSERVE. RESOLVE. UNDERSTAND.**
-
-## Additional approved phrases
-
-**SYSTEMS LEAVE TRACES.**
-
-**NATIVE STRUCTURE STAYS NATIVE.**
-
-**OBSERVATION IS NOT OWNERSHIP.**
-
-**PROVENANCE IS NOT IDENTITY.**
-
-**THE GRAPH CONNECTS.**
-
-**RESOLUTION, NOT REDUCTION.**
-
-**READ THE EVIDENCE.**
-
-**DON'T REWRITE THE WORLD.**
-
-**BAD ASSUMPTIONS CREATE CLEAN LIES.**
-
-## Use rules
-
-- Do not create unnecessary alternatives.
-- Do not convert supporting phrases into product names.
-- Do not present philosophical phrases as technical specifications.
-- Pair bold statements with technical boundaries when misunderstanding is plausible.
-- Prefer one canonical phrase over three near-synonyms.
+This path remains for backward-compatible documentation links.

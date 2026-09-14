@@ -1,70 +1,87 @@
 # OX-DX Brand Guidelines
 
-## Brand
-**OX-DX**  
-Universal Ontology & Experience Engine
+Master authority:
 
-**FROM STRUCTURE TO EXPERIENCE.**  
+`OX-DX-BRAND-BIBLE-v1.0.md`
+
+This file is a compact implementation guide. It does not compete with the Brand Bible.
+
+## Brand
+
+**OX-DX**
+
+**Universal Ontology & Experience Engine**
+
+Technical implementation:
+
+**Universal Ontology Engine**
+
+Primary:
+
+**FROM STRUCTURE TO EXPERIENCE.**
+
+Secondary:
+
 **FROM UNIVERSE TO BIT.**
 
-The approved master logo remains canonical and must not be casually redesigned.
+Core:
 
-## Visual system
-The canonical supporting visual language is the **Interrupted Evidence Field**, documented in `visual/README.md`.
-
-It grows from the approved mark through:
-- opposed open frames;
-- diamond witness anchors;
-- measured interruption;
-- persistence rails;
-- provenance tails;
-- void slots;
-- deterministic disturbed surfaces;
-- resolution by decomposition rather than zoom.
+**EVIDENCE FIRST.**
 
 ## Identity equation
+
 **QURANIC DEPTH × GEN-Z CLARITY × GRUNGE ATTITUDE × INTELLIGENT PRECISION**
 
-Quranic influence remains philosophical and geometric: order, proportion, measure, layering, symmetry, restraint, reflection, observation. It never requires scripture, calligraphy, religious emblems, or divine authorization claims.
+## Visual system
 
-Gen-Z energy appears through direct composition, bold hierarchy, unusual but disciplined spacing, and low-bloat communication—not slang or memes.
+Canonical supporting language:
 
-Grunge creates friction against precision.
+**Interrupted Evidence Field**
 
-**CLEAN STRUCTURE. DISTURBED SURFACE.**
+Public grunge principle:
+
+**CLEAN STRUCTURE. DIRTY SURFACE.**
+
+Dirty means controlled deterministic friction, never random damage.
 
 ## Recognizable without logo
-An OX-DX composition should remain recognizable through:
-- Interrupted Dyad frames;
-- off-axis witness anchors;
-- relation persistence rails;
+
+Use:
+- open/interrupted frames;
+- diamond witness anchors;
+- measured breaks;
+- persistence rails;
+- provenance tails;
 - intentional void slots;
-- 7 / 21 / 49 field logic;
-- deterministic erosion/dropout;
-- White/Void structure with restrained Cyan signal.
+- 7 / 21 / 49 supporting proportions;
+- monochrome structure with restrained Cyan signal.
 
 ## Correct usage
-- use supplied canonical logo SVG;
-- preserve aspect ratio and clear space;
-- use supporting grammar around the logo, never inside it;
-- preserve color-independent meaning;
-- use texture only on surfaces/supporting rails;
-- keep critical diagrams readable in monochrome.
+
+- use canonical SVG identity assets;
+- preserve geometry, aspect ratio, clear space, and contrast;
+- keep the master mark in a quiet field;
+- derive new supporting work from `visual/` and `technical/design-tokens.md`;
+- preserve monochrome and accessibility behavior.
 
 ## Incorrect usage
-- do not stretch, rotate, soften, glitch, texture, or distort the master logo;
-- do not default to glowing grids, circles, hexagons, gradients, glass, or generic cyberpunk;
-- do not add random scratches/VHS/paper grain as identity;
-- do not invent palette colors;
-- do not add sacred text/calligraphy/religious symbols;
-- do not turn visual grammar terms into ontology semantics;
-- do not add fake equations, coordinates, benchmarks, or pseudo-technical labels.
 
-## Source hierarchy
-- master identity: `brand/logo/`, `brand/icon/`, `brand/wordmark/`
-- visual grammar: `documentation/visual/`
-- implementation tokens: `documentation/technical/design-tokens.md`
-- color: `documentation/technical/color-system.md`
-- typography: `documentation/technical/typography.md`
-- motion: `documentation/visual/motion-grammar.md`
-- brand architecture: `documentation/architecture/brand-architecture.md`
+- do not redraw or texture the master logo;
+- do not invent palette colors;
+- do not use generic glowing grids, hexagons, circuit boards, AI brains, or Web3 networks as identity;
+- do not use random VHS/paper dirt;
+- do not use religious symbols or fabricated scripture;
+- do not turn visual constructs into ontology semantics;
+- do not use fake equations, coordinates, benchmarks, or code for atmosphere.
+
+## Canonical sources
+
+- Brand Bible: `OX-DX-BRAND-BIBLE-v1.0.md`
+- Logo: `logo-specification.md`
+- Voice: `brand-voice.md`
+- Naming: `architecture/brand-architecture.md`
+- Visual grammar: `visual/visual-grammar.md`
+- Color: `technical/color-system.md`
+- Typography: `technical/typography.md`
+- Tokens: `technical/design-tokens.md`
+- Governance: `brand-bible/governance.md`

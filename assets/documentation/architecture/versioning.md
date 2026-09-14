@@ -1,104 +1,109 @@
 # OX-DX Versioning & Product Identifiers
 
-Version numbers describe compatibility/release boundaries. They must not blur brand, product, engine, ontology, and schema identity.
+Master brand authority:
+
+`../OX-DX-BRAND-BIBLE-v1.0.md`
+
+This file is the canonical specialist for version boundaries.
 
 ## Version layers
 
 | Layer | Identifier | Version rule |
 |---|---|---|
-| Brand | **OX-DX** | Normally unversioned. A brand identity does not inherit a technical version automatically. |
-| Product/system | **Universal Ontology & Experience Engine** | Version only if a future product contract requires one. Do not borrow engine/ontology version casually. |
-| Engine | **Universal Ontology Engine** | Follows repository software release train. |
+| Brand identity | **OX-DX** | Normally unversioned as a public name. |
+| Brand system | **OX-DX Brand Bible** | Versioned; current canonical system is **v1.0**. |
+| Product/system | **Universal Ontology & Experience Engine** | Version only if a future product contract requires one. |
+| Engine | **Universal Ontology Engine** | Independent software release train. |
 | Ontology | **Universal Ontology** | Normative ontology contract version. |
-| Schema | specific schema artifact | Version according to its compatibility contract/filename/schema metadata. |
-| Tool/interface | specific tool/product | Own version only when independently shipped. |
+| Schema | specific schema artifact | Version according to schema compatibility/contract. |
+| Tool/interface | specific independently shipped surface | Own version only if it has a real independent lifecycle. |
 
-## Current verified snapshot
+## Current audit snapshot
 
-At the repository audit on **2026-09-14**:
+On 2026-09-14 07:14 UTC:
 
-- latest stable engine release: **v0.1.4**;
-- root `main/Cargo.toml`: **0.1.4**;
-- Universal Ontology contract: **v1.0.0**.
+- **OX-DX Brand Bible:** v1.0;
+- **Universal Ontology:** v1.0.0;
+- **Universal Ontology Engine stable release observed:** v0.1.7;
+- **main Cargo version:** 0.1.7;
+- **latest preceding prerelease observed:** v0.1.7-dev.21.
 
-These are separate facts.
+The engine version is volatile. Live truth comes from GitHub Releases/generated repository status.
 
-## Essential distinction
+## Do not conflate
 
-Do not say:
+Incorrect:
 
-> OX-DX is v1.0.0
+> OX-DX is v1.0.0.
 
-merely because Universal Ontology is v1.0.0.
+Incorrect:
 
-Do not say:
-
-> the ontology is v0.1.4
-
-because the Rust engine release is v0.1.4.
+> The ontology is v0.1.7.
 
 Preferred:
 
-> Universal Ontology v1.0.0 is implemented by the Universal Ontology Engine, whose software releases follow an independent 0.x train.
+> OX-DX Brand Bible v1.0 defines the stable brand system. Universal Ontology v1.0.0 is the normative ontology contract. Universal Ontology Engine releases follow an independent software release train.
 
-## Stable release
+## Brand-system versioning
 
-Use normal machine-friendly semantic release identifiers already established by the repository, for example:
+### v1.x
+Backward-compatible evolution:
+- clarification;
+- accessibility improvement;
+- additive application guidance;
+- new compliant examples;
+- non-breaking governance refinements.
 
-`v0.1.4`
+### v2.0
+Potentially breaking:
+- master identity geometry;
+- core descriptor/hierarchy;
+- primary brand promise;
+- major voice architecture;
+- major palette/visual-grammar replacement.
 
-A stable channel means stable within the repository's release policy. It does not automatically mean every roadmap capability is complete.
+## Stable engine release
+
+Use machine-friendly semantic identifiers such as:
+
+`v0.1.7`
+
+Stable means stable within repository release policy, not completion of every roadmap phase.
 
 ## Development release
 
-Use machine-friendly prerelease identifiers following repository automation conventions, for example:
+Use repository automation conventions such as:
 
-`v0.1.4-dev.15`
+`v0.1.7-dev.21`
 
-Do not invent branded release names for ordinary development builds.
+Do not create branded codenames for ordinary development builds.
 
-## Experimental product
+## Experimental products
 
-Mark the product/capability status explicitly:
+Mark maturity explicitly:
 
 **EXPERIMENTAL**
 
-Then give its technical version separately if one exists.
+Then state the technical version separately if one exists.
 
-Do not encode experimentation only through a clever codename.
+## Milestones
 
-## Milestone
+A milestone is an acceptance/program boundary.
 
-A milestone names an acceptance boundary or program checkpoint.
+It is not automatically:
+- a brand version;
+- software release;
+- product version;
+- ontology version.
 
-A milestone is not automatically:
-- a software release;
-- a product version;
-- an ontology version.
+## Migration
 
-## Schema versioning
+Version/naming changes must:
+1. document old → new;
+2. preserve compatibility/aliases when practical;
+3. update references and automation;
+4. state breaking impact;
+5. define migration path;
+6. retain historical release lineage.
 
-Schema identity should be explicit and technical.
-
-Do not infer schema compatibility from the OX-DX brand or engine version.
-
-Where normative files already have established names, preserve them.
-
-## Deprecation and migration
-
-Naming/version changes follow these rules:
-
-1. never rename casually;
-2. document old → new mapping;
-3. preserve aliases/compatibility where practical;
-4. mark deprecated identifiers explicitly;
-5. update links, examples, package metadata, and automation;
-6. define a migration window when external consumers are affected;
-7. retain historical release references;
-8. do not erase the technical lineage merely to make branding symmetrical.
-
-## Volatile version data
-
-General brand documentation should avoid hardcoding “latest” versions unless the text is explicitly a dated audit snapshot.
-
-For live truth, prefer generated release metadata and repository state.
+General brand documentation should not hardcode “latest engine” except in a clearly dated audit snapshot.

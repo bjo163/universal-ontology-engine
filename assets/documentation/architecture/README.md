@@ -1,46 +1,52 @@
 # OX-DX Brand Architecture
 
-This directory is the canonical governance layer for how OX-DX names brands, products, engines, specifications, tools, interfaces, repositories, packages, documentation, domains, releases, and future extensions.
+Master brand authority:
+
+`../OX-DX-BRAND-BIBLE-v1.0.md`
+
+This directory contains specialist naming, ownership, repository, package, product, domain, and version policies.
 
 ## Start here
 
-**Primary reference:** `brand-architecture.md`
+For overall brand decisions:
 
-Specialized policies:
+`../OX-DX-BRAND-BIBLE-v1.0.md`
 
-- `repository-naming.md` — repository identity and `ox-dx-*` policy.
-- `package-naming.md` — Rust crates, packages, libraries, and CLI naming.
-- `product-naming.md` — product, tool, interface, documentation, and extension rules.
-- `responsibility-matrix.md` — one owner per capability.
-- `repository-map.md` — verified current repository plus explicitly planned future repositories.
-- `versioning.md` — brand/product/engine/ontology/schema/release version boundaries.
-- `domain-architecture.md` — future public-domain naming.
-- `naming-anti-patterns.md` — patterns that create collision, hype, or semantic drift.
+For naming/ownership architecture:
+
+`brand-architecture.md`
+
+Specialists:
+- `repository-naming.md`
+- `package-naming.md`
+- `product-naming.md`
+- `responsibility-matrix.md`
+- `repository-map.md`
+- `versioning.md`
+- `domain-architecture.md`
+- `naming-anti-patterns.md`
 
 ## Authority
 
-For naming/governance questions, use this order:
+For **technical semantics**:
+1. normative specification/schema/engineering standards;
+2. implementation/tests/generated technical status;
+3. brand/documentation explanation.
 
-1. existing normative technical names and contracts;
+For **brand/naming governance**:
+1. Brand Bible v1.0;
 2. `brand-architecture.md`;
-3. specialized architecture policy in this directory;
-4. communication naming summary in `../communication/naming-conventions.md`;
-5. campaign/editorial copy.
+3. specialist architecture policy;
+4. communication/application guidance.
 
-Brand architecture does not redefine ontology semantics. Technical truth remains governed by the specification, schemas, engineering standards, implementation, tests, and release evidence.
-
-## Existing names are protected
-
-This architecture does **not** rename:
-
+Existing names remain protected:
 - `universal-ontology-engine`;
-- existing Rust crates;
-- `ontology-engine` CLI binary;
+- current Rust crates;
+- `ontology-engine` CLI;
 - ontology TYPE names;
-- edge kinds;
-- normative specification/schema filenames;
-- phases.
+- graph edge kinds;
+- normative specification/schema filenames.
 
-Future consistency must not erase useful technical history.
+Brand architecture does not authorize implementation renames.
 
 **One brand. Clear ownership. No semantic drift.**

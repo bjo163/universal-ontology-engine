@@ -1,12 +1,21 @@
 # OX-DX Tagline System
 
-| Class | Line | Use |
-|---|---|---|
-| PRIMARY | **FROM STRUCTURE TO EXPERIENCE.** | Main public brand statement; hero, repository banner, primary social preview. |
-| SECONDARY | **FROM UNIVERSE TO BIT.** | Scale / resolution statement; footer, architecture, resolution-spine communication. |
-| CAMPAIGN / CONTEXTUAL | **EVIDENCE FIRST.** | Technical principles, release or documentation moments. |
-| CAMPAIGN / CONTEXTUAL | **DON'T REWRITE THE WORLD.** | Discovery / read-only positioning. |
-| CAMPAIGN / CONTEXTUAL | **ORDER INSIDE CHAOS.** | Visual system, editorial composition, brand storytelling. |
-| CAMPAIGN / CONTEXTUAL | **OBSERVE. RESOLVE. UNDERSTAND.** | Workflow / explanatory communication. |
+Brand Bible v1.0 is the master authority.
 
-Do not multiply slogans casually. The primary and secondary lines remain canonical; contextual lines support specific communication without replacing them.
+Canonical copy source:
+
+`brand-bible/canonical-copy.md`
+
+| Role | Canonical line |
+|---|---|
+| PRIMARY | **FROM STRUCTURE TO EXPERIENCE.** |
+| SECONDARY | **FROM UNIVERSE TO BIT.** |
+| PRINCIPLE | **EVIDENCE FIRST.** |
+| ATTITUDE | **DON'T FORCE THE SHAPE.** |
+| METHOD | **OBSERVE. RESOLVE. UNDERSTAND.** |
+| SUPPORTING | **READ THE EVIDENCE. DON'T REWRITE THE WORLD.** |
+| SUPPORTING | **ORDER INSIDE CHAOS.** |
+
+Do not multiply slogans casually.
+
+A new slogan requires an actual communication gap and must not replace a canonical line without Brand Bible change control.

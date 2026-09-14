@@ -1,5 +1,9 @@
 # OX-DX Brand Architecture
 
+Master brand authority: `../OX-DX-BRAND-BIBLE-v1.0.md`
+
+This file remains the canonical specialist for naming/ownership architecture.
+
 This is the master naming and ownership reference for the OX-DX ecosystem.
 
 It governs **how things are named and related**. It does not redefine ontology semantics or implementation architecture.
@@ -334,7 +338,7 @@ schemas                      → schema compatibility/version as defined by cont
 ```
 
 At the repository audit on 2026-09-14:
-- engine stable release: **v0.1.4**;
+- engine stable release in the Brand Bible audit snapshot: **v0.1.7**;
 - ontology contract: **v1.0.0**.
 
 Do not infer software maturity from the ontology's `1.0.0`, or ontology compatibility from the engine's `0.x` release.

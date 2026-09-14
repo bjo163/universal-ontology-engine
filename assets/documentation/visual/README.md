@@ -1,5 +1,9 @@
 # OX-DX Visual Language
 
+Master brand authority: `../OX-DX-BRAND-BIBLE-v1.0.md`
+
+This directory remains the canonical specialist source for the supporting visual grammar.
+
 The OX-DX visual system is called the **Interrupted Evidence Field**.
 
 It grows from the approved OX-DX mark: opposed hard-edged structures, a witnessed center, interruption, and resolution. The master logo is locked. This system governs the supporting visual language around it.
@@ -25,7 +29,7 @@ Recognizable traits:
 - off-axis diamond witness anchors instead of circular nodes;
 - paired relation rails with changing persistence instead of ordinary arrows;
 - deliberate void slots;
-- deterministic surface disturbance instead of random dirt;
+- deterministic dirty-surface disturbance instead of random dirt;
 - 7 / 21 / 49 spatial logic;
 - resolution by decomposition, not zoom;
 - monochrome structure with restrained semantic accents.
