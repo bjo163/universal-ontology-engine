@@ -3,9 +3,19 @@
   "$id": "https://github.com/bjo163/universe-foundation/blob/main/specifications/universe-contract.json",
   "title": "Universe Foundation Contract",
   "type": "object",
-  "required": ["contract_version", "universe", "ecosystems"],
+  "required": ["contract_version", "hierarchy", "canonicalVocabulary", "universe", "ecosystems"],
   "properties": {
-    "contract_version": {"const": "0.2"},
+    "contract_version": {"const": "0.3"},
+    "hierarchy": {
+      "type": "array",
+      "const": ["UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"]
+    },
+    "canonicalVocabulary": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true,
+      "minItems": 12
+    },
     "universe": {
       "type": "object",
       "required": ["id", "name"],
