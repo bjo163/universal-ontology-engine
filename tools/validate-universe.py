@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "universe.json"
-CONTRACT = ROOT / "specifications" / "foundation-contract.json"
+CONTRACT = ROOT / "specifications" / "foundation-contract.instance.json"
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 CONTRACT_VERSION = "0.3"
 CANONICAL_HIERARCHY = [
