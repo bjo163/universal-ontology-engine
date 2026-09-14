@@ -9,6 +9,7 @@ ontology-core = { path = "../ontology-core" }
 ontology-graph = { path = "../ontology-graph" }
 ontology-registry = { path = "../ontology-registry" }
 ontology-rust = { path = "../ontology-rust" }
+ontology-language = { path = "../ontology-language" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
