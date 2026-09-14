@@ -1,4 +1,4 @@
-use ontology_core::{OntologyError, OntologyType, LEVEL_COUNT, ONTOLOGY_VERSION};
+use ontology_core::{OntologyType, LEVEL_COUNT, ONTOLOGY_VERSION};
 use serde::Deserialize;
 use std::{collections::{HashMap, HashSet}, fs, path::Path};
 
@@ -189,12 +189,6 @@ fn parse_type(value: &str) -> Result<OntologyType, RegistryError> {
         .into_iter()
         .find(|ty| ty.slug() == value)
         .ok_or_else(|| RegistryError::UnknownType(value.to_owned()))
-}
-
-impl From<OntologyError> for RegistryError {
-    fn from(value: OntologyError) -> Self {
-        RegistryError::UnknownType(value.to_string())
-    }
 }
 
 #[cfg(test)]
