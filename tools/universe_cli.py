@@ -11,15 +11,12 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "universe.json"
-CONTRACT_VERSION = "1.0"
+LEGACY_CONTRACT_VERSION = "0.3"
+CURRENT_CONTRACT_VERSION = "1.0"
+SUPPORTED_CONTRACT_VERSIONS = {LEGACY_CONTRACT_VERSION, CURRENT_CONTRACT_VERSION}
 FOUNDATION_HIERARCHY = [
-    "UNIVERSE", "CREATION", "ORDER", "REALITY", "REALM", "WORLD", "DOMAIN",
-    "ECOSYSTEM", "ORGANIZATION", "COMMUNITY", "REGION", "ENVIRONMENT", "NETWORK", "CONTEXT",
-    "PURPOSE", "MISSION", "OBJECTIVE", "PROGRAM", "PROJECT", "PRODUCT", "SYSTEM",
-    "REPOSITORY", "SOURCE", "UNIT", "MODULE", "SUBSYSTEM", "COMPONENT", "ELEMENT",
-    "SYMBOL", "ENTITY", "PROPERTY", "RELATION", "OPERATION", "FUNCTION", "BEHAVIOR",
-    "STATE", "EVENT", "PROCESS", "FLOW", "TRANSITION", "ACTION", "EXECUTION",
-    "INSTRUCTION", "EXPRESSION", "VALUE", "DATA", "TOKEN", "CHARACTER", "BIT",
+    "UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY",
+    "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION",
 ]
 
 
@@ -49,9 +46,10 @@ def ecosystems(data: dict[str, Any]) -> list[dict[str, Any]]:
 
 def validate(data: dict[str, Any]) -> list[str]:
     errors: list[str] = []
-    if data.get("contract_version") != CONTRACT_VERSION:
-        errors.append(f"contract_version must be {CONTRACT_VERSION}")
-    if data.get("ontology") != "Universal Ontology v1.0.0":
+    version = data.get("contract_version")
+    if version not in SUPPORTED_CONTRACT_VERSIONS:
+        errors.append(f"contract_version must be one of {sorted(SUPPORTED_CONTRACT_VERSIONS)}")
+    elif version == CURRENT_CONTRACT_VERSION and data.get("ontology") != "Universal Ontology v1.0.0":
         errors.append("ontology must be Universal Ontology v1.0.0")
 
     universe = data.get("universe")
@@ -81,15 +79,12 @@ def validate(data: dict[str, Any]) -> list[str]:
 
 def foundation_summary() -> dict[str, Any]:
     return {
-        "version": CONTRACT_VERSION,
-        "ontology": "Universal Ontology v1.0.0",
+        "version": LEGACY_CONTRACT_VERSION,
         "hierarchy": FOUNDATION_HIERARCHY,
-        "canonical_levels": 49,
-        "zones": 7,
-        "levels_per_zone": 7,
         "single_foundation": True,
         "optional_layers": ["ORGANIZATION", "DOMAIN"],
-        "semantic_layers_not_directories": ["UNIT", "MODULE", "SUBSYSTEM", "COMPONENT", "ELEMENT"],
+        "semantic_layers_not_directories": ["UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"],
+        "compatibility": "legacy tooling contract; canonical ontology is v1.0.0",
     }
 
 
@@ -129,7 +124,7 @@ def command_validate(data: dict[str, Any], as_json: bool) -> int:
         for error in errors:
             print(f"FAIL: {error}")
     else:
-        print(f"VALID: {len(ecosystems(data))} ecosystem(s); Universal Ontology v1.0.0; 49 canonical levels")
+        print(f"VALID: {len(ecosystems(data))} ecosystem(s); contract {data.get('contract_version')}")
     return 0 if not errors else 1
 
 
