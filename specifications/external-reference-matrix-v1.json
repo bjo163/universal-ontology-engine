@@ -1,0 +1,75 @@
+{
+  "schema": "universal-ontology-engine/external-reference-matrix-v1",
+  "purpose": "network-dependent conformance references; separate from local deterministic fixtures",
+  "references": [
+    {
+      "category": "frontend-ui",
+      "repository": "bjo163/rocksoul-ui",
+      "ref": "68b1f16192a2bbd4694f5b75efee675a4272aabf",
+      "mode": "syntax",
+      "assertions": [
+        "read_only=true",
+        "REPOSITORY>0",
+        "SOURCE>0",
+        "COMPONENT>0",
+        "ELEMENT>0",
+        "semantic_nodes>0",
+        "UNIT=0",
+        "MODULE=0",
+        "repeatable_at_pinned_ref"
+      ]
+    },
+    {
+      "category": "rust-heavy",
+      "repository": "BurntSushi/ripgrep",
+      "ref": "3fce3b5bb0236da2df6d99672afb8a719642eca7",
+      "mode": "rust-ast",
+      "assertions": [
+        "read_only=true",
+        "REPOSITORY>0",
+        "SOURCE>0",
+        "COMPONENT>0",
+        "ELEMENT>0",
+        "FUNCTION>0",
+        "UNIT=0 unless native evidence justifies it",
+        "repeatable_at_pinned_ref"
+      ]
+    },
+    {
+      "category": "mixed-language",
+      "repository": "bjo163/gpt4free",
+      "ref": "73cc04f371f690730ee3cb9d4e90ded5aba9cacc",
+      "mode": "syntax",
+      "assertions": [
+        "read_only=true",
+        "REPOSITORY>0",
+        "SOURCE>0",
+        "COMPONENT>0",
+        "ELEMENT>0",
+        "supported_language_semantics_when_present",
+        "no_synthetic_containment",
+        "repeatable_at_pinned_ref"
+      ]
+    },
+    {
+      "category": "small-sparse-product",
+      "repository": "bjo163/rocksoul-superhero",
+      "ref": "89963d5f5801aec3d44d2d55538e2a882e37f86b",
+      "mode": "syntax",
+      "assertions": [
+        "read_only=true",
+        "REPOSITORY>0",
+        "only_evidence_backed_levels_materialize",
+        "UNIT=0 unless native evidence justifies it",
+        "MODULE=0 unless native evidence justifies it",
+        "repeatable_at_pinned_ref"
+      ]
+    }
+  ],
+  "policy": {
+    "pin_exact_commits": true,
+    "exact_node_counts": "avoid unless the pinned reference is intentionally treated as a golden external specimen",
+    "network_failures": "classify separately from engine regressions",
+    "local_fixtures_remain_authoritative_for_byte_determinism": true
+  }
+}
