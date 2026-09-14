@@ -157,20 +157,16 @@ fn discover_source_tree(
         path: rel(workspace, source_root), kind: "source".into(), language: language.clone(),
         evidence: "native source boundary".into(),
     });
-    let unit_id = NodeId::scoped(&source_id, &format!("unit:{source_name}"));
-    insert_node(graph, Some(source_id), OntologyType::Unit, unit_id.clone(), true)?;
-    let module_id = NodeId::scoped(&unit_id, &format!("module:{source_name}"));
-    insert_node(graph, Some(unit_id), OntologyType::Module, module_id.clone(), true)?;
     observations.push(DiscoveryObservation {
-        path: rel(workspace, source_root), kind: "module".into(), language: language.clone(),
-        evidence: "native directory grouping".into(),
+        path: rel(workspace, source_root), kind: "unmaterialized-levels".into(), language: language.clone(),
+        evidence: "UNIT and MODULE omitted because discovery has no native ownership evidence; canonical intermediate levels may remain unmaterialized".into(),
     });
-    walk_source_files(graph, &module_id, source_root, source_root, language, options, workspace, observations, 0)
+    walk_source_files(graph, &source_id, source_root, source_root, language, options, workspace, observations, 0)
 }
 
 fn walk_source_files(
     graph: &mut OntologyGraph,
-    module: &NodeId,
+    structural_parent: &NodeId,
     root: &Path,
     current: &Path,
     language: &Option<String>,
@@ -183,11 +179,11 @@ fn walk_source_files(
     for path in read_dir_sorted(current)? {
         if is_ignored(&path) { continue; }
         if path.is_dir() {
-            walk_source_files(graph, module, root, &path, language, options, workspace, observations, depth + 1)?;
+            walk_source_files(graph, structural_parent, root, &path, language, options, workspace, observations, depth + 1)?;
         } else if is_source_file(&path) {
             let relative = path.strip_prefix(root).unwrap_or(&path).to_string_lossy().replace('\\', "/");
-            let component_id = NodeId::scoped(module, &format!("component:{relative}"));
-            insert_node(graph, Some(module.clone()), OntologyType::Component, component_id.clone(), true)?;
+            let component_id = NodeId::scoped(structural_parent, &format!("component:{relative}"));
+            insert_node(graph, Some(structural_parent.clone()), OntologyType::Component, component_id.clone(), true)?;
             observations.push(DiscoveryObservation {
                 path: rel(workspace, &path), kind: "component".into(), language: language.clone(),
                 evidence: "source file".into(),
@@ -204,7 +200,12 @@ fn walk_source_files(
             }
             if options.include_files {
                 let execution_id = NodeId::scoped(&element_id, "execution:observed");
-                insert_node(graph, Some(element_id), OntologyType::Execution, execution_id, true)?;
+                insert_node(graph, None, OntologyType::Execution, execution_id.clone(), true)?;
+                graph.add_edge(execution_id.clone(), element_id.clone(), EdgeKind::ObservedAt)?;
+                observations.push(DiscoveryObservation {
+                    path: rel(workspace, &path), kind: "execution".into(), language: language.clone(),
+                    evidence: "observed file boundary; represented by ObservedAt relation, not containment".into(),
+                });
             }
         }
     }
@@ -222,9 +223,17 @@ fn discover_rust_semantics(
     match ontology_rust::parse(&source) {
         Ok(items) => {
             let mut counts = BTreeMap::<OntologyType, usize>::new();
+            let mut occurrences = BTreeMap::<String, usize>::new();
             for (ordinal, item) in items.iter().enumerate() {
-                let label = item.name.clone().unwrap_or_else(|| format!("anonymous-{ordinal}"));
-                let semantic_id = NodeId::scoped(element, &format!("ast:{}:{}:{}:{}", item.ontology_type.slug().to_lowercase(), label, item.location.line_start, item.location.column_start));
+                let native_kind = item.native_kind.as_str();
+                let base_key = format!("{}:{}:{}", item.ontology_type.slug().to_lowercase(), native_kind, item.name.as_deref().unwrap_or("anonymous"));
+                let occurrence = occurrences.entry(base_key.clone()).and_modify(|count| *count += 1).or_insert(1);
+                let semantic_local = if item.name.is_some() {
+                    if *occurrence == 1 { format!("ast:{base_key}") } else { format!("ast:{base_key}:~{occurrence}") }
+                } else {
+                    format!("ast:{base_key}:~{ordinal}")
+                };
+                let semantic_id = NodeId::scoped(element, &semantic_local);
                 graph.insert_node(Node {
                     id: semantic_id.clone(), parent: None, ontology_type: item.ontology_type,
                     kind: None, name: item.name.clone(),
@@ -237,7 +246,7 @@ fn discover_rust_semantics(
                 graph.add_edge(element.clone(), semantic_id, EdgeKind::ProjectsTo)?;
                 observations.push(DiscoveryObservation {
                     path: rel(workspace, path), kind: "rust-ast-item".into(), language: Some("rust".into()),
-                    evidence: format!("native_kind={}; ontology_type={}", item.native_kind, item.ontology_type.slug()),
+                    evidence: format!("native_kind={native_kind}; ontology_type={}", item.ontology_type.slug()),
                 });
                 *counts.entry(item.ontology_type).or_default() += 1;
             }
@@ -331,7 +340,17 @@ mod tests {
     }
 
     #[test]
-    fn discovers_nested_rust_source_and_execution() {
+    fn discovery_does_not_fabricate_unit_or_module() {
+        let root = fixture();
+        let result = discover_workspace(&root, registry(), DiscoveryOptions::default()).unwrap();
+        assert_eq!(result.graph.nodes_by_type(OntologyType::Unit).count(), 0);
+        assert_eq!(result.graph.nodes_by_type(OntologyType::Module).count(), 0);
+        assert!(result.observations.iter().any(|x| x.kind == "unmaterialized-levels"));
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn discovers_nested_rust_source_and_execution_observation() {
         let root = fixture();
         let result = discover_workspace(&root, registry(), DiscoveryOptions { include_files: true, max_depth: Some(6), parse_rust_ast: true }).unwrap();
         assert_eq!(result.graph.nodes_by_type(OntologyType::Ecosystem).count(), 1);
@@ -339,6 +358,20 @@ mod tests {
         assert_eq!(result.graph.nodes_by_type(OntologyType::Source).count(), 1);
         assert!(result.graph.nodes_by_type(OntologyType::Execution).count() >= 1);
         assert!(result.graph.nodes_by_type(OntologyType::Function).count() >= 1);
+        let execution = result.graph.nodes_by_type(OntologyType::Execution).next().unwrap();
+        assert_eq!(execution.parent, None);
+        assert!(result.graph.outgoing_kind(&execution.id, EdgeKind::ObservedAt).next().is_some());
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn project_to_does_not_change_structural_parent() {
+        let root = fixture();
+        let result = discover_workspace(&root, registry(), DiscoveryOptions { include_files: false, max_depth: Some(6), parse_rust_ast: true }).unwrap();
+        let element = result.graph.nodes_by_type(OntologyType::Element).next().unwrap();
+        let projected = result.graph.outgoing_kind(&element.id, EdgeKind::ProjectsTo).next().unwrap();
+        let semantic = result.graph.node(&projected.to).unwrap();
+        assert_eq!(semantic.parent, None);
         fs::remove_dir_all(root).unwrap();
     }
 
@@ -350,6 +383,19 @@ mod tests {
         let result = discover_workspace(&root, registry(), DiscoveryOptions { include_files: false, max_depth: Some(6), parse_rust_ast: true }).unwrap();
         assert!(result.observations.iter().any(|x| x.kind == "rust-ast-error"));
         assert!(result.graph.nodes_by_type(OntologyType::Element).count() >= 2);
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn rust_semantic_ids_do_not_depend_on_line_numbers() {
+        let root = fixture();
+        let file = root.join("ecosystem-demo/project-a/repo-a/src/core/lib.rs");
+        let first = discover_workspace(&root, registry(), DiscoveryOptions { include_files: false, max_depth: Some(6), parse_rust_ast: true }).unwrap();
+        let first_ids = first.graph.nodes_by_type(OntologyType::Function).map(|node| node.id.clone()).collect::<Vec<_>>();
+        fs::write(&file, "\n\n\n// moved\npub fn demo() {}\n").unwrap();
+        let second = discover_workspace(&root, registry(), DiscoveryOptions { include_files: false, max_depth: Some(6), parse_rust_ast: true }).unwrap();
+        let second_ids = second.graph.nodes_by_type(OntologyType::Function).map(|node| node.id.clone()).collect::<Vec<_>>();
+        assert_eq!(first_ids, second_ids);
         fs::remove_dir_all(root).unwrap();
     }
 
