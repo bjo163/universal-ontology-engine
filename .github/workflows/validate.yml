@@ -2,7 +2,7 @@ name: Validate Universal Ontology Engine
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
 
 permissions:
@@ -13,6 +13,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
+      - name: Enforce branch flow
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+          BASE_BRANCH: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          if [[ "$BASE_BRANCH" == "dev" && "$HEAD_BRANCH" == feature/* ]]; then
+            echo "allowed: feature/* -> dev"
+          elif [[ "$BASE_BRANCH" == "main" && "$HEAD_BRANCH" == "dev" ]]; then
+            echo "allowed: dev -> main"
+          else
+            echo "invalid branch flow: ${HEAD_BRANCH} -> ${BASE_BRANCH}" >&2
+            echo "allowed flows: feature/* -> dev, dev -> main" >&2
+            exit 1
+          fi
+
       - uses: actions/setup-python@v7
         with:
           python-version: "3.x"
