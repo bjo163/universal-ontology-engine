@@ -198,14 +198,26 @@ fn main() {
                 );
             } else {
                 println!("UNIVERSAL ONTOLOGY ENGINE — SELF INSPECTION");
-                println!("repository       {}", snapshot["repository"].as_str().unwrap_or("unknown"));
-                println!("ontology         {}", snapshot["ontology"].as_str().unwrap_or("unknown"));
+                println!(
+                    "repository       {}",
+                    snapshot["repository"].as_str().unwrap_or("unknown")
+                );
+                println!(
+                    "ontology         {}",
+                    snapshot["ontology"].as_str().unwrap_or("unknown")
+                );
                 println!("canonical levels {}", snapshot["canonical_levels"]);
                 println!("workspace crates {}", snapshot["workspace_crates"]);
                 println!("rust sources     {}", snapshot["rust_sources"]);
                 println!("cargo manifest   {}", snapshot["checks"]["cargo_manifest"]);
                 println!("registry         {}", snapshot["checks"]["registry"]);
-                println!("status           {}", snapshot["status"].as_str().unwrap_or("unknown").to_uppercase());
+                println!(
+                    "status           {}",
+                    snapshot["status"]
+                        .as_str()
+                        .unwrap_or("unknown")
+                        .to_uppercase()
+                );
             }
 
             if snapshot["status"] != "healthy" {
@@ -280,7 +292,10 @@ fn count_rust_sources(root: &Path) -> Result<usize, std::io::Error> {
         for entry in fs::read_dir(path)? {
             let path = entry?.path();
             if path.is_dir() {
-                let name = path.file_name().and_then(|value| value.to_str()).unwrap_or("");
+                let name = path
+                    .file_name()
+                    .and_then(|value| value.to_str())
+                    .unwrap_or("");
                 if SELF_IGNORED_DIRS.contains(&name) {
                     continue;
                 }
@@ -309,10 +324,18 @@ mod tests {
         let root = std::env::temp_dir().join(format!("ontology-self-{stamp}"));
         fs::create_dir_all(root.join("crates/example/src")).unwrap();
         fs::write(root.join("Cargo.toml"), "[workspace]\n").unwrap();
-        fs::write(root.join("crates/example/Cargo.toml"), "[package]\nname='example'\nversion='0.1.0'\n").unwrap();
+        fs::write(
+            root.join("crates/example/Cargo.toml"),
+            "[package]\nname='example'\nversion='0.1.0'\n",
+        )
+        .unwrap();
         fs::write(root.join("crates/example/src/lib.rs"), "pub fn demo() {}\n").unwrap();
         fs::create_dir_all(root.join("target/generated")).unwrap();
-        fs::write(root.join("target/generated/ignored.rs"), "fn ignored() {}\n").unwrap();
+        fs::write(
+            root.join("target/generated/ignored.rs"),
+            "fn ignored() {}\n",
+        )
+        .unwrap();
 
         assert_eq!(count_workspace_crates(&root).unwrap(), 1);
         assert_eq!(count_rust_sources(&root).unwrap(), 1);
