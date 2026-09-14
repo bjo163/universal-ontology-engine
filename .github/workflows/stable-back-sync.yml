@@ -1,15 +1,23 @@
 name: Stable Back Sync
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: ["Release Channels"]
+    types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: stable-back-sync
+  cancel-in-progress: false
+
 jobs:
   sync:
-    if: github.event.release.prerelease == false
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -23,9 +31,13 @@ jobs:
           git fetch origin main dev
           main_head="$(git rev-parse origin/main)"
           dev_head="$(git rev-parse origin/dev)"
+          if [[ "$main_head" == "$dev_head" ]]; then
+            echo "dev already aligned with main"
+            exit 0
+          fi
           if git merge-base --is-ancestor "$dev_head" "$main_head"; then
             git push origin "$main_head:dev"
-            echo "dev synchronized to stable main"
+            echo "dev synchronized to stable main: $main_head"
           else
             echo "refusing back-sync: dev is not an ancestor of main" >&2
             exit 1
