@@ -1,24 +1,22 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/bjo163/universe-foundation/blob/main/specifications/universe-contract.json",
-  "title": "Universe Foundation Contract",
+  "title": "Universal Ontology Universe Registry Contract",
   "type": "object",
-  "required": ["contract_version", "hierarchy", "canonicalVocabulary", "universe", "ecosystems"],
+  "required": ["contract_version", "ontology", "hierarchy", "universe", "ecosystems"],
   "properties": {
-    "contract_version": {"const": "1.0"},
+    "contract_version": {"const": "1.0.0"},
+    "ontology": {"const": "Universal Ontology v1.0.0"},
     "hierarchy": {
-      "type": "array",
       "const": [
-        "UNIVERSE", "CREATION", "COSMIC_ORDER", "REALITY", "REALM", "WORLD", "ECOSYSTEM",
-        "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE",
-        "COMPONENT", "ELEMENT", "IMPLEMENTATION"
+        "UNIVERSE", "CREATION", "ORDER", "REALITY", "REALM", "WORLD", "DOMAIN",
+        "ECOSYSTEM", "ORGANIZATION", "COMMUNITY", "REGION", "ENVIRONMENT", "NETWORK", "CONTEXT",
+        "PURPOSE", "MISSION", "OBJECTIVE", "PROGRAM", "PROJECT", "PRODUCT", "SYSTEM",
+        "REPOSITORY", "SOURCE", "UNIT", "MODULE", "SUBSYSTEM", "COMPONENT", "ELEMENT",
+        "SYMBOL", "ENTITY", "PROPERTY", "RELATION", "OPERATION", "FUNCTION", "BEHAVIOR",
+        "STATE", "EVENT", "PROCESS", "FLOW", "TRANSITION", "ACTION", "EXECUTION",
+        "INSTRUCTION", "EXPRESSION", "VALUE", "DATA", "TOKEN", "CHARACTER", "BIT"
       ]
-    },
-    "canonicalVocabulary": {
-      "type": "array",
-      "items": {"type": "string"},
-      "uniqueItems": true,
-      "minItems": 17
     },
     "universe": {
       "type": "object",
