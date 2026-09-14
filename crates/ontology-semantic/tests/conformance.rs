@@ -103,11 +103,7 @@ fn unresolved_code(value: &str) -> UnresolvedCode {
     }
 }
 
-fn descriptor(
-    language: &str,
-    native_kind: &str,
-    source_type: &str,
-) -> NativeEvidenceDescriptor {
+fn descriptor(language: &str, native_kind: &str, source_type: &str) -> NativeEvidenceDescriptor {
     NativeEvidenceDescriptor {
         language: language.to_owned(),
         native_kind: native_kind.to_owned(),
@@ -115,11 +111,7 @@ fn descriptor(
     }
 }
 
-fn conformance_rule(
-    rule_id: &str,
-    rule_version: &str,
-    target: OntologyType,
-) -> ProjectionRule {
+fn conformance_rule(rule_id: &str, rule_version: &str, target: OntologyType) -> ProjectionRule {
     ProjectionRule {
         rule_id: rule_id.to_owned(),
         rule_version: rule_version.to_owned(),
@@ -186,14 +178,14 @@ fn run_positive(case: &PositiveCase) -> ProjectionTrace {
         "{} normalization class",
         case.id
     );
-    assert_eq!(normalized[0].original, native, "{} native evidence", case.id);
+    assert_eq!(
+        normalized[0].original, native,
+        "{} native evidence",
+        case.id
+    );
 
     let target = ontology_type(&case.target_type);
-    let rule = conformance_rule(
-        &case.semantic_rule_id,
-        &case.semantic_rule_version,
-        target,
-    );
+    let rule = conformance_rule(&case.semantic_rule_id, &case.semantic_rule_version, target);
     let evidence = projection_evidence(
         &case.source_id,
         native.source_type,
@@ -230,7 +222,11 @@ fn run_positive(case: &PositiveCase) -> ProjectionTrace {
 }
 
 fn run_unresolved(case: &UnresolvedCase) -> ProjectionTrace {
-    assert!(!case.reason.trim().is_empty(), "{} must explain negative case", case.id);
+    assert!(
+        !case.reason.trim().is_empty(),
+        "{} must explain negative case",
+        case.id
+    );
     let native = descriptor(&case.language, &case.native_kind, &case.source_type);
     let normalized = normalize_candidates(&native, foundation_rules());
     let expected = unresolved_code(&case.expected_code);
@@ -239,12 +235,21 @@ fn run_unresolved(case: &UnresolvedCase) -> ProjectionTrace {
         "unsupported" => {
             assert!(normalized.is_empty(), "{} must not normalize", case.id);
             (
-                resolve_evaluations(NodeId::new(&case.source_id), [], &[]),
+                resolve_evaluations(
+                    NodeId::new(&case.source_id),
+                    Vec::<RuleEvaluation>::new(),
+                    &[],
+                ),
                 Vec::new(),
             )
         }
         "insufficient" => {
-            assert_eq!(normalized.len(), 1, "{} must have native normalization", case.id);
+            assert_eq!(
+                normalized.len(),
+                1,
+                "{} must have native normalization",
+                case.id
+            );
             let rule = conformance_rule("conformance.insufficient.v1", "1", OntologyType::Function);
             let evidence = projection_evidence(
                 &case.source_id,
@@ -270,8 +275,13 @@ fn run_unresolved(case: &UnresolvedCase) -> ProjectionTrace {
                 Some(&normalized[0].rule_id),
                 &BTreeMap::new(),
             );
-            let function = conformance_rule("conformance.ambiguous.function", "1", OntologyType::Function);
-            let entity = conformance_rule("conformance.ambiguous.entity", "1", OntologyType::Entity);
+            let function = conformance_rule(
+                "conformance.ambiguous.function",
+                "1",
+                OntologyType::Function,
+            );
+            let entity =
+                conformance_rule("conformance.ambiguous.entity", "1", OntologyType::Entity);
             let evaluations = [
                 function.evaluate(&evidence).expect("valid rule"),
                 entity.evaluate(&evidence).expect("valid rule"),
@@ -371,7 +381,11 @@ fn graph_summary(case: &GraphCase) -> String {
         ))
         .unwrap());
     assert!(graph.validate_phase7_invariants().is_empty());
-    assert!(graph.node(&NodeId::new(&case.target_id)).unwrap().parent.is_none());
+    assert!(graph
+        .node(&NodeId::new(&case.target_id))
+        .unwrap()
+        .parent
+        .is_none());
     assert_eq!(
         graph
             .outgoing_kind(&NodeId::new(&case.source_id), EdgeKind::ProjectsTo)
@@ -410,7 +424,15 @@ fn run_suite() -> BTreeMap<String, String> {
 #[test]
 fn committed_corpus_executes_without_network_or_language_bypass() {
     let output = run_suite();
-    for required in ["rust", "typescript", "javascript", "python", "go", "java", "kotlin"] {
+    for required in [
+        "rust",
+        "typescript",
+        "javascript",
+        "python",
+        "go",
+        "java",
+        "kotlin",
+    ] {
         assert!(
             output.keys().any(|key| key.starts_with(required)),
             "missing positive conformance case for {required}"
