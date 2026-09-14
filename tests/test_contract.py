@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 UNIVERSE = ROOT / "universe.json"
 CONTRACT = ROOT / "specifications" / "universe-contract.instance.json"
 FOUNDATION = ROOT / "specifications" / "foundation-contract.instance.json"
+ONTOLOGY = ROOT / "specifications" / "universal-ontology-v1.0.json"
+SCHEMA = ROOT / "schemas" / "universal-ontology.schema.json"
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 EXPECTED_HIERARCHY = [
     "UNIVERSE", "CREATION", "ORDER", "REALITY", "REALM", "WORLD", "DOMAIN",
@@ -22,6 +24,7 @@ EXPECTED_HIERARCHY = [
     "STATE", "EVENT", "PROCESS", "FLOW", "TRANSITION", "ACTION", "EXECUTION",
     "INSTRUCTION", "EXPRESSION", "VALUE", "DATA", "TOKEN", "CHARACTER", "BIT",
 ]
+EXPECTED_EDGES = ["contains", "references", "specializes", "depends_on", "invokes", "produces", "consumes", "causes", "projects_to", "represented_as", "observed_at"]
 
 
 class UniverseContractTests(unittest.TestCase):
@@ -30,6 +33,8 @@ class UniverseContractTests(unittest.TestCase):
         cls.universe = json.loads(UNIVERSE.read_text(encoding="utf-8"))
         cls.contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
         cls.foundation = json.loads(FOUNDATION.read_text(encoding="utf-8"))
+        cls.ontology = json.loads(ONTOLOGY.read_text(encoding="utf-8"))
+        cls.schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
 
     def test_contract_version_and_shape(self) -> None:
         self.assertEqual(self.universe["contract_version"], "1.0")
@@ -43,6 +48,16 @@ class UniverseContractTests(unittest.TestCase):
         self.assertEqual(self.contract["zones"], 7)
         self.assertEqual(self.contract["levelsPerZone"], 7)
         self.assertEqual(self.contract["canonicalLevels"], 49)
+
+    def test_universal_registry_and_schema_are_aligned(self) -> None:
+        self.assertEqual(self.ontology["title"], self.schema["title"])
+        self.assertEqual(self.ontology["contract_version"], self.schema["properties"]["contract_version"]["const"])
+        self.assertEqual(self.ontology["shape"], {key: value["const"] for key, value in self.schema["properties"]["shape"]["properties"].items()})
+        self.assertEqual(self.ontology["rules"], {key: value["const"] for key, value in self.schema["properties"]["rules"]["properties"].items()})
+        self.assertEqual(self.ontology["edge_classes"], self.schema["properties"]["edge_classes"]["const"])
+        self.assertEqual(self.ontology["edge_classes"], EXPECTED_EDGES)
+        self.assertEqual([zone["id"] for zone in self.ontology["zones"]], ["existence", "context", "intent", "structure", "semantic", "dynamic", "representation"])
+        self.assertEqual([level["type"] for zone in self.ontology["zones"] for level in zone["levels"]], EXPECTED_HIERARCHY)
 
     def test_optional_levels(self) -> None:
         self.assertEqual(self.foundation["optionalLevels"], ["ORGANIZATION", "DOMAIN"])
