@@ -1,8 +1,8 @@
-# Universe Contract v0.1
+# Universe Contract v0.2
 
 ## 1. Scope
 
-This contract governs the top-level Universe layer and its relationship to Ecosystems.
+This contract governs the top-level Universe layer and its relationship to independently owned Ecosystems.
 
 It does not replace or duplicate the internal contract of any ecosystem.
 
@@ -11,9 +11,10 @@ It does not replace or duplicate the internal contract of any ecosystem.
 ```text
 UNIVERSE
 └── ECOSYSTEM*
+    └── PROJECT / REPOSITORY / SOURCE / MODULE
 ```
 
-`*` means one or more ecosystems may exist in a universe.
+`*` means one or more ecosystems may exist in a universe. The lower levels are owned by the ecosystem and its applicable foundation contract.
 
 ## 3. Universe identity
 
@@ -35,7 +36,7 @@ Each registered ecosystem MUST have:
 - a unique registry entry
 - a path or source reference used for discovery
 
-An ecosystem MAY have additional metadata such as repository, organization, lifecycle, or capabilities.
+An ecosystem MAY declare a repository containing its own ecosystem-level manifest or foundation material.
 
 ## 5. Ownership boundary
 
@@ -67,36 +68,48 @@ A conforming local workspace SHOULD use:
 universe/
 ├── universe manifest
 ├── ecosystem-<id>/
-│   ├── ecosystem manifest
-│   └── repositories/
+│   ├── ecosystem manifest (when used)
+│   └── <repository directories>
 └── ecosystem-<id>/
 ```
 
+Repositories do not need an extra `repositories/` wrapper. Native repository layouts remain governed by `ecosystem-foundation` or the repository's own native conventions.
+
 A physical layout MAY differ when an orchestration tool requires it, provided registry identity remains stable and explicit.
 
-## 7. Relationships
+## 7. Registry and discovery
 
-Cross-ecosystem relationships MUST point to ecosystem IDs or another stable identifier. They MUST NOT infer ownership from filesystem names alone.
+The registry is the source of truth for ecosystem discovery within the universe.
+
+Discovery MUST use the stable ecosystem `id` and explicit `path` or `source` reference. Filesystem naming alone MUST NOT be treated as identity.
+
+A registry entry MAY include lifecycle, capability, contract, repository, organization, or other cross-ecosystem metadata.
+
+## 8. Relationships
+
+Cross-ecosystem relationships MUST point to ecosystem IDs or another stable identifier.
+
+Relationships MUST NOT redefine ownership of the referenced ecosystem or its repositories.
 
 External systems are represented as relationships and are not automatically children of the universe.
 
-## 8. Compatibility
+## 9. Foundation compatibility
 
 An ecosystem MAY conform to `ecosystem-foundation`.
 
 When it does, the relationship is:
 
 ```text
-universe-foundation v0.1
+universe-foundation v0.2
         ↓
 ecosystem-foundation v0.x
         ↓
 ecosystem repositories
 ```
 
-The universe contract MUST remain compatible with ecosystem autonomy.
+Universe Foundation defines the container and discovery contract; Ecosystem Foundation defines the structure below that boundary.
 
-## 9. Non-goals
+## 10. Non-goals
 
 This contract does not define:
 
@@ -108,3 +121,4 @@ This contract does not define:
 - database technology
 - application architecture
 - repository naming conventions beyond stable registry identity
+- project or repository internals
