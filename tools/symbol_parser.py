@@ -75,11 +75,16 @@ def _brace_end(lines: list[str], start: int) -> int:
 
 def _python_end(lines: list[str], start: int) -> int:
     base = len(lines[start]) - len(lines[start].lstrip())
+    last_code = start + 1
     for index in range(start + 1, len(lines)):
         stripped = lines[index].strip()
-        if stripped and (len(lines[index]) - len(lines[index].lstrip()) <= base):
-            return index
-    return len(lines)
+        if not stripped:
+            continue
+        indent = len(lines[index]) - len(lines[index].lstrip())
+        if indent <= base:
+            return last_code
+        last_code = index + 1
+    return last_code
 
 
 def parse_symbols(path: Path, language: str | None = None) -> list[dict[str, Any]]:
@@ -94,11 +99,7 @@ def parse_symbols(path: Path, language: str | None = None) -> list[dict[str, Any
     found: list[dict[str, Any]] = []
     occupied: set[tuple[int, str]] = set()
     for kind, pattern in PATTERNS[language]:
-        try:
-            matches = re.finditer(pattern, text, flags=re.MULTILINE)
-        except re.error:
-            continue
-        for match in matches:
+        for match in re.finditer(pattern, text, flags=re.MULTILINE):
             name = match.group(1)
             line_start = text.count("\n", 0, match.start()) + 1
             key = (line_start, name)
