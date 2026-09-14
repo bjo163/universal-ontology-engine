@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the canonical Universe manifest and single foundation contract. Stdlib-only."""
+"""Validate the single Universe Foundation contract and top-level registry. Stdlib-only."""
 
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ CANONICAL_HIERARCHY = [
     "UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY",
     "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION",
 ]
+FORBIDDEN_FOUNDATION_REFS = {"ecosystem-foundation", "project-foundation", "repository-foundation"}
 
 
 def fail(message: str) -> None:
@@ -46,6 +47,7 @@ def main() -> int:
         fail("foundation hierarchy does not match canonical hierarchy")
     if contract.get("optionalLayers") != ["ORGANIZATION", "DOMAIN"]:
         fail("optional foundation layers are invalid")
+
     rules = contract.get("rules", {})
     if rules.get("singleFoundation") is not True:
         fail("singleFoundation rule must be true")
@@ -53,12 +55,20 @@ def main() -> int:
         fail("semanticDirectories rule must be false")
     if rules.get("externalSystems") != "relationship":
         fail("externalSystems rule must be relationship")
+    if rules.get("stableIdentity") is not True or rules.get("parentScopedIdentity") is not True:
+        fail("stable identity rules must be enabled")
 
     universe = data.get("universe")
     if not isinstance(universe, dict) or not universe.get("id") or not universe.get("name"):
         fail("universe requires id and name")
     if not ID_PATTERN.fullmatch(str(universe["id"])):
         fail("universe id must use lowercase kebab-case")
+
+    # The registry itself must not delegate the foundation contract downward.
+    serialized = json.dumps(data, sort_keys=True)
+    for forbidden in FORBIDDEN_FOUNDATION_REFS:
+        if forbidden in serialized:
+            fail(f"competing foundation reference found: {forbidden}")
 
     ecosystems = data.get("ecosystems")
     if not isinstance(ecosystems, list) or not ecosystems:
@@ -87,7 +97,7 @@ def main() -> int:
         ids.add(ecosystem_id)
         paths.add(path)
 
-    print(f"Universe Foundation v{CONTRACT_VERSION} valid: {len(ecosystems)} ecosystem(s); complete hierarchy enforced")
+    print(f"Universe Foundation v{CONTRACT_VERSION} valid: {len(ecosystems)} ecosystem(s); single foundation; full hierarchy")
     return 0
 
 
