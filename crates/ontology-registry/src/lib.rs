@@ -1,4 +1,4 @@
-use ontology_core::{OntologyType, LEVEL_COUNT, ONTOLOGY_VERSION};
+use ontology_core::{EdgeKind, OntologyType, LEVEL_COUNT, ONTOLOGY_VERSION};
 use serde::Deserialize;
 use std::{collections::{HashMap, HashSet}, fs, path::Path};
 
@@ -16,11 +16,7 @@ pub struct OntologyDocument {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct Shape {
-    pub zones: usize,
-    pub levels_per_zone: usize,
-    pub canonical_levels: usize,
-}
+pub struct Shape { pub zones: usize, pub levels_per_zone: usize, pub canonical_levels: usize }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Rules {
@@ -35,11 +31,7 @@ pub struct Rules {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct Zone {
-    pub id: String,
-    pub name: String,
-    pub levels: Vec<LevelDefinition>,
-}
+pub struct Zone { pub id: String, pub name: String, pub levels: Vec<LevelDefinition> }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct LevelDefinition {
@@ -64,14 +56,22 @@ pub enum RegistryError {
     Json(#[from] serde_json::Error),
     #[error("ontology version `{actual}` does not match engine `{expected}`")]
     Version { actual: String, expected: String },
+    #[error("ontology title `{0}` is not canonical")]
+    TitleMismatch(String),
     #[error("invalid ontology shape: zones={zones}, levels_per_zone={levels}, canonical_levels={canonical}")]
     Shape { zones: usize, levels: usize, canonical: usize },
     #[error("expected {expected} levels but registry contains {actual}")]
     LevelCount { expected: usize, actual: usize },
+    #[error("zone {zone} must contain exactly 7 levels, found {actual}")]
+    ZoneLevelCount { zone: String, actual: usize },
+    #[error("zone id `{zone}` does not match canonical zone {expected}")]
+    ZoneMismatch { zone: String, expected: String },
     #[error("duplicate canonical level index: {0}")]
     DuplicateIndex(u8),
     #[error("non-contiguous canonical level index: expected {expected}, found {found}")]
     NonContiguousIndex { expected: u8, found: u8 },
+    #[error("level {index} is assigned to wrong zone {zone}")]
+    LevelInWrongZone { index: u8, zone: String },
     #[error("unknown ontology type `{0}`")]
     UnknownType(String),
     #[error("registry type mismatch at level {level}: contract=`{contract}`, engine=`{engine}`")]
@@ -80,6 +80,10 @@ pub enum RegistryError {
     DuplicateType(String),
     #[error("kind `{kind}` is assigned to multiple types: `{first}` and `{second}`")]
     KindConflict { kind: String, first: String, second: String },
+    #[error("edge class `{0}` is unknown to the engine")]
+    UnknownEdgeKind(String),
+    #[error("edge class registry is missing `{0}`")]
+    MissingEdgeKind(String),
     #[error("registry rule `{0}` must be true")]
     RuleViolation(&'static str),
 }
@@ -90,40 +94,54 @@ pub struct OntologyRegistry {
     by_type: HashMap<OntologyType, LevelDefinition>,
     by_index: Vec<OntologyType>,
     kind_owners: HashMap<String, OntologyType>,
+    edge_kinds: HashSet<EdgeKind>,
 }
 
 impl OntologyRegistry {
     pub fn load(path: impl AsRef<Path>) -> Result<Self, RegistryError> {
-        let text = fs::read_to_string(path)?;
-        Self::from_json(&text)
+        Self::from_json(&fs::read_to_string(path)?)
     }
 
     pub fn from_json(text: &str) -> Result<Self, RegistryError> {
-        let document: OntologyDocument = serde_json::from_str(text)?;
-        Self::from_document(document)
+        Self::from_document(serde_json::from_str(text)?)
     }
 
     pub fn from_document(document: OntologyDocument) -> Result<Self, RegistryError> {
         if document.contract_version != ONTOLOGY_VERSION {
-            return Err(RegistryError::Version {
-                actual: document.contract_version.clone(),
-                expected: ONTOLOGY_VERSION,
-            });
+            return Err(RegistryError::Version { actual: document.contract_version.clone(), expected: ONTOLOGY_VERSION });
+        }
+        if document.title != "Universal Ontology Engine" {
+            return Err(RegistryError::TitleMismatch(document.title.clone()));
         }
         if document.shape.zones != 7 || document.shape.levels_per_zone != 7 || document.shape.canonical_levels != LEVEL_COUNT {
-            return Err(RegistryError::Shape {
-                zones: document.shape.zones,
-                levels: document.shape.levels_per_zone,
-                canonical: document.shape.canonical_levels,
-            });
+            return Err(RegistryError::Shape { zones: document.shape.zones, levels: document.shape.levels_per_zone, canonical: document.shape.canonical_levels });
         }
-        if !document.rules.type_is_canonical_level { return Err(RegistryError::RuleViolation("type_is_canonical_level")); }
-        if !document.rules.kind_is_specialization { return Err(RegistryError::RuleViolation("kind_is_specialization")); }
-        if !document.rules.kind_must_not_create_level { return Err(RegistryError::RuleViolation("kind_must_not_create_level")); }
-        if !document.rules.filesystem_is_not_canonical_hierarchy { return Err(RegistryError::RuleViolation("filesystem_is_not_canonical_hierarchy")); }
-        if !document.rules.projection_is_distinct_from_containment { return Err(RegistryError::RuleViolation("projection_is_distinct_from_containment")); }
-        if !document.rules.representation_is_distinct_from_semantics { return Err(RegistryError::RuleViolation("representation_is_distinct_from_semantics")); }
-        if !document.rules.stable_identity_required { return Err(RegistryError::RuleViolation("stable_identity_required")); }
+        let rules = &document.rules;
+        let required_rules = [
+            (rules.type_is_canonical_level, "type_is_canonical_level"),
+            (rules.kind_is_specialization, "kind_is_specialization"),
+            (rules.kind_must_not_create_level, "kind_must_not_create_level"),
+            (rules.filesystem_is_not_canonical_hierarchy, "filesystem_is_not_canonical_hierarchy"),
+            (rules.projection_is_distinct_from_containment, "projection_is_distinct_from_containment"),
+            (rules.representation_is_distinct_from_semantics, "representation_is_distinct_from_semantics"),
+            (rules.stable_identity_required, "stable_identity_required"),
+            (rules.intermediate_levels_may_be_unmaterialized, "intermediate_levels_may_be_unmaterialized"),
+        ];
+        for (enabled, name) in required_rules {
+            if !enabled { return Err(RegistryError::RuleViolation(name)); }
+        }
+
+        if document.edge_classes.len() != EdgeKind::ALL.len() {
+            return Err(RegistryError::MissingEdgeKind("canonical edge class set".into()));
+        }
+        let mut edge_kinds = HashSet::new();
+        for name in &document.edge_classes {
+            let kind = EdgeKind::from_slug(name).ok_or_else(|| RegistryError::UnknownEdgeKind(name.clone()))?;
+            edge_kinds.insert(kind);
+        }
+        for kind in EdgeKind::ALL {
+            if !edge_kinds.contains(&kind) { return Err(RegistryError::MissingEdgeKind(kind.slug().into())); }
+        }
 
         let levels: Vec<&LevelDefinition> = document.zones.iter().flat_map(|zone| zone.levels.iter()).collect();
         if levels.len() != LEVEL_COUNT {
@@ -135,24 +153,33 @@ impl OntologyRegistry {
         let mut by_type = HashMap::with_capacity(LEVEL_COUNT);
         let mut by_index = vec![OntologyType::Universe; LEVEL_COUNT];
 
-        for (position, definition) in levels.iter().enumerate() {
-            if !seen_indices.insert(definition.index) {
-                return Err(RegistryError::DuplicateIndex(definition.index));
+        for (zone_position, zone) in document.zones.iter().enumerate() {
+            if zone.levels.len() != 7 {
+                return Err(RegistryError::ZoneLevelCount { zone: zone.id.clone(), actual: zone.levels.len() });
             }
+            let expected_zone = format!("zone-{}", zone_position + 1);
+            if zone.id != expected_zone {
+                return Err(RegistryError::ZoneMismatch { zone: zone.id.clone(), expected: expected_zone });
+            }
+        }
+
+        for (position, definition) in levels.iter().enumerate() {
+            if !seen_indices.insert(definition.index) { return Err(RegistryError::DuplicateIndex(definition.index)); }
             let expected_index = (position + 1) as u8;
             if definition.index != expected_index {
                 return Err(RegistryError::NonContiguousIndex { expected: expected_index, found: definition.index });
+            }
+            let expected_zone = ((definition.index as usize - 1) / 7) + 1;
+            let actual_zone_position = document.zones.iter().position(|zone| zone.levels.iter().any(|level| level.index == definition.index)).map(|v| v + 1).unwrap_or_default();
+            if actual_zone_position != expected_zone {
+                return Err(RegistryError::LevelInWrongZone { index: definition.index, zone: actual_zone_position.to_string() });
             }
             if !seen_types.insert(definition.ontology_type.clone()) {
                 return Err(RegistryError::DuplicateType(definition.ontology_type.clone()));
             }
             let engine_type = OntologyType::ALL[position];
             if definition.ontology_type != engine_type.slug() {
-                return Err(RegistryError::TypeMismatch {
-                    level: definition.index,
-                    contract: definition.ontology_type.clone(),
-                    engine: engine_type.slug().to_owned(),
-                });
+                return Err(RegistryError::TypeMismatch { level: definition.index, contract: definition.ontology_type.clone(), engine: engine_type.slug().to_owned() });
             }
             by_type.insert(engine_type, (*definition).clone());
             by_index[position] = engine_type;
@@ -160,19 +187,15 @@ impl OntologyRegistry {
 
         let mut kind_owners = HashMap::new();
         for example in &document.kind_examples {
-            let ty = parse_type(&example.ontology_type)?;
+            let ty = OntologyType::from_slug(&example.ontology_type).ok_or_else(|| RegistryError::UnknownType(example.ontology_type.clone()))?;
             if let Some(existing) = kind_owners.insert(example.kind.clone(), ty) {
                 if existing != ty {
-                    return Err(RegistryError::KindConflict {
-                        kind: example.kind.clone(),
-                        first: existing.slug().to_owned(),
-                        second: ty.slug().to_owned(),
-                    });
+                    return Err(RegistryError::KindConflict { kind: example.kind.clone(), first: existing.slug().to_owned(), second: ty.slug().to_owned() });
                 }
             }
         }
 
-        Ok(Self { document, by_type, by_index, kind_owners })
+        Ok(Self { document, by_type, by_index, kind_owners, edge_kinds })
     }
 
     pub fn document(&self) -> &OntologyDocument { &self.document }
@@ -181,23 +204,16 @@ impl OntologyRegistry {
     pub fn level(&self, one_based: u8) -> Option<OntologyType> { self.by_index.get(one_based.saturating_sub(1) as usize).copied() }
     pub fn definition(&self, ty: OntologyType) -> Option<&LevelDefinition> { self.by_type.get(&ty) }
     pub fn owner_of_kind(&self, kind: &str) -> Option<OntologyType> { self.kind_owners.get(kind).copied() }
+    pub fn edge_kind(&self, slug: &str) -> Option<EdgeKind> { EdgeKind::from_slug(slug).filter(|kind| self.edge_kinds.contains(kind)) }
+    pub fn supports_edge(&self, kind: EdgeKind) -> bool { self.edge_kinds.contains(&kind) }
     pub fn all(&self) -> &[OntologyType] { &self.by_index }
-}
-
-fn parse_type(value: &str) -> Result<OntologyType, RegistryError> {
-    OntologyType::ALL
-        .into_iter()
-        .find(|ty| ty.slug() == value)
-        .ok_or_else(|| RegistryError::UnknownType(value.to_owned()))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn registry_json() -> String {
-        include_str!("../../../specifications/universal-ontology-v1.0.json").to_owned()
-    }
+    fn registry_json() -> String { include_str!("../../../specifications/universal-ontology-v1.0.json").to_owned() }
 
     #[test]
     fn loads_canonical_registry() {
@@ -211,6 +227,13 @@ mod tests {
     fn registry_is_source_of_truth_for_definitions() {
         let registry = OntologyRegistry::from_json(&registry_json()).unwrap();
         assert_eq!(registry.definition(OntologyType::Bit).unwrap().definition, "Single binary information unit.");
+    }
+
+    #[test]
+    fn edge_registry_is_complete() {
+        let registry = OntologyRegistry::from_json(&registry_json()).unwrap();
+        assert_eq!(registry.edge_kind("projects_to"), Some(EdgeKind::ProjectsTo));
+        assert!(registry.supports_edge(EdgeKind::Contains));
     }
 
     #[test]
