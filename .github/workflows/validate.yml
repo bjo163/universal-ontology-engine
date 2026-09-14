@@ -1,0 +1,25 @@
+name: Validate Universe Foundation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate JSON documents
+        run: |
+          python -m json.tool specifications/universe-contract.json >/dev/null
+          python -m json.tool specifications/universe-contract.instance.json >/dev/null
+          python -m json.tool schemas/universe.schema.json >/dev/null
+      - name: Validate reference manifest
+        run: python tools/validate-universe.py
