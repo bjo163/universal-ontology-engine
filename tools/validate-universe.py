@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the canonical Universe manifest. Stdlib-only."""
+"""Validate the canonical Universe manifest and single foundation contract. Stdlib-only."""
 
 from __future__ import annotations
 
@@ -9,25 +9,50 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "universe.json"
+CONTRACT = ROOT / "specifications" / "foundation-contract.json"
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+CONTRACT_VERSION = "0.3"
+CANONICAL_HIERARCHY = [
+    "UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY",
+    "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION",
+]
 
 
 def fail(message: str) -> None:
     raise SystemExit(f"validation failed: {message}")
 
 
-def main() -> int:
+def load_json(path: Path) -> dict:
     try:
-        data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        fail(f"missing {MANIFEST}")
+        fail(f"missing {path}")
     except json.JSONDecodeError as exc:
-        fail(f"invalid JSON: {exc}")
-
+        fail(f"invalid JSON in {path}: {exc}")
     if not isinstance(data, dict):
-        fail("manifest root must be an object")
-    if data.get("contract_version") != "0.2":
-        fail("unexpected contract_version")
+        fail(f"{path.name} root must be an object")
+    return data
+
+
+def main() -> int:
+    data = load_json(MANIFEST)
+    contract = load_json(CONTRACT)
+
+    if data.get("contract_version") != CONTRACT_VERSION:
+        fail("unexpected manifest contract_version")
+    if contract.get("version") != CONTRACT_VERSION:
+        fail("unexpected foundation contract version")
+    if contract.get("hierarchy") != CANONICAL_HIERARCHY:
+        fail("foundation hierarchy does not match canonical hierarchy")
+    if contract.get("optionalLayers") != ["ORGANIZATION", "DOMAIN"]:
+        fail("optional foundation layers are invalid")
+    rules = contract.get("rules", {})
+    if rules.get("singleFoundation") is not True:
+        fail("singleFoundation rule must be true")
+    if rules.get("semanticDirectories") is not False:
+        fail("semanticDirectories rule must be false")
+    if rules.get("externalSystems") != "relationship":
+        fail("externalSystems rule must be relationship")
 
     universe = data.get("universe")
     if not isinstance(universe, dict) or not universe.get("id") or not universe.get("name"):
@@ -62,7 +87,7 @@ def main() -> int:
         ids.add(ecosystem_id)
         paths.add(path)
 
-    print(f"Universe Foundation valid: {len(ecosystems)} ecosystem(s)")
+    print(f"Universe Foundation v{CONTRACT_VERSION} valid: {len(ecosystems)} ecosystem(s); complete hierarchy enforced")
     return 0
 
 
