@@ -2,6 +2,23 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.5 — STABLE — 2026-09-14
+
+## What's Changed
+* ci: add real external discovery reference smoke by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/21
+* release: promote real external reference smoke by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/22
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.4...v0.1.5
+
+## v0.1.5-dev.17 — DEV — 2026-09-14
+
+## What's Changed
+* ci: add real external discovery reference smoke by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/21
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.4...v0.1.5-dev.17
+
 ## v0.1.4 — STABLE — 2026-09-14
 
 ## What's Changed
