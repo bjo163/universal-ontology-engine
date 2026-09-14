@@ -34,6 +34,25 @@ cargo run -p ontology-engine -- self --json
 ```
 <!-- AUTO:SELF_STATUS:END -->
 
+<!-- AUTO:REPO_STATUS:START -->
+## Repository automation status
+
+> Auto-generated. Human-authored sections remain outside this block.
+
+| Signal | Value |
+|---|---:|
+| Health | **HEALTHY** |
+| CI | `success` |
+| Stable release | `v0.1.2` |
+| Dev release | `v0.1.2-dev.6` |
+| Main version | `0.1.2` |
+| Dev version | `0.1.2-dev.6` |
+| Branch relation | `main_ahead` |
+| Branch model | `feature/* -> dev -> main` |
+
+See [`CHANGELOG.md`](CHANGELOG.md) for generated release history.
+<!-- AUTO:REPO_STATUS:END -->
+
 ## Canonical levels
 
 ```text
