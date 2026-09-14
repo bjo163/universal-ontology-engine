@@ -1,124 +1,120 @@
-# Universe Contract v0.2
+# Universe Foundation Contract v0.3
 
 ## 1. Scope
 
-This contract governs the top-level Universe layer and its relationship to independently owned Ecosystems.
+This is the single normative foundation contract for the complete software hierarchy managed by a Universe.
 
-It does not replace or duplicate the internal contract of any ecosystem.
+It governs the chain from `UNIVERSE` through `IMPLEMENTATION` and does not delegate any canonical layer to another foundation repository.
 
-## 2. Canonical model
+## 2. Canonical hierarchy
 
 ```text
 UNIVERSE
-└── ECOSYSTEM*
-    └── PROJECT / REPOSITORY / SOURCE / MODULE
+└── ECOSYSTEM
+    └── ORGANIZATION (optional)
+        └── DOMAIN (optional)
+            └── PROJECT
+                └── REPOSITORY
+                    └── SOURCE
+                        └── UNIT
+                            └── MODULE
+                                └── COMPONENT
+                                    └── ELEMENT
+                                        └── IMPLEMENTATION
 ```
 
-`*` means one or more ecosystems may exist in a universe. The lower levels are owned by the ecosystem and its applicable foundation contract.
+`ORGANIZATION` and `DOMAIN` are optional. All other layers form the canonical continuous chain.
 
-## 3. Universe identity
+## 3. Foundation principle
 
-A universe MUST have:
+`universe-foundation` is the only foundation contract required for conformance.
 
-- a stable `id`
-- a human-readable `name`
-- a contract version
-- an ecosystem registry
+There is no normative dependency on `ecosystem-foundation` or any other lower-level foundation repository. An ecosystem may still contain its own documentation or governance, but those materials are subordinate to this universal contract and cannot redefine the canonical hierarchy.
 
-The local filesystem path is operational metadata, not identity.
+## 4. Identity
 
-## 4. Ecosystem identity
+Every canonical entity SHOULD have a stable semantic identifier within its parent scope.
 
-Each registered ecosystem MUST have:
+Filesystem paths, directory names, repository names, branch names, and build artifacts are operational references unless explicitly declared as identifiers.
 
-- a stable `id`
-- a human-readable `name`
-- a unique registry entry
-- a path or source reference used for discovery
+## 5. Layer responsibilities
 
-An ecosystem MAY declare a repository containing its own ecosystem-level manifest or foundation material.
+- `UNIVERSE`: global boundary, registry, topology, discovery, cross-ecosystem coordination.
+- `ECOSYSTEM`: coherent product, research, platform, or software boundary.
+- `ORGANIZATION`: ownership/governance grouping when applicable.
+- `DOMAIN`: bounded business, technical, research, or product area when applicable.
+- `PROJECT`: bounded initiative, product, system, or engineering effort.
+- `REPOSITORY`: version-controlled implementation boundary.
+- `SOURCE`: repository implementation area.
+- `UNIT`: logical native implementation container.
+- `MODULE`: grouping of related implementation inside a Unit.
+- `COMPONENT`: cohesive implementation responsibility.
+- `ELEMENT`: smaller meaningful construct within a Component.
+- `IMPLEMENTATION`: concrete logic or behavior that realizes an Element or Component.
 
-## 5. Ownership boundary
+## 6. Native implementation mapping
 
-Universe Foundation owns:
-
-- universe identity
-- ecosystem registry
-- ecosystem discovery
-- workspace topology
-- cross-ecosystem relationships
-- cross-ecosystem orchestration boundaries
-
-Universe Foundation does NOT own:
-
-- ecosystem domain semantics
-- project semantics
-- repository internals
-- source code conventions
-- module/component design
-- language/toolchain choices
-
-Those remain below the ecosystem boundary.
-
-## 6. Workspace standard
-
-A conforming local workspace SHOULD use:
+The universal vocabulary is semantic and language-agnostic. Native constructs remain valid and are mapped to the canonical layers.
 
 ```text
-universe/
-├── universe manifest
-├── ecosystem-<id>/
-│   ├── ecosystem manifest (when used)
-│   └── <repository directories>
-└── ecosystem-<id>/
+UNIT
+├── Rust      → crate
+├── Node      → package / application / library
+├── Go        → package / command / service
+├── Python    → package / module
+└── Java      → module / package / application
 ```
 
-Repositories do not need an extra `repositories/` wrapper. Native repository layouts remain governed by `ecosystem-foundation` or the repository's own native conventions.
-
-A physical layout MAY differ when an orchestration tool requires it, provided registry identity remains stable and explicit.
-
-## 7. Registry and discovery
-
-The registry is the source of truth for ecosystem discovery within the universe.
-
-Discovery MUST use the stable ecosystem `id` and explicit `path` or `source` reference. Filesystem naming alone MUST NOT be treated as identity.
-
-A registry entry MAY include lifecycle, capability, contract, repository, organization, or other cross-ecosystem metadata.
-
-## 8. Relationships
-
-Cross-ecosystem relationships MUST point to ecosystem IDs or another stable identifier.
-
-Relationships MUST NOT redefine ownership of the referenced ecosystem or its repositories.
-
-External systems are represented as relationships and are not automatically children of the universe.
-
-## 9. Foundation compatibility
-
-An ecosystem MAY conform to `ecosystem-foundation`.
-
-When it does, the relationship is:
+Examples of lower mappings include:
 
 ```text
-universe-foundation v0.2
-        ↓
-ecosystem-foundation v0.x
-        ↓
-ecosystem repositories
+MODULE        → native module / namespace / source grouping
+COMPONENT     → class / service / handler / subsystem / feature unit
+ELEMENT       → function / method / type / interface / constant / handler
+IMPLEMENTATION → concrete executable logic, data flow, or behavior
 ```
 
-Universe Foundation defines the container and discovery contract; Ecosystem Foundation defines the structure below that boundary.
+Profiles may refine mappings without changing the universal vocabulary.
 
-## 10. Non-goals
+## 7. Physical layout rule
 
-This contract does not define:
+Canonical semantic layers MUST NOT become mandatory directory names.
 
-- package managers
-- build systems
-- programming languages
-- CI providers
-- cloud providers
-- database technology
-- application architecture
-- repository naming conventions beyond stable registry identity
-- project or repository internals
+A repository may use native layouts such as:
+
+```text
+src/ apps/ packages/ crates/ libs/ cmd/ pkg/ internal/ modules/ components/
+```
+
+A repository MUST NOT create `unit/`, `module/`, `component/`, `element/`, or `implementation/` merely to satisfy the hierarchy.
+
+## 8. Supporting concerns
+
+Tests, examples, fixtures, tools, scripts, configuration, data, documentation, specifications, infrastructure, deployment, and assets are supporting dimensions. They are not extra canonical parent layers.
+
+## 9. Registry and discovery
+
+`universe.json` is the top-level registry. It MUST identify ecosystems using stable IDs and operational references.
+
+An ecosystem MAY expose an `ecosystem.json` discovery manifest. Such a manifest is an optional metadata envelope and is not a second foundation contract.
+
+## 10. Relationships
+
+References between entities MUST preserve ownership. Cross-ecosystem relationships point to stable identifiers and do not transfer ownership.
+
+External systems are relationships, not children of the canonical hierarchy.
+
+## 11. Conformance
+
+A conforming implementation MUST:
+
+1. use the canonical vocabulary consistently;
+2. preserve native project/repository structures through mappings;
+3. avoid duplicate ownership layers and overlapping alias directories;
+4. maintain stable identity independent of local paths;
+5. validate machine-readable manifests against the current foundation contract;
+6. treat this repository as the single normative foundation.
+
+## 12. Change control
+
+Changes to hierarchy, semantics, identity rules, or native mappings require an explicit contract update and corresponding validator/test changes before templates or adopters are changed.
