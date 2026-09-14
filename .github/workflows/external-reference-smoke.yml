@@ -55,13 +55,14 @@ jobs:
             https://github.com/bjo163/rocksoul-ui.git \
             /tmp/ox-dx-external-reference
 
-      - name: Discover external repository with syntax projection
+      - name: Discover external repository with canonical syntax CLI
         shell: bash
         run: |
           set -euo pipefail
-          cargo run -p ontology-engine --bin ontology-syntax-discover -- \
+          cargo run -p ontology-engine -- discover \
             /tmp/ox-dx-external-reference \
             --include-files \
+            --syntax \
             --max-depth 3 \
             > external-reference.json
 
