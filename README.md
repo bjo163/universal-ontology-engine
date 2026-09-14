@@ -44,14 +44,16 @@ universe-foundation/
 
 ## Contract
 
-Current contract version: **0.1**.
+Current contract version: **0.2**.
 
 See:
 
 - `governance/hierarchy.md`
 - `specifications/universe-contract.md`
 - `specifications/universe-contract.json`
+- `specifications/universe-contract.instance.json`
 - `schemas/universe.schema.json`
+- `standards/workspace.md`
 
 ## Relationship to Ecosystem Foundation
 
@@ -60,9 +62,9 @@ See:
 `ecosystem-foundation` remains the canonical contract for structure inside an ecosystem.
 
 ```text
-universe-foundation
+universe-foundation v0.2
         ↓
-ecosystem-foundation
+ecosystem-foundation v0.x
         ↓
-ecosystem-* repositories
+ecosystem repositories
 ```
