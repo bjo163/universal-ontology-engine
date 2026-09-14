@@ -10,4 +10,6 @@ serde.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]
+ontology-graph = { path = "../ontology-graph" }
+ontology-registry = { path = "../ontology-registry" }
 serde_json.workspace = true

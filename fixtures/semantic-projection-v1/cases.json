@@ -1,0 +1,188 @@
+{
+  "schema": "universal-ontology-engine/semantic-conformance-v1",
+  "rfc": "oxdx.semantic-projection.rfc/v1",
+  "positive": [
+    {
+      "id": "rust-function",
+      "source_id": "fixture:rust:function",
+      "language": "rust",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_normalization_rule": "norm.rust.function",
+      "expected_normalization_class": "CallableDeclaration",
+      "semantic_rule_id": "conformance.function.v1",
+      "semantic_rule_version": "1",
+      "target_type": "FUNCTION",
+      "metadata": {"name": "run", "scope": "crate"}
+    },
+    {
+      "id": "typescript-function",
+      "source_id": "fixture:typescript:function",
+      "language": "typescript",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_normalization_rule": "norm.ts.function",
+      "expected_normalization_class": "CallableDeclaration",
+      "semantic_rule_id": "conformance.function.v1",
+      "semantic_rule_version": "1",
+      "target_type": "FUNCTION",
+      "metadata": {"name": "run", "scope": "module"}
+    },
+    {
+      "id": "javascript-arrow",
+      "source_id": "fixture:javascript:arrow",
+      "language": "javascript",
+      "native_kind": "arrow_function",
+      "source_type": "FUNCTION",
+      "expected_normalization_rule": "norm.js.arrow",
+      "expected_normalization_class": "CallableBinding",
+      "semantic_rule_id": "conformance.function.v1",
+      "semantic_rule_version": "1",
+      "target_type": "FUNCTION",
+      "metadata": {"name": "run", "scope": "module"}
+    },
+    {
+      "id": "python-function-scope-a",
+      "source_id": "fixture:python:function:a",
+      "language": "python",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_normalization_rule": "norm.py.function",
+      "expected_normalization_class": "CallableDeclaration",
+      "semantic_rule_id": "conformance.function.v1",
+      "semantic_rule_version": "1",
+      "target_type": "FUNCTION",
+      "metadata": {"name": "duplicate", "scope": "a"}
+    },
+    {
+      "id": "python-function-scope-b",
+      "source_id": "fixture:python:function:b",
+      "language": "python",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_normalization_rule": "norm.py.function",
+      "expected_normalization_class": "CallableDeclaration",
+      "semantic_rule_id": "conformance.function.v1",
+      "semantic_rule_version": "1",
+      "target_type": "FUNCTION",
+      "metadata": {"name": "duplicate", "scope": "b"}
+    },
+    {
+      "id": "go-function",
+      "source_id": "fixture:go:function",
+      "language": "go",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_normalization_rule": "norm.go.function",
+      "expected_normalization_class": "CallableDeclaration",
+      "semantic_rule_id": "conformance.function.v1",
+      "semantic_rule_version": "1",
+      "target_type": "FUNCTION",
+      "metadata": {"name": "run", "scope": "package"}
+    },
+    {
+      "id": "java-method",
+      "source_id": "fixture:java:method",
+      "language": "java",
+      "native_kind": "method",
+      "source_type": "FUNCTION",
+      "expected_normalization_rule": "norm.java.method",
+      "expected_normalization_class": "MethodDeclaration",
+      "semantic_rule_id": "conformance.function.v1",
+      "semantic_rule_version": "1",
+      "target_type": "FUNCTION",
+      "metadata": {"name": "run", "scope": "class"}
+    },
+    {
+      "id": "kotlin-function",
+      "source_id": "fixture:kotlin:function",
+      "language": "kotlin",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_normalization_rule": "norm.kt.function",
+      "expected_normalization_class": "CallableDeclaration",
+      "semantic_rule_id": "conformance.function.v1",
+      "semantic_rule_version": "1",
+      "target_type": "FUNCTION",
+      "metadata": {"name": "run", "scope": "class"}
+    },
+    {
+      "id": "typescript-class",
+      "source_id": "fixture:typescript:class",
+      "language": "typescript",
+      "native_kind": "class",
+      "source_type": "ENTITY",
+      "expected_normalization_rule": "norm.ts.class",
+      "expected_normalization_class": "DeclaredType",
+      "semantic_rule_id": "conformance.entity.v1",
+      "semantic_rule_version": "1",
+      "target_type": "ENTITY",
+      "metadata": {"name": "Widget", "scope": "module"}
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "go-declaration-unsupported",
+      "mode": "unsupported",
+      "source_id": "fixture:go:declaration",
+      "language": "go",
+      "native_kind": "declaration",
+      "source_type": "INSTRUCTION",
+      "expected_code": "unsupported",
+      "reason": "Go declaration is observable but intentionally has no cross-language normalization equivalence."
+    },
+    {
+      "id": "rust-parse-error-observable",
+      "mode": "unsupported",
+      "source_id": "fixture:rust:parse-error",
+      "language": "rust",
+      "native_kind": "parse_error",
+      "source_type": "ELEMENT",
+      "expected_code": "unsupported",
+      "reason": "Malformed Rust remains observable evidence and must not fabricate a semantic target."
+    },
+    {
+      "id": "python-missing-required-field",
+      "mode": "insufficient",
+      "source_id": "fixture:python:insufficient",
+      "language": "python",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_code": "insufficient",
+      "reason": "The normalization exists, but the conformance rule is evaluated without its required normalization_rule_id field."
+    },
+    {
+      "id": "python-competing-targets",
+      "mode": "ambiguous",
+      "source_id": "fixture:python:ambiguous",
+      "language": "python",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_code": "ambiguous",
+      "reason": "Two independently valid fixture rules assert different targets; rule order must not choose truth."
+    },
+    {
+      "id": "python-explicit-conflict",
+      "mode": "conflicting",
+      "source_id": "fixture:python:conflict",
+      "language": "python",
+      "native_kind": "function",
+      "source_type": "FUNCTION",
+      "expected_code": "conflicting",
+      "reason": "Two fixture rules are explicitly marked conflicting even when they target the same canonical type."
+    }
+  ],
+  "graph": [
+    {
+      "id": "projection-skips-canonical-levels",
+      "source_id": "fixture:graph:source",
+      "source_type": "SOURCE",
+      "target_id": "fixture:graph:function",
+      "target_type": "FUNCTION",
+      "rule_id": "conformance.skip-levels.v1",
+      "rule_version": "1",
+      "expected_edge": "PROJECTS_TO",
+      "reason": "Projection may connect evidence to a semantic target without fabricating UNIT/MODULE/SUBSYSTEM/COMPONENT/ELEMENT/SYMBOL intermediates."
+    }
+  ]
+}
