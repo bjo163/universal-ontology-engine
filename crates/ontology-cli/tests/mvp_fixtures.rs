@@ -42,12 +42,22 @@ fn assert_common_invariants(report: &Value) {
     assert_eq!(report["read_only"], true);
     assert!(count_level(report, 22) > 0, "REPOSITORY must exist");
     assert!(count_level(report, 23) > 0, "SOURCE must exist");
-    assert_eq!(count_level(report, 24), 0, "UNIT must remain unmaterialized");
-    assert_eq!(count_level(report, 25), 0, "MODULE must remain unmaterialized");
+    assert_eq!(
+        count_level(report, 24),
+        0,
+        "UNIT must remain unmaterialized"
+    );
+    assert_eq!(
+        count_level(report, 25),
+        0,
+        "MODULE must remain unmaterialized"
+    );
     assert!(count_level(report, 27) > 0, "COMPONENT must exist");
     assert!(count_level(report, 28) > 0, "ELEMENT must exist");
 
-    let semantic_levels = [30_u8, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46];
+    let semantic_levels = [
+        30_u8, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46,
+    ];
     let semantic_count: u64 = semantic_levels
         .into_iter()
         .map(|level| count_level(report, level))
@@ -58,7 +68,10 @@ fn assert_common_invariants(report: &Value) {
 fn assert_byte_deterministic(name: &str, mode: &str) {
     let first = run_fixture(name, mode);
     let second = run_fixture(name, mode);
-    assert_eq!(first, second, "repeated scans must be byte-identical for {name}");
+    assert_eq!(
+        first, second,
+        "repeated scans must be byte-identical for {name}"
+    );
 
     let report: Value = serde_json::from_slice(&first).expect("valid discovery JSON");
     assert_common_invariants(&report);
