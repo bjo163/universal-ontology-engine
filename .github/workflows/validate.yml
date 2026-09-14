@@ -29,6 +29,7 @@ jobs:
           python -m json.tool specifications/universal-ontology-v1.0.json >/dev/null
           python -m json.tool schemas/universe.schema.json >/dev/null
           python -m json.tool schemas/foundation-node.schema.json >/dev/null
+          python -m json.tool schemas/universal-ontology.schema.json >/dev/null
       - name: Validate canonical ontology contract
         run: python tools/validate-universe.py
       - name: Validate Python registry and discovery tooling
