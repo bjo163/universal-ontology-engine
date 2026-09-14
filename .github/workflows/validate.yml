@@ -22,6 +22,7 @@ jobs:
           python -m json.tool specifications/universe-contract.json >/dev/null
           python -m json.tool specifications/universe-contract.instance.json >/dev/null
           python -m json.tool specifications/foundation-contract.json >/dev/null
+          python -m json.tool specifications/foundation-contract.instance.json >/dev/null
           python -m json.tool schemas/universe.schema.json >/dev/null
       - name: Validate single foundation contract
         run: python tools/validate-universe.py
