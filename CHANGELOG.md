@@ -2,6 +2,23 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.7 — STABLE — 2026-09-14
+
+## What's Changed
+* feat: expose syntax projection on main discover CLI by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/27
+* release: promote canonical syntax discover CLI by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/28
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.6...v0.1.7
+
+## v0.1.7-dev.21 — DEV — 2026-09-14
+
+## What's Changed
+* feat: expose syntax projection on main discover CLI by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/27
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.6...v0.1.7-dev.21
+
 ## v0.1.6 — STABLE — 2026-09-14
 
 ## What's Changed

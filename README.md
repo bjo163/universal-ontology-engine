@@ -358,10 +358,10 @@ cargo run -p ontology-engine -- self --json
 |---|---:|
 | Health | **HEALTHY** |
 | CI | `success` |
-| Stable release | `v0.1.6` |
-| Dev release | `v0.1.6-dev.19` |
-| Main version | `0.1.6` |
-| Dev version | `0.1.6` |
+| Stable release | `v0.1.7` |
+| Dev release | `v0.1.7-dev.21` |
+| Main version | `0.1.7` |
+| Dev version | `0.1.7` |
 | Branch relation | `aligned` |
 | Branch model | `feature/* -> dev -> main` |
 
