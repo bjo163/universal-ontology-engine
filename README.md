@@ -350,7 +350,7 @@ cargo run -p ontology-engine -- self --json
 <!-- AUTO:SELF_STATUS:END -->
 
 <!-- AUTO:REPO_STATUS:START -->
-## Repository Automation Status
+## Repository automation status
 
 > Auto-generated. Human-authored sections remain outside this block.
 
