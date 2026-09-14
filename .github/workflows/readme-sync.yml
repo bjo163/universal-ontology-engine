@@ -1,0 +1,40 @@
+name: Sync README Self Status
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".ontology/self.json"
+      - "README.md"
+      - "tools/sync_readme.py"
+      - ".github/workflows/readme-sync.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: readme-self-status-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - name: Render deterministic README block
+        run: python tools/sync_readme.py
+      - name: Commit generated README when needed
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "README already synchronized"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs(auto): sync README self status"
+          git push
