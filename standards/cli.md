@@ -13,9 +13,20 @@ universe validate
 universe discover <workspace>
 universe status <workspace>
 universe doctor <workspace>
+python tools/universe-hierarchy.py <workspace> --json
 ```
 
-`--manifest <path>` selects an alternate Universe manifest. `--json` emits machine-readable output intended for launchers and automation.
+`--manifest <path>` selects an alternate Universe manifest for registry commands. `--json` emits machine-readable output intended for launchers and automation.
+
+## Hierarchy discovery
+
+`universe-hierarchy.py` is read-only and maps native workspace/repository structures to the semantic chain:
+
+```text
+UNIVERSE → ECOSYSTEM → ORGANIZATION? → DOMAIN? → PROJECT → REPOSITORY → SOURCE → UNIT → MODULE → COMPONENT → ELEMENT → IMPLEMENTATION
+```
+
+It MUST preserve native directories and report lower-level mappings as semantic classifications. It MUST NOT create or rename directories.
 
 ## Ownership
 
@@ -34,4 +45,4 @@ The registry `ecosystems[].id` is authoritative for Universe-level identity. A l
 
 ## Stability
 
-The command names above are the v0.2 CLI contract. Future commands MAY be added, but existing command semantics SHOULD remain backward compatible within a contract major version.
+Existing registry commands remain backward compatible. Hierarchy discovery is additive and dependency-free.
