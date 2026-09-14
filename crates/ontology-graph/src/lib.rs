@@ -121,8 +121,8 @@ mod tests {
     #[test]
     fn rejects_bad_level_order() {
         let mut g = OntologyGraph::new(registry());
-        g.insert_node(node("u", None, OntologyType::Universe)).unwrap();
-        let err = g.insert_node(node("b", Some("u"), OntologyType::Bit)).unwrap_err();
+        g.insert_node(node("bit", None, OntologyType::Bit)).unwrap();
+        let err = g.insert_node(node("universe", Some("bit"), OntologyType::Universe)).unwrap_err();
         assert!(err.to_string().contains("invalid level ordering"));
     }
 
