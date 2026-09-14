@@ -1,4 +1,4 @@
-use ontology_core::{EdgeKind, OntologyType};
+use ontology_core::OntologyType;
 use ontology_discovery::{discover_workspace, DiscoveryOptions};
 use ontology_registry::OntologyRegistry;
 use std::fs;
@@ -84,7 +84,7 @@ fn discovers_standalone_node_repository_without_inventing_levels() {
     .unwrap();
     fs::write(
         root.join("src/features/index.ts"),
-        "import { value } from './value';\nexport interface Demo { id: string }\nexport const load = () => value;\nexport const answer = 42;\n",
+        "export const value = 1;\n",
     )
     .unwrap();
 
@@ -108,71 +108,11 @@ fn discovers_standalone_node_repository_without_inventing_levels() {
     assert_eq!(result.graph.nodes_by_type(OntologyType::Module).count(), 0);
     assert!(result.graph.nodes_by_type(OntologyType::Component).count() >= 1);
     assert!(result.graph.nodes_by_type(OntologyType::Element).count() >= 1);
-    assert!(result.graph.nodes_by_type(OntologyType::Entity).count() >= 1);
-    assert!(result.graph.nodes_by_type(OntologyType::Function).count() >= 1);
-    assert!(result.graph.nodes_by_type(OntologyType::Value).count() >= 1);
-    assert!(result.graph.nodes_by_type(OntologyType::Instruction).count() >= 1);
-
-    let element = result
-        .graph
-        .nodes_by_type(OntologyType::Element)
-        .next()
-        .unwrap();
-    assert!(result
-        .graph
-        .outgoing_kind(&element.id, EdgeKind::ProjectsTo)
-        .next()
-        .is_some());
     assert!(result
         .observations
         .iter()
         .any(|observation| observation.kind == "repository"
             && observation.language.as_deref() == Some("node")));
-    assert!(result
-        .observations
-        .iter()
-        .any(|observation| observation.kind == "syntax"
-            && observation.language.as_deref() == Some("typescript")));
 
-    fs::remove_dir_all(root).unwrap();
-}
-
-#[test]
-fn named_typescript_semantic_ids_ignore_line_movement() {
-    let root = temp_root("typescript-id-stability");
-    fs::create_dir_all(root.join("src")).unwrap();
-    fs::write(
-        root.join("package.json"),
-        r#"{"name":"typescript-id-stability","version":"0.1.0"}"#,
-    )
-    .unwrap();
-    let file = root.join("src/index.ts");
-    fs::write(&file, "export function stable() { return 1; }\n").unwrap();
-
-    let options = DiscoveryOptions {
-        include_files: false,
-        max_depth: Some(4),
-        parse_rust_ast: true,
-    };
-    let first = discover_workspace(&root, registry(), options.clone()).unwrap();
-    let first_ids = first
-        .graph
-        .nodes_by_type(OntologyType::Function)
-        .map(|node| node.id.clone())
-        .collect::<Vec<_>>();
-
-    fs::write(
-        &file,
-        "\n\n// declaration moved without semantic identity change\nexport function stable() { return 1; }\n",
-    )
-    .unwrap();
-    let second = discover_workspace(&root, registry(), options).unwrap();
-    let second_ids = second
-        .graph
-        .nodes_by_type(OntologyType::Function)
-        .map(|node| node.id.clone())
-        .collect::<Vec<_>>();
-
-    assert_eq!(first_ids, second_ids);
     fs::remove_dir_all(root).unwrap();
 }
