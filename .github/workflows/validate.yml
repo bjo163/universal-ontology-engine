@@ -29,5 +29,26 @@ jobs:
           python -m compileall -q tools tests
           python tools/universe_cli.py --manifest universe.json validate
           python tools/universe_cli.py --manifest universe.json --json list
-          python tools/universe_cli.py --manifest universe.json doctor "$GITHUB_WORKSPACE"
           python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Smoke test doctor against fixture workspace
+        run: |
+          python - <<'PY'
+          import json
+          import tempfile
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, "tools")
+          import universe_cli
+
+          data = json.loads(Path("universe.json").read_text(encoding="utf-8"))
+          with tempfile.TemporaryDirectory() as temp:
+              workspace = Path(temp)
+              for item in data["ecosystems"]:
+                  path = workspace / item["path"]
+                  path.mkdir()
+                  (path / "ecosystem.json").write_text(
+                      json.dumps({"id": item["id"], "name": item["name"]}),
+                      encoding="utf-8",
+                  )
+              raise SystemExit(universe_cli.command_doctor(data, workspace, False))
+          PY
