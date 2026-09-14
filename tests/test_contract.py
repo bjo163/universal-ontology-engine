@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "specifications" / "universe-contract.instance.json"
-FOUNDATION = ROOT / "specifications" / "foundation-contract.json"
+FOUNDATION = ROOT / "specifications" / "foundation-contract.instance.json"
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 EXPECTED_HIERARCHY = [
     "UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY",
