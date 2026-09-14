@@ -328,7 +328,7 @@ Phase 4 intentionally does not manufacture `UNIT` or `MODULE` from generic sourc
 The ontology contract version and the Rust package version are separate concerns: **Universal Ontology is v1.0.0**, while repository implementation releases follow their own `0.x` release train.
 
 <!-- AUTO:SELF_STATUS:START -->
-## Self Status
+## Self status
 
 > Auto-generated from `.ontology/self.json`. Do not edit this block manually.
 
