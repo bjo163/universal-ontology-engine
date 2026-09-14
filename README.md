@@ -39,6 +39,7 @@ universe-foundation/
 ├── templates/
 ├── tools/
 ├── tests/
+├── universe.json
 └── README.md
 ```
 
@@ -54,6 +55,33 @@ See:
 - `specifications/universe-contract.instance.json`
 - `schemas/universe.schema.json`
 - `standards/workspace.md`
+
+## Canonical registry
+
+`universe.json` is the operational Universe registry used by tooling. The stable ecosystem `id` is the identity; `path` is workspace metadata.
+
+The current reference registry contains ROCKSOUL, MoonWitness, CRAYON, and ISP.
+
+## Registry / discovery CLI
+
+The dependency-free Python CLI is `tools/universe_cli.py`.
+
+```text
+python tools/universe_cli.py list
+python tools/universe_cli.py inspect rocksoul
+python tools/universe_cli.py validate
+python tools/universe_cli.py discover X:\\REPO\\universe
+python tools/universe_cli.py status X:\\REPO\\universe
+```
+
+Add `--json` for machine-readable output:
+
+```text
+python tools/universe_cli.py --json list
+python tools/universe_cli.py --json status X:\\REPO\\universe
+```
+
+`list` reads the registry only. `discover` scans the workspace for `ecosystem-*` directories and reports registered, missing, and unknown entries. `status` combines registry entries with local filesystem/Git presence.
 
 ## Relationship to Ecosystem Foundation
 
