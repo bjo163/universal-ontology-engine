@@ -1,3 +1,4 @@
+mod preflight;
 mod syntax_projection;
 
 mod legacy {
@@ -10,7 +11,7 @@ mod legacy {
 
 use clap::{Parser, Subcommand};
 use ontology_core::{OntologyType, ONTOLOGY_VERSION};
-use ontology_discovery::{discover_workspace, DiscoveryOptions};
+use ontology_discovery::{discover_workspace, DiscoveryError, DiscoveryOptions};
 use ontology_registry::OntologyRegistry;
 use std::collections::BTreeMap;
 use std::path::PathBuf;
@@ -18,18 +19,21 @@ use std::sync::Arc;
 use syntax_projection::project_workspace_syntax;
 
 const DEFAULT_REGISTRY: &str = "specifications/universal-ontology-v1.0.json";
+const DISCOVERY_SCHEMA: &str = "universal-ontology-engine/discovery-v1";
+const EXIT_INPUT: i32 = 2;
+const EXIT_ENGINE: i32 = 3;
 
 #[derive(Parser, Debug)]
 #[command(name = "ontology-engine", version = ONTOLOGY_VERSION)]
-struct SyntaxCli {
+struct DiscoveryCli {
     #[arg(long, global = true, default_value = DEFAULT_REGISTRY)]
     registry: PathBuf,
     #[command(subcommand)]
-    command: SyntaxCommand,
+    command: DiscoveryCommand,
 }
 
 #[derive(Subcommand, Debug)]
-enum SyntaxCommand {
+enum DiscoveryCommand {
     Discover {
         workspace: PathBuf,
         #[arg(long)]
@@ -44,16 +48,16 @@ enum SyntaxCommand {
 }
 
 fn main() {
-    if std::env::args().any(|argument| argument == "--syntax") {
-        run_syntax_discover();
+    if std::env::args().any(|argument| argument == "discover") {
+        run_discover();
     } else {
         legacy::run();
     }
 }
 
-fn run_syntax_discover() {
-    let cli = SyntaxCli::parse();
-    let SyntaxCommand::Discover {
+fn run_discover() {
+    let cli = DiscoveryCli::parse();
+    let DiscoveryCommand::Discover {
         workspace,
         include_files,
         rust_ast,
@@ -61,8 +65,10 @@ fn run_syntax_discover() {
         max_depth,
     } = cli.command;
 
-    debug_assert!(syntax);
-    debug_assert!(!rust_ast);
+    if let Err(error) = preflight::validate_workspace(&workspace, max_depth) {
+        eprintln!("workspace preflight failed: {error}");
+        std::process::exit(EXIT_INPUT);
+    }
 
     let registry = match OntologyRegistry::load(&cli.registry) {
         Ok(registry) => Arc::new(registry),
@@ -71,7 +77,7 @@ fn run_syntax_discover() {
                 "failed to load ontology registry `{}`: {error}",
                 cli.registry.display()
             );
-            std::process::exit(2);
+            std::process::exit(EXIT_INPUT);
         }
     };
 
@@ -81,20 +87,30 @@ fn run_syntax_discover() {
         DiscoveryOptions {
             include_files,
             max_depth,
-            parse_rust_ast: false,
+            parse_rust_ast: rust_ast,
         },
     ) {
         Ok(result) => result,
         Err(error) => {
             eprintln!("discovery failed: {error}");
-            std::process::exit(2);
+            std::process::exit(discovery_exit_code(&error));
         }
     };
 
-    if let Err(error) = project_workspace_syntax(&mut result, &workspace) {
-        eprintln!("syntax projection failed: {error}");
-        std::process::exit(2);
+    if syntax {
+        if let Err(error) = project_workspace_syntax(&mut result, &workspace) {
+            eprintln!("syntax projection failed: {error}");
+            std::process::exit(EXIT_ENGINE);
+        }
     }
+
+    let mode = if syntax {
+        "syntax-projection"
+    } else if rust_ast {
+        "rust-ast"
+    } else {
+        "structural"
+    };
 
     let mut by_level = BTreeMap::new();
     for ty in OntologyType::ALL {
@@ -105,17 +121,39 @@ fn run_syntax_discover() {
     }
 
     let summary = serde_json::json!({
+        "schema": DISCOVERY_SCHEMA,
         "ontology": ONTOLOGY_VERSION,
-        "workspace": workspace,
+        "workspace": normalize_path(&workspace),
         "read_only": true,
-        "mode": "syntax-projection",
+        "mode": mode,
         "nodes": result.graph.len(),
         "edges": result.graph.edge_len(),
         "nodes_by_level": by_level,
         "observations": result.observations
     });
-    println!(
-        "{}",
-        serde_json::to_string_pretty(&summary).expect("summary is serializable")
-    );
+    emit_json(&summary);
+}
+
+fn discovery_exit_code(error: &DiscoveryError) -> i32 {
+    match error {
+        DiscoveryError::Graph(_) => EXIT_ENGINE,
+        DiscoveryError::MissingWorkspace(_)
+        | DiscoveryError::NotDirectory(_)
+        | DiscoveryError::ReadDir { .. }
+        | DiscoveryError::ReadSource { .. } => EXIT_INPUT,
+    }
+}
+
+fn normalize_path(path: &std::path::Path) -> String {
+    path.to_string_lossy().replace('\\', "/")
+}
+
+fn emit_json(value: &serde_json::Value) {
+    match serde_json::to_string_pretty(value) {
+        Ok(json) => println!("{json}"),
+        Err(error) => {
+            eprintln!("failed to serialize machine output: {error}");
+            std::process::exit(EXIT_ENGINE);
+        }
+    }
 }

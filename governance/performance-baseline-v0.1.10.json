@@ -1,0 +1,85 @@
+{
+  "schema": "universal-ontology-engine/performance-baseline-v1",
+  "baseline_target": "v0.1.10",
+  "ontology": "1.0.0",
+  "source": {
+    "workflow": "Validate Universal Ontology Engine",
+    "run_id": 34823503824,
+    "runner_image": "ubuntu-24.04",
+    "runner_image_version": "20260907.300.1"
+  },
+  "environment": {
+    "machine": "x86_64",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "python": "3.14.7",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)"
+  },
+  "max_rss_kib_observed": 39340,
+  "cases": [
+    {
+      "name": "fixture-rust",
+      "workspace": "fixtures/mvp/rust",
+      "flags": ["--rust-ast"],
+      "runs": 3,
+      "median_ms": 1.902,
+      "min_ms": 1.866,
+      "max_ms": 2.478,
+      "output_bytes": 2246,
+      "nodes": 9,
+      "edges": 4,
+      "observations": 11,
+      "mode": "rust-ast",
+      "schema": "universal-ontology-engine/discovery-v1"
+    },
+    {
+      "name": "fixture-typescript",
+      "workspace": "fixtures/mvp/typescript",
+      "flags": ["--syntax"],
+      "runs": 3,
+      "median_ms": 1.8,
+      "min_ms": 1.769,
+      "max_ms": 1.816,
+      "output_bytes": 3467,
+      "nodes": 13,
+      "edges": 6,
+      "observations": 17,
+      "mode": "syntax-projection",
+      "schema": "universal-ontology-engine/discovery-v1"
+    },
+    {
+      "name": "fixture-python",
+      "workspace": "fixtures/mvp/python",
+      "flags": ["--syntax"],
+      "runs": 3,
+      "median_ms": 1.689,
+      "min_ms": 1.688,
+      "max_ms": 1.708,
+      "output_bytes": 2411,
+      "nodes": 9,
+      "edges": 4,
+      "observations": 11,
+      "mode": "syntax-projection",
+      "schema": "universal-ontology-engine/discovery-v1"
+    },
+    {
+      "name": "self-structural-depth4",
+      "workspace": ".",
+      "flags": ["--max-depth", "4"],
+      "runs": 3,
+      "median_ms": 3.581,
+      "min_ms": 3.564,
+      "max_ms": 3.799,
+      "output_bytes": 5772,
+      "nodes": 31,
+      "edges": 0,
+      "observations": 31,
+      "mode": "structural",
+      "schema": "universal-ontology-engine/discovery-v1"
+    }
+  ],
+  "policy": {
+    "numbers_are_baselines_not_promises": true,
+    "severe_regression_threshold": "3x median time or 3x output size on committed local fixtures",
+    "network_repositories_are_measured_separately": true
+  }
+}

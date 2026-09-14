@@ -41,9 +41,11 @@ fn count_level(report: &Value, level: u8) -> u64 {
         .sum()
 }
 
-fn assert_common_invariants(report: &Value) {
+fn assert_common_invariants(report: &Value, expected_mode: &str) {
+    assert_eq!(report["schema"], "universal-ontology-engine/discovery-v1");
     assert_eq!(report["ontology"], "1.0.0");
     assert_eq!(report["read_only"], true);
+    assert_eq!(report["mode"], expected_mode);
     assert!(count_level(report, 22) > 0, "REPOSITORY must exist");
     assert!(count_level(report, 23) > 0, "SOURCE must exist");
     assert_eq!(
@@ -69,7 +71,7 @@ fn assert_common_invariants(report: &Value) {
     assert!(semantic_count > 0, "fixture must project semantic evidence");
 }
 
-fn assert_byte_deterministic(name: &str, mode: &str) {
+fn assert_byte_deterministic(name: &str, mode: &str, expected_mode: &str) {
     let first = run_fixture(name, mode);
     let second = run_fixture(name, mode);
     assert_eq!(
@@ -78,20 +80,20 @@ fn assert_byte_deterministic(name: &str, mode: &str) {
     );
 
     let report: Value = serde_json::from_slice(&first).expect("valid discovery JSON");
-    assert_common_invariants(&report);
+    assert_common_invariants(&report, expected_mode);
 }
 
 #[test]
 fn rust_fixture_is_byte_deterministic() {
-    assert_byte_deterministic("rust", "--rust-ast");
+    assert_byte_deterministic("rust", "--rust-ast", "rust-ast");
 }
 
 #[test]
 fn typescript_fixture_is_byte_deterministic() {
-    assert_byte_deterministic("typescript", "--syntax");
+    assert_byte_deterministic("typescript", "--syntax", "syntax-projection");
 }
 
 #[test]
 fn python_fixture_is_byte_deterministic() {
-    assert_byte_deterministic("python", "--syntax");
+    assert_byte_deterministic("python", "--syntax", "syntax-projection");
 }

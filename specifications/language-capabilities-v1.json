@@ -1,0 +1,121 @@
+{
+  "schema": "universal-ontology-engine/language-capabilities-v1",
+  "phase": 6,
+  "claim": "deterministic syntax observation; not compiler-grade semantic analysis",
+  "languages": {
+    "rust": {
+      "adapter": "ontology-rust/syn",
+      "source_span": true,
+      "malformed_source": "parse-error observation",
+      "constructs": {
+        "const": "VALUE",
+        "static": "VALUE",
+        "enum": "ENTITY",
+        "struct": "ENTITY",
+        "trait": "ENTITY",
+        "trait_alias": "ENTITY",
+        "type_alias": "ENTITY",
+        "union": "ENTITY",
+        "foreign_mod": "ENTITY",
+        "function": "FUNCTION",
+        "impl": "RELATION",
+        "macro": "OPERATION",
+        "method": "OPERATION",
+        "impl_macro": "OPERATION",
+        "call": "OPERATION",
+        "field": "PROPERTY",
+        "mod": "MODULE",
+        "use": "INSTRUCTION",
+        "extern_crate": "INSTRUCTION",
+        "impl_const": "VALUE",
+        "associated_type": "ENTITY"
+      }
+    },
+    "typescript": {
+      "adapter": "ontology-language/line-observer",
+      "source_span": true,
+      "malformed_source": "best-effort line observation; unsupported syntax remains unobserved",
+      "constructs": {
+        "class": "ENTITY",
+        "interface": "ENTITY",
+        "type_alias": "ENTITY",
+        "function": "FUNCTION",
+        "arrow_function": "FUNCTION",
+        "module_statement": "INSTRUCTION",
+        "variable": "VALUE"
+      }
+    },
+    "javascript": {
+      "adapter": "ontology-language/line-observer",
+      "source_span": true,
+      "malformed_source": "best-effort line observation; unsupported syntax remains unobserved",
+      "constructs": {
+        "class": "ENTITY",
+        "interface": "ENTITY",
+        "type_alias": "ENTITY",
+        "function": "FUNCTION",
+        "arrow_function": "FUNCTION",
+        "module_statement": "INSTRUCTION",
+        "variable": "VALUE"
+      }
+    },
+    "python": {
+      "adapter": "ontology-language/line-observer",
+      "source_span": true,
+      "malformed_source": "best-effort line observation; unsupported syntax remains unobserved",
+      "constructs": {
+        "class": "ENTITY",
+        "function": "FUNCTION",
+        "async_function": "FUNCTION",
+        "import": "INSTRUCTION",
+        "assignment": "VALUE"
+      }
+    },
+    "go": {
+      "adapter": "ontology-language/line-observer",
+      "source_span": true,
+      "malformed_source": "best-effort line observation; unsupported syntax remains unobserved",
+      "constructs": {
+        "type": "ENTITY",
+        "function": "FUNCTION",
+        "declaration": "INSTRUCTION"
+      }
+    },
+    "java": {
+      "adapter": "ontology-language/line-observer",
+      "source_span": true,
+      "malformed_source": "best-effort line observation; unsupported syntax remains unobserved",
+      "constructs": {
+        "class": "ENTITY",
+        "interface": "ENTITY",
+        "object": "ENTITY",
+        "enum class": "ENTITY",
+        "function": "FUNCTION",
+        "method": "FUNCTION",
+        "package_or_import": "INSTRUCTION",
+        "property": "VALUE"
+      }
+    },
+    "kotlin": {
+      "adapter": "ontology-language/line-observer",
+      "source_span": true,
+      "malformed_source": "best-effort line observation; unsupported syntax remains unobserved",
+      "constructs": {
+        "class": "ENTITY",
+        "interface": "ENTITY",
+        "object": "ENTITY",
+        "enum class": "ENTITY",
+        "function": "FUNCTION",
+        "package_or_import": "INSTRUCTION",
+        "property": "VALUE"
+      }
+    }
+  },
+  "non_goals": [
+    "full type resolution",
+    "macro expansion outside native Rust AST behavior",
+    "cross-file binding",
+    "compiler-grade control/data-flow analysis",
+    "semantic equivalence across languages"
+  ]
+}

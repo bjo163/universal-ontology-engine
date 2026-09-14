@@ -11,6 +11,8 @@ on:
       - "crates/ontology-rust/**"
       - "crates/ontology-language/**"
       - "crates/ontology-cli/**"
+      - "specifications/external-reference-matrix-v1.json"
+      - "schemas/discovery-output-v1.schema.json"
       - ".ontology/self.json"
       - ".github/workflows/external-reference-smoke.yml"
   workflow_dispatch:
@@ -21,6 +23,9 @@ permissions:
 concurrency:
   group: external-reference-smoke
   cancel-in-progress: true
+
+env:
+  ROCKSOUL_UI_REF: 68b1f16192a2bbd4694f5b75efee675a4272aabf
 
 jobs:
   rocksoul-ui:
@@ -44,16 +49,16 @@ jobs:
           cargo run -p ontology-engine -- self --json > /tmp/ox-dx-self.json
           diff -u .ontology/self.json /tmp/ox-dx-self.json
 
-      - name: Clone external reference specimen
+      - name: Clone pinned external reference specimen
         shell: bash
         run: |
           set -euo pipefail
           rm -rf /tmp/ox-dx-external-reference
-          git clone \
-            --depth 1 \
-            --branch main \
-            https://github.com/bjo163/rocksoul-ui.git \
-            /tmp/ox-dx-external-reference
+          git init /tmp/ox-dx-external-reference
+          git -C /tmp/ox-dx-external-reference remote add origin https://github.com/bjo163/rocksoul-ui.git
+          git -C /tmp/ox-dx-external-reference fetch --depth 1 origin "$ROCKSOUL_UI_REF"
+          git -C /tmp/ox-dx-external-reference checkout --detach FETCH_HEAD
+          test "$(git -C /tmp/ox-dx-external-reference rev-parse HEAD)" = "$ROCKSOUL_UI_REF"
 
       - name: Discover external repository with canonical syntax CLI
         shell: bash
@@ -81,35 +86,26 @@ jobs:
               prefix = f"{level:02d}_"
               return sum(value for key, value in levels.items() if key.startswith(prefix))
 
-          required = {
-              "REPOSITORY": (22, count(22)),
-              "SOURCE": (23, count(23)),
-              "COMPONENT": (27, count(27)),
-              "ELEMENT": (28, count(28)),
-          }
           semantic_levels = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46)
           semantic_count = sum(count(level) for level in semantic_levels)
 
+          assert report.get("schema") == "universal-ontology-engine/discovery-v1", report
           assert report.get("ontology") == "1.0.0", report
           assert report.get("read_only") is True, report
           assert report.get("mode") == "syntax-projection", report
           assert report.get("nodes", 0) > 1, report
           assert report.get("edges", 0) > 0, report
 
-          for name, (_, value) in required.items():
-              assert value > 0, f"missing required {name} nodes: {levels}"
+          for name, level in (("REPOSITORY", 22), ("SOURCE", 23), ("COMPONENT", 27), ("ELEMENT", 28)):
+              assert count(level) > 0, f"missing required {name} nodes: {levels}"
 
           assert count(24) == 0, f"synthetic UNIT detected: {levels}"
           assert count(25) == 0, f"synthetic MODULE detected: {levels}"
           assert semantic_count > 0, f"no syntax semantic nodes projected: {levels}"
 
-          observation_kinds = {
-              item.get("kind") for item in report.get("observations", [])
-          }
+          observation_kinds = {item.get("kind") for item in report.get("observations", [])}
           for kind in ("repository", "source", "component", "element", "syntax"):
-              assert kind in observation_kinds, (
-                  f"missing {kind} observation: {sorted(observation_kinds)}"
-              )
+              assert kind in observation_kinds, f"missing {kind} observation: {sorted(observation_kinds)}"
 
           print(
               "external-reference rocksoul-ui: "
@@ -127,6 +123,7 @@ jobs:
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
+          import os
           from pathlib import Path
 
           report = json.loads(Path("external-reference.json").read_text())
@@ -138,7 +135,7 @@ jobs:
 
           print("## OX-DX external reference smoke")
           print()
-          print("Reference: `bjo163/rocksoul-ui@main`")
+          print(f"Reference: `bjo163/rocksoul-ui@{os.environ['ROCKSOUL_UI_REF']}`")
           print()
           print("| Signal | Count |")
           print("|---|---:|")

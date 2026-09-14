@@ -9,7 +9,7 @@
   "ontology": "1.0.0",
   "read_only": true,
   "repository": "universal-ontology-engine",
-  "rust_sources": 14,
+  "rust_sources": 16,
   "schema": "universal-ontology-engine/self-v1",
   "self": true,
   "sources": {
