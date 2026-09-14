@@ -1,7 +1,12 @@
 {
-  "version": "0.3",
+  "version": "1.0",
   "hierarchy": [
     "UNIVERSE",
+    "CREATION",
+    "COSMIC_ORDER",
+    "REALITY",
+    "REALM",
+    "WORLD",
     "ECOSYSTEM",
     "ORGANIZATION",
     "DOMAIN",
@@ -16,18 +21,9 @@
   ],
   "optionalLayers": ["ORGANIZATION", "DOMAIN"],
   "supportingDimensions": [
-    "tests",
-    "examples",
-    "fixtures",
-    "tools",
-    "scripts",
-    "configuration",
-    "data",
-    "documentation",
-    "specifications",
-    "infrastructure",
-    "deployment",
-    "assets"
+    "tests", "examples", "fixtures", "tools", "scripts", "configuration", "data",
+    "documentation", "specifications", "infrastructure", "deployment", "assets",
+    "observations", "relationships", "provenance"
   ],
   "nativeMappings": {
     "rust": ["crate", "module", "function", "struct", "trait", "impl"],
@@ -41,6 +37,8 @@
     "semanticDirectories": false,
     "externalSystems": "relationship",
     "stableIdentity": true,
-    "parentScopedIdentity": true
+    "parentScopedIdentity": true,
+    "creatorOutsideModel": true,
+    "tokenIsParserDetail": true
   }
 }
