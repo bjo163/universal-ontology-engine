@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bjo163/universe-foundation/blob/main/schemas/universe.schema.json",
+  "title": "Universe Manifest",
+  "type": "object",
+  "required": ["contract_version", "universe", "ecosystems"],
+  "properties": {
+    "contract_version": {"const": "0.1"},
+    "universe": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "name": {"type": "string", "minLength": 1},
+        "description": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "ecosystems": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "path"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1, "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "name": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "repository": {"type": "string"},
+          "lifecycle": {"type": "string", "enum": ["planned", "active", "maintenance", "archived"]},
+          "contract": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
