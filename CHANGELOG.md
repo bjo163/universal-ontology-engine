@@ -2,6 +2,14 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.11-dev.30 — DEV — 2026-09-14
+
+## What's Changed
+* docs(rfc): freeze Phase 7 semantic projection boundary by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/61
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.10...v0.1.11-dev.30
+
 ## v0.1.10 — STABLE — 2026-09-14
 
 ## What's Changed
