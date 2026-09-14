@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="196" height="196" viewBox="0 0 196 196" fill="none">
+<g stroke="#F5F7F8" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter">
+  <path d="M21 49H70L91 77V91"/>
+  <path d="M21 147H70L91 119V105"/>
+  <path d="M175 49H133L112 77V84"/>
+  <path d="M175 147H133L112 119V112"/>
+</g>
+<g transform="translate(126 91) rotate(45)"><rect x="-7" y="-7" width="14" height="14" fill="#00D8FF"/></g>
+<path d="M126 70V84M140 91H154" stroke="#00D8FF" stroke-width="3"/>
+</svg>

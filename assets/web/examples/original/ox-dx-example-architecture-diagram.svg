@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none"><rect width="1200" height="630" fill="#07090A"/>
+<g stroke="#F5F7F8" stroke-width="7">
+ <path d="M84 98H280L329 147V175M84 245H280L329 196V189"/>
+ <path d="M784 98H980L1029 147V175M784 245H980L1029 196V189"/>
+ <path d="M392 385H588L637 434V462M392 532H588L637 483V476"/>
+</g>
+<g fill="#00D8FF">
+ <rect x="322" y="182" width="14" height="14" transform="rotate(45 329 189)"/>
+ <rect x="1022" y="182" width="14" height="14" transform="rotate(45 1029 189)"/>
+ <rect x="630" y="469" width="14" height="14" transform="rotate(45 637 476)"/>
+</g>
+<g stroke="#99A2AA" stroke-width="3">
+ <path d="M343 189H539M560 189H735M756 189H1015"/>
+ <path d="M329 210V343M343 364H588"/>
+ <path d="M1029 210V343M1008 364H686"/>
+</g>
+<text x="105" y="171" fill="#F5F7F8" font-family="monospace" font-size="20">REGISTRY</text>
+<text x="805" y="171" fill="#F5F7F8" font-family="monospace" font-size="20">DISCOVERY</text>
+<text x="413" y="458" fill="#F5F7F8" font-family="monospace" font-size="20">TYPED GRAPH</text>
+</svg>

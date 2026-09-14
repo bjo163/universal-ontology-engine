@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none"><rect width="1200" height="630" fill="#07090A"/>
+<path d="M98 98H343L392 147V175M98 532H343L392 483V455" stroke="#F5F7F8" stroke-width="7"/>
+<path d="M833 98H1029L1078 147V175M833 532H1029L1078 483V455" stroke="#F5F7F8" stroke-width="7"/>
+<rect x="777" y="287" width="14" height="14" fill="#8CFF00" transform="rotate(45 784 294)"/>
+<text x="441" y="238" fill="#99A2AA" font-family="monospace" font-size="18" letter-spacing="2">STABLE RELEASE</text>
+<text x="441" y="315" fill="#F5F7F8" font-family="Arial, sans-serif" font-size="64" font-weight="700">v0.1.4</text>
+<text x="441" y="371" fill="#99A2AA" font-family="Arial, sans-serif" font-size="22">Verified changes. Explicit remainder.</text>
+<path d="M441 420H588M609 420H735M756 420H882" stroke="#99A2AA" stroke-width="3"/>
+</svg>

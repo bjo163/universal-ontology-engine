@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none"><rect width="1200" height="630" fill="#07090A"/>
+<path d="M98 315H245M266 315H413M434 315H581M602 315H749M770 315H917M938 315H1102" stroke="#F5F7F8" stroke-width="3"/>
+<g fill="#F5F7F8">
+ <rect x="91" y="308" width="14" height="14" transform="rotate(45 98 315)"/>
+ <rect x="238" y="308" width="14" height="14" transform="rotate(45 245 315)"/>
+ <rect x="385" y="308" width="14" height="14" transform="rotate(45 392 315)"/>
+ <rect x="532" y="308" width="14" height="14" transform="rotate(45 539 315)"/>
+ <rect x="679" y="308" width="14" height="14" transform="rotate(45 686 315)"/>
+ <rect x="826" y="308" width="14" height="14" transform="rotate(45 833 315)"/>
+ <rect x="973" y="308" width="14" height="14" transform="rotate(45 980 315)"/>
+</g>
+<rect x="1095" y="308" width="14" height="14" fill="#00D8FF" transform="rotate(45 1102 315)"/>
+<g fill="#99A2AA" font-family="monospace" font-size="14">
+ <text x="84" y="273">01</text><text x="231" y="357">08</text><text x="378" y="273">15</text>
+ <text x="525" y="357">22</text><text x="672" y="273">29</text><text x="819" y="357">36</text>
+ <text x="966" y="273">43</text><text x="1088" y="357">49</text>
+</g>
+<text x="98" y="119" fill="#F5F7F8" font-family="Arial, sans-serif" font-size="48" font-weight="700">FROM UNIVERSE TO BIT.</text>
+<text x="98" y="168" fill="#99A2AA" font-family="Arial, sans-serif" font-size="22">A resolution spine over a graph — not 49 nested boxes.</text>
+</svg>

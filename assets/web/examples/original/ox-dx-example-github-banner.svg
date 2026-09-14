@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" fill="none"><rect width="1280" height="320" fill="#07090A"/>
+<path d="M49 49H392M441 49H784M833 49H1231" stroke="#20252B" stroke-width="3"/>
+<path d="M49 271H294M343 271H686M735 271H1231" stroke="#F5F7F8" stroke-width="3" opacity=".5"/>
+<rect x="826" y="153" width="14" height="14" fill="#00D8FF" transform="rotate(45 833 160)"/>
+<path d="M833 112V139M854 160H980" stroke="#00D8FF" stroke-width="3"/>
+<text x="98" y="150" fill="#F5F7F8" font-family="Arial, sans-serif" font-size="64" font-weight="700">OX-DX</text>
+<text x="98" y="196" fill="#99A2AA" font-family="monospace" font-size="18" letter-spacing="2">UNIVERSAL ONTOLOGY &amp; EXPERIENCE ENGINE</text>
+<path d="M735 0V320" stroke="#07090A" stroke-width="49"/>
+</svg>
