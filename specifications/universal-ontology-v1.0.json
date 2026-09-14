@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/bjo163/universe-foundation/blob/main/specifications/universal-ontology-v1.0.json",
+  "$id": "https://github.com/bjo163/universal-ontology-engine/blob/main/specifications/universal-ontology-v1.0.json",
   "title": "Universal Ontology v1.0",
   "description": "Canonical 7-zone x 7-level ontology registry. Quran Inspired ALLAH my Beloved is a philosophical inspiration statement, not a technical or theological prescription.",
   "contract_version": "1.0.0",
@@ -80,9 +80,7 @@
       {"index":49,"type":"BIT","definition":"Single binary information unit."}
     ]}
   ],
-  "edge_classes": [
-    "contains","references","specializes","depends_on","invokes","produces","consumes","causes","projects_to","represented_as","observed_at"
-  ],
+  "edge_classes": ["contains","references","specializes","depends_on","invokes","produces","consumes","causes","projects_to","represented_as","observed_at"],
   "kind_examples": [
     {"type":"UNIT","kind":"rust-crate"},
     {"type":"UNIT","kind":"node-package"},
