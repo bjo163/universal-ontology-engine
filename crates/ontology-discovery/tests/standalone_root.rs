@@ -49,9 +49,15 @@ fn discovers_standalone_rust_repository_root() {
     )
     .unwrap();
 
-    assert_eq!(result.graph.nodes_by_type(OntologyType::Ecosystem).count(), 0);
+    assert_eq!(
+        result.graph.nodes_by_type(OntologyType::Ecosystem).count(),
+        0
+    );
     assert_eq!(result.graph.nodes_by_type(OntologyType::Project).count(), 0);
-    assert_eq!(result.graph.nodes_by_type(OntologyType::Repository).count(), 1);
+    assert_eq!(
+        result.graph.nodes_by_type(OntologyType::Repository).count(),
+        1
+    );
     assert_eq!(result.graph.nodes_by_type(OntologyType::Source).count(), 1);
     assert_eq!(result.graph.nodes_by_type(OntologyType::Unit).count(), 0);
     assert_eq!(result.graph.nodes_by_type(OntologyType::Module).count(), 0);
@@ -93,7 +99,10 @@ fn discovers_standalone_node_repository_without_inventing_levels() {
     )
     .unwrap();
 
-    assert_eq!(result.graph.nodes_by_type(OntologyType::Repository).count(), 1);
+    assert_eq!(
+        result.graph.nodes_by_type(OntologyType::Repository).count(),
+        1
+    );
     assert_eq!(result.graph.nodes_by_type(OntologyType::Source).count(), 1);
     assert_eq!(result.graph.nodes_by_type(OntologyType::Unit).count(), 0);
     assert_eq!(result.graph.nodes_by_type(OntologyType::Module).count(), 0);
