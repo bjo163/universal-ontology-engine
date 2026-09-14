@@ -1,0 +1,35 @@
+{
+  "contract_version": "0.2",
+  "universe": {
+    "id": "universe",
+    "name": "Universe",
+    "description": "Top-level workspace containing independently owned software ecosystems."
+  },
+  "ecosystems": [
+    {
+      "id": "rocksoul",
+      "name": "ROCKSOUL",
+      "path": "ecosystem-rocksoul",
+      "lifecycle": "active",
+      "contract": "ecosystem-foundation"
+    },
+    {
+      "id": "moonwitness",
+      "name": "MoonWitness",
+      "path": "ecosystem-moonwitness",
+      "lifecycle": "active"
+    },
+    {
+      "id": "crayon",
+      "name": "CRAYON",
+      "path": "ecosystem-crayon",
+      "lifecycle": "active"
+    },
+    {
+      "id": "isp",
+      "name": "ISP",
+      "path": "ecosystem-isp",
+      "lifecycle": "active"
+    }
+  ]
+}
