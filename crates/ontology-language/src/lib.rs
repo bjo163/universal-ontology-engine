@@ -73,7 +73,7 @@ fn normalized_line(line: &str) -> String {
             .or_else(|| current.strip_prefix("protected ")).or_else(|| current.strip_prefix("static "))
             .or_else(|| current.strip_prefix("abstract ")).or_else(|| current.strip_prefix("final "))
             .or_else(|| current.strip_prefix("open ")).or_else(|| current.strip_prefix("internal "))
-            .or_else(|| current.strip_prefix("suspend ")).or_else(|| current.strip_prefix("async "));
+            .or_else(|| current.strip_prefix("suspend "));
         let Some(next) = next else { break };
         current = next.trim_start().to_owned();
     }
@@ -83,13 +83,14 @@ fn normalized_line(line: &str) -> String {
 fn js_rules(line: &str) -> Vec<(OntologyType, &'static str, Option<String>, &'static str)> {
     let mut out = Vec::new();
     let line = normalized_line(line);
-    if let Some(n) = after_keyword(&line, "class") { out.push((OntologyType::Entity, "class", Some(n), "class declaration")); }
-    if let Some(n) = after_keyword(&line, "interface") { out.push((OntologyType::Entity, "interface", Some(n), "interface declaration")); }
-    if let Some(n) = after_keyword(&line, "type") { out.push((OntologyType::Entity, "type_alias", Some(n), "type declaration")); }
-    if let Some(n) = after_keyword(&line, "function") { out.push((OntologyType::Function, "function", Some(n), "function declaration")); }
-    if let Some(n) = assignment_function(&line) { out.push((OntologyType::Function, "arrow_function", Some(n), "arrow function assignment")); }
+    let line = line.strip_prefix("async ").unwrap_or(&line);
+    if let Some(n) = after_keyword(line, "class") { out.push((OntologyType::Entity, "class", Some(n), "class declaration")); }
+    if let Some(n) = after_keyword(line, "interface") { out.push((OntologyType::Entity, "interface", Some(n), "interface declaration")); }
+    if let Some(n) = after_keyword(line, "type") { out.push((OntologyType::Entity, "type_alias", Some(n), "type declaration")); }
+    if let Some(n) = after_keyword(line, "function") { out.push((OntologyType::Function, "function", Some(n), "function declaration")); }
+    if let Some(n) = assignment_function(line) { out.push((OntologyType::Function, "arrow_function", Some(n), "arrow function assignment")); }
     if line.starts_with("import ") || line.starts_with("export ") { out.push((OntologyType::Instruction, "module_statement", None, "module statement")); }
-    if let Some(n) = variable_name(&line) { out.push((OntologyType::Value, "variable", Some(n), "variable declaration")); }
+    if let Some(n) = variable_name(line) { out.push((OntologyType::Value, "variable", Some(n), "variable declaration")); }
     out
 }
 
@@ -97,8 +98,11 @@ fn python_rules(line: &str) -> Vec<(OntologyType, &'static str, Option<String>, 
     let mut out = Vec::new();
     let line = normalized_line(line);
     if let Some(n) = after_keyword(&line, "class") { out.push((OntologyType::Entity, "class", Some(n), "class declaration")); }
-    if let Some(n) = after_keyword(&line, "async def") { out.push((OntologyType::Function, "async_function", Some(n), "async function declaration")); }
-    else if let Some(n) = after_keyword(&line, "def") { out.push((OntologyType::Function, "function", Some(n), "function declaration")); }
+    if let Some(rest) = line.strip_prefix("async ") {
+        if let Some(n) = after_keyword(rest, "def") { out.push((OntologyType::Function, "async_function", Some(n), "async function declaration")); }
+    } else if let Some(n) = after_keyword(&line, "def") {
+        out.push((OntologyType::Function, "function", Some(n), "function declaration"));
+    }
     if line.starts_with("import ") || line.starts_with("from ") { out.push((OntologyType::Instruction, "import", None, "import statement")); }
     if let Some(n) = assignment_name(&line) { out.push((OntologyType::Value, "assignment", Some(n), "assignment")); }
     out
