@@ -1,17 +1,16 @@
 {
-  "contract_version": "0.2",
+  "contract_version": "0.3",
   "universe": {
     "id": "universe",
     "name": "Universe",
-    "description": "Top-level workspace containing independently owned software ecosystems."
+    "description": "Top-level managed boundary governed by one foundation contract from ecosystem discovery through concrete implementation."
   },
   "ecosystems": [
     {
       "id": "rocksoul",
       "name": "ROCKSOUL",
       "path": "ecosystem-rocksoul",
-      "lifecycle": "active",
-      "contract": "ecosystem-foundation"
+      "lifecycle": "active"
     },
     {
       "id": "moonwitness",
