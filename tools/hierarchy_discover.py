@@ -11,8 +11,9 @@ from typing import Any
 from symbol_parser import parse_symbols
 
 LEVELS = [
-    "UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY",
-    "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION",
+    "UNIVERSE", "CREATION", "COSMIC_ORDER", "REALITY", "REALM", "WORLD", "ECOSYSTEM",
+    "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE",
+    "COMPONENT", "ELEMENT", "IMPLEMENTATION",
 ]
 IGNORED = {
     ".git", ".next", ".turbo", "node_modules", "target", "dist", "build",
@@ -20,7 +21,6 @@ IGNORED = {
 }
 SOURCE_NAMES = {"src", "app", "apps", "packages", "crates", "cmd", "internal", "lib", "libs", "pkg"}
 MANIFESTS = ("Cargo.toml", "package.json", "go.mod", "pyproject.toml", "pom.xml", "build.gradle", "build.gradle.kts")
-ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 SOURCE_EXTENSIONS = {".rs", ".ts", ".tsx", ".js", ".jsx", ".go", ".py", ".java", ".kt"}
 
 
@@ -68,7 +68,7 @@ def detect_language(repo: Path) -> str | None:
 
 
 def parser_language(path: Path, language: str | None) -> str | None:
-    if path.suffix.lower() == ".tsx" or path.suffix.lower() == ".ts":
+    if path.suffix.lower() in {".tsx", ".ts"}:
         return "typescript" if language == "node" else language
     if path.suffix.lower() in {".jsx", ".js"}:
         return "javascript" if language == "node" else language
@@ -185,29 +185,67 @@ def element_nodes(path: Path, repo: Path, language: str | None) -> list[dict[str
     return [node("ELEMENT", path.stem, rel, "source-construct", language, [implementation], {"confidence": "low", "evidence": "parser-no-symbols"})]
 
 
+def _semantic_shell(ecosystems: list[dict[str, Any]]) -> dict[str, Any]:
+    """Build the six universal upper levels without inventing physical directories."""
+    world = node(
+        "WORLD", "Managed World", ".", "semantic-container", metadata={"semantic_only": True, "evidence": "foundation-contract"}
+    )
+    world["children"] = ecosystems
+    realm = node(
+        "REALM", "Managed Realm", ".", "semantic-container", children=[world],
+        metadata={"semantic_only": True, "evidence": "foundation-contract"},
+    )
+    reality = node(
+        "REALITY", "Managed Reality", ".", "semantic-container", children=[realm],
+        metadata={"semantic_only": True, "evidence": "foundation-contract"},
+    )
+    cosmic_order = node(
+        "COSMIC_ORDER", "Cosmic Order", ".", "semantic-container", children=[reality],
+        metadata={"semantic_only": True, "evidence": "foundation-contract"},
+    )
+    creation = node(
+        "CREATION", "Creation", ".", "semantic-container", children=[cosmic_order],
+        metadata={"semantic_only": True, "evidence": "foundation-contract"},
+    )
+    return creation
+
+
 def discover(workspace: Path, universe_id: str = "universe") -> dict[str, Any]:
     ecosystems: list[dict[str, Any]] = []
-    if not workspace.is_dir():
-        return {"level": "UNIVERSE", "id": universe_id, "name": universe_id, "path": ".", "children": [], "metadata": {"read_only": True, "canonical_levels": LEVELS}}
-    for path in sorted(workspace.iterdir(), key=lambda p: p.name.lower()):
-        if not path.is_dir() or path.name.startswith(".") or not path.name.startswith("ecosystem-"):
-            continue
-        eco_id = path.name.removeprefix("ecosystem-")
-        projects: list[dict[str, Any]] = []
-        for child in sorted(path.iterdir(), key=lambda p: p.name.lower()):
-            if not child.is_dir() or child.name in IGNORED:
+    if workspace.is_dir():
+        for path in sorted(workspace.iterdir(), key=lambda p: p.name.lower()):
+            if not path.is_dir() or path.name.startswith(".") or not path.name.startswith("ecosystem-"):
                 continue
-            repositories: list[dict[str, Any]] = []
-            if is_repo(child):
-                repositories.append(node("REPOSITORY", child.name, child.relative_to(workspace).as_posix(), "git-or-native-project", detect_language(child), source_nodes(child)))
-            else:
-                for repo in sorted([p for p in child.iterdir() if p.is_dir() and p.name not in IGNORED], key=lambda p: p.name.lower()):
-                    if is_repo(repo):
-                        repositories.append(node("REPOSITORY", repo.name, repo.relative_to(workspace).as_posix(), "git-or-native-project", detect_language(repo), source_nodes(repo)))
-            if repositories:
-                projects.append(node("PROJECT", child.name, child.relative_to(workspace).as_posix(), "workspace-project", children=repositories))
-        ecosystems.append(node("ECOSYSTEM", eco_id, path.relative_to(workspace).as_posix(), "workspace-directory", children=projects, metadata={"discovery": "filesystem"}))
-    return {"level": "UNIVERSE", "id": universe_id, "name": universe_id, "path": ".", "children": ecosystems, "metadata": {"read_only": True, "canonical_levels": LEVELS}}
+            eco_id = path.name.removeprefix("ecosystem-")
+            projects: list[dict[str, Any]] = []
+            for child in sorted(path.iterdir(), key=lambda p: p.name.lower()):
+                if not child.is_dir() or child.name in IGNORED:
+                    continue
+                repositories: list[dict[str, Any]] = []
+                if is_repo(child):
+                    repositories.append(node("REPOSITORY", child.name, child.relative_to(workspace).as_posix(), "git-or-native-project", detect_language(child), source_nodes(child)))
+                else:
+                    for repo in sorted([p for p in child.iterdir() if p.is_dir() and p.name not in IGNORED], key=lambda p: p.name.lower()):
+                        if is_repo(repo):
+                            repositories.append(node("REPOSITORY", repo.name, repo.relative_to(workspace).as_posix(), "git-or-native-project", detect_language(repo), source_nodes(repo)))
+                if repositories:
+                    projects.append(node("PROJECT", child.name, child.relative_to(workspace).as_posix(), "workspace-project", children=repositories))
+            ecosystems.append(node("ECOSYSTEM", eco_id, path.relative_to(workspace).as_posix(), "workspace-directory", children=projects, metadata={"discovery": "filesystem"}))
+
+    creation = _semantic_shell(ecosystems)
+    return {
+        "level": "UNIVERSE",
+        "id": universe_id,
+        "name": universe_id,
+        "path": ".",
+        "children": [creation],
+        "metadata": {
+            "read_only": True,
+            "canonical_levels": LEVELS,
+            "creator_outside_model": True,
+            "semantic_upper_levels": True,
+        },
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
