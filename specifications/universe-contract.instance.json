@@ -40,15 +40,20 @@
     "deployment",
     "assets"
   ],
-  "universe": {
-    "id": "universe",
-    "name": "Universe",
-    "description": "Top-level managed boundary governed by one foundation contract from ecosystem discovery through concrete implementation."
+  "optionalLayers": ["ORGANIZATION", "DOMAIN"],
+  "supportingDimensions": ["tests", "examples", "fixtures", "tools", "scripts", "configuration", "data", "documentation", "specifications", "infrastructure", "deployment", "assets"],
+  "nativeMappings": {
+    "rust": ["crate", "module", "function", "struct", "trait", "impl"],
+    "node": ["package", "application", "library", "module", "function", "class"],
+    "go": ["package", "command", "service", "function", "type", "method"],
+    "python": ["package", "module", "class", "function", "method"],
+    "java": ["module", "package", "application", "class", "method", "interface"]
   },
-  "ecosystems": [
-    {"id": "rocksoul", "name": "ROCKSOUL", "path": "ecosystem-rocksoul", "lifecycle": "active"},
-    {"id": "moonwitness", "name": "MoonWitness", "path": "ecosystem-moonwitness", "lifecycle": "active"},
-    {"id": "crayon", "name": "CRAYON", "path": "ecosystem-crayon", "lifecycle": "active"},
-    {"id": "isp", "name": "ISP", "path": "ecosystem-isp", "lifecycle": "active"}
-  ]
+  "rules": {
+    "singleFoundation": true,
+    "semanticDirectories": false,
+    "externalSystems": "relationship",
+    "stableIdentity": true,
+    "parentScopedIdentity": true
+  }
 }
