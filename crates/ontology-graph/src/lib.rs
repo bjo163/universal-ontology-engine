@@ -258,11 +258,7 @@ impl OntologyGraph {
         to: &NodeId,
         domain: EdgeDomain,
     ) -> Result<(), GraphInvariantViolation> {
-        let parent_matches = self
-            .nodes
-            .get(to)
-            .and_then(|node| node.parent.as_ref())
-            == Some(from);
+        let parent_matches = self.nodes.get(to).and_then(|node| node.parent.as_ref()) == Some(from);
         let contains_same_pair = self.edges.contains(&Edge {
             from: from.clone(),
             to: to.clone(),
@@ -522,7 +518,11 @@ mod tests {
         assert!(g.add_projection(key.clone()).unwrap());
         assert!(!g.add_projection(key).unwrap());
         assert_eq!(g.projection_keys().count(), 1);
-        assert_eq!(g.outgoing_kind(&NodeId::new("source"), EdgeKind::ProjectsTo).count(), 1);
+        assert_eq!(
+            g.outgoing_kind(&NodeId::new("source"), EdgeKind::ProjectsTo)
+                .count(),
+            1
+        );
     }
 
     #[test]
@@ -557,7 +557,8 @@ mod tests {
     #[test]
     fn projection_cycles_are_rejected_deterministically() {
         let mut g = OntologyGraph::new(registry());
-        g.insert_node(node("a", None, OntologyType::Entity)).unwrap();
+        g.insert_node(node("a", None, OntologyType::Entity))
+            .unwrap();
         g.insert_node(node("b", None, OntologyType::Function))
             .unwrap();
         g.add_projection(ProjectionMaterializationKey::new(
@@ -576,7 +577,10 @@ mod tests {
                 "1",
             ))
             .unwrap_err();
-        assert!(matches!(error, GraphInvariantViolation::ProjectionCycle { .. }));
+        assert!(matches!(
+            error,
+            GraphInvariantViolation::ProjectionCycle { .. }
+        ));
     }
 
     #[test]
