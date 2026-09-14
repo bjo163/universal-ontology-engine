@@ -9,6 +9,7 @@ on:
       - "crates/ontology-registry/**"
       - "crates/ontology-discovery/**"
       - "crates/ontology-rust/**"
+      - "crates/ontology-language/**"
       - "crates/ontology-cli/**"
       - ".ontology/self.json"
       - ".github/workflows/external-reference-smoke.yml"
@@ -61,7 +62,7 @@ jobs:
           cargo run -p ontology-engine -- discover \
             /tmp/ox-dx-external-reference \
             --include-files \
-            --rust-ast \
+            --syntax \
             --max-depth 3 \
             > external-reference.json
 
@@ -86,6 +87,8 @@ jobs:
               "COMPONENT": (27, count(27)),
               "ELEMENT": (28, count(28)),
           }
+          semantic_levels = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46)
+          semantic_count = sum(count(level) for level in semantic_levels)
 
           assert report.get("ontology") == "1.0.0", report
           assert report.get("read_only") is True, report
@@ -97,11 +100,12 @@ jobs:
 
           assert count(24) == 0, f"synthetic UNIT detected: {levels}"
           assert count(25) == 0, f"synthetic MODULE detected: {levels}"
+          assert semantic_count > 0, f"no syntax semantic nodes projected: {levels}"
 
           observation_kinds = {
               item.get("kind") for item in report.get("observations", [])
           }
-          for kind in ("repository", "source", "component", "element"):
+          for kind in ("repository", "source", "component", "element", "syntax"):
               assert kind in observation_kinds, (
                   f"missing {kind} observation: {sorted(observation_kinds)}"
               )
@@ -111,7 +115,9 @@ jobs:
               f"nodes={report['nodes']} edges={report['edges']} "
               f"repository={count(22)} source={count(23)} "
               f"component={count(27)} element={count(28)} "
-              f"unit={count(24)} module={count(25)}"
+              f"entity={count(30)} function={count(34)} "
+              f"instruction={count(43)} value={count(45)} "
+              f"semantic={semantic_count} unit={count(24)} module={count(25)}"
           )
           PY
 
@@ -143,6 +149,10 @@ jobs:
           print(f"| Module | {count(25)} |")
           print(f"| Component | {count(27)} |")
           print(f"| Element | {count(28)} |")
+          print(f"| Entity | {count(30)} |")
+          print(f"| Function | {count(34)} |")
+          print(f"| Instruction | {count(43)} |")
+          print(f"| Value | {count(45)} |")
           PY
 
       - name: Upload external discovery artifact
