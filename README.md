@@ -39,7 +39,9 @@ ontology-registry
         ↓
 ontology-core + ontology-graph
         ↓
-discovery → semantic → runtime → representation → bit
+ontology-discovery
+        ↓
+semantic → runtime → representation → bit
 ```
 
 `TYPE` is one canonical level. `KIND` is a specialization owned by exactly one type. The Rust compiled type representation is checked against the registry at load time; the registry remains the source of truth for definitions, ordering, and ontology rules.
@@ -52,11 +54,24 @@ The graph engine uses stable semantic node IDs, deterministic ordered storage/tr
 
 ```text
 crates/
-├── ontology-core      # canonical compiled ontology primitives
-├── ontology-graph     # registry-aware typed graph and invariants
-├── ontology-registry  # registry loader + canonical validation
-└── ontology-cli       # ontology-engine command-line interface
+├── ontology-core       # canonical compiled ontology primitives
+├── ontology-graph      # registry-aware typed graph and invariants
+├── ontology-registry   # registry loader + canonical validation
+├── ontology-discovery  # read-only filesystem/workspace discovery
+└── ontology-cli        # ontology-engine command-line interface
 ```
+
+## Discovery
+
+Phase 4 adds a **read-only** workspace discovery engine. It recognizes `ecosystem-*` workspace boundaries, native repositories/manifests, source directories, native units, directory groupings, source-file components, and observed execution boundaries. It never creates canonical directories and it leaves unsupported or intermediate ontology levels unmaterialized.
+
+Example:
+
+```bash
+cargo run -p ontology-engine -- discover /path/to/workspace --include-files --max-depth 3
+```
+
+The command emits a JSON summary with the ontology version, node/edge counts, observation count, and an explicit `read_only=true` marker.
 
 ## Current commands
 
@@ -64,6 +79,7 @@ crates/
 cargo run -p ontology-engine -- validate
 cargo run -p ontology-engine -- levels
 cargo run -p ontology-engine -- inspect 49
+cargo run -p ontology-engine -- discover /path/to/workspace
 cargo run -p ontology-engine -- --registry path/to/universal-ontology-v1.0.json levels
 ```
 
@@ -73,7 +89,7 @@ cargo run -p ontology-engine -- --registry path/to/universal-ontology-v1.0.json 
 Phase 1   Core ontology primitives                  ✅
 Phase 2   Canonical registry + schema loading       ✅
 Phase 3   Registry-aware typed graph + identity     ✅
-Phase 4   Filesystem / Git discovery                →
+Phase 4   Filesystem / Git discovery                ✅
 Phase 5   Rust source + AST adapters                →
 Phase 6   Cross-language parsing adapters            →
 Phase 7   Semantic projection                       →
@@ -86,7 +102,7 @@ Phase 12  Query engine + certification               →
 
 ## Safety boundaries
 
-Binary and bit inspection must be bounded and streaming-capable. The engine must not require whole-file materialization for a range inspection, and malformed input must remain an explicit observation rather than silently changing ontology meaning.
+Discovery is observational and read-only. It must not rewrite a repository, infer semantic truth from filenames alone, or turn filesystem layout into the canonical ontology. Binary and bit inspection must be bounded and streaming-capable; malformed input must remain an explicit observation rather than silently changing ontology meaning.
 
 ## Normative specification
 
