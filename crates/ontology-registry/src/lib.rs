@@ -57,10 +57,13 @@ pub enum RegistryError {
     #[error("duplicate canonical level index: {0}")] DuplicateIndex(u8),
     #[error("non-contiguous canonical level index: expected {expected}, found {found}")] NonContiguousIndex { expected: u8, found: u8 },
     #[error("level {index} is assigned to wrong zone `{zone}`")] LevelInWrongZone { index: u8, zone: String },
-    #[error("unknown ontology type `{0}`")] UnknownType(String),
-    #[error("registry type mismatch at level {level}: contract=`{contract}`, engine=`{engine}`")] TypeMismatch { level: u8, contract: String, engine: String },
+    #[error("unknown ontology type `{0}`")]
+    UnknownType(String),
+    #[error("registry type mismatch at level {level}: contract=`{contract}`, engine=`{engine}`")]
+    TypeMismatch { level: u8, contract: String, engine: String },
     #[error("duplicate ontology type `{0}`")] DuplicateType(String),
-    #[error("kind `{kind}` is assigned to multiple types: `{first}` and `{second}`")] KindConflict { kind: String, first: String, second: String },
+    #[error("kind `{kind}` is assigned to multiple types: `{first}` and `{second}`")]
+    KindConflict { kind: String, first: String, second: String },
     #[error("edge class `{0}` is unknown to the engine")] UnknownEdgeKind(String),
     #[error("edge class registry is missing `{0}`")] MissingEdgeKind(String),
     #[error("registry rule `{0}` must be true")] RuleViolation(&'static str),
@@ -81,7 +84,7 @@ impl OntologyRegistry {
 
     pub fn from_document(document: OntologyDocument) -> Result<Self, RegistryError> {
         if document.contract_version != ONTOLOGY_VERSION {
-            return Err(RegistryError::Version { actual: document.contract_version.clone(), expected: ONTOLOGY_VERSION });
+            return Err(RegistryError::Version { actual: document.contract_version.clone(), expected: ONTOLOGY_VERSION.to_string() });
         }
         if document.title != "Universal Ontology v1.0" { return Err(RegistryError::TitleMismatch(document.title.clone())); }
         if document.shape.zones != 7 || document.shape.levels_per_zone != 7 || document.shape.canonical_levels != LEVEL_COUNT {
@@ -102,13 +105,9 @@ impl OntologyRegistry {
             if !enabled { return Err(RegistryError::RuleViolation(name)); }
         }
 
-        if document.edge_classes.len() != EdgeKind::ALL.len() {
-            return Err(RegistryError::MissingEdgeKind("complete canonical edge class set".into()));
-        }
+        if document.edge_classes.len() != EdgeKind::ALL.len() { return Err(RegistryError::MissingEdgeKind("complete canonical edge class set".into())); }
         let mut edge_kinds = HashSet::new();
-        for name in &document.edge_classes {
-            edge_kinds.insert(EdgeKind::from_slug(name).ok_or_else(|| RegistryError::UnknownEdgeKind(name.clone()))?);
-        }
+        for name in &document.edge_classes { edge_kinds.insert(EdgeKind::from_slug(name).ok_or_else(|| RegistryError::UnknownEdgeKind(name.clone()))?); }
         for kind in EdgeKind::ALL {
             if !edge_kinds.contains(&kind) { return Err(RegistryError::MissingEdgeKind(kind.slug().into())); }
         }
@@ -167,29 +166,8 @@ impl OntologyRegistry {
 mod tests {
     use super::*;
     fn registry_json() -> String { include_str!("../../../specifications/universal-ontology-v1.0.json").to_owned() }
-
-    #[test]
-    fn loads_canonical_registry() {
-        let registry = OntologyRegistry::from_json(&registry_json()).unwrap();
-        assert_eq!(registry.len(), 49);
-        assert_eq!(registry.level(1), Some(OntologyType::Universe));
-        assert_eq!(registry.level(49), Some(OntologyType::Bit));
-    }
-    #[test]
-    fn registry_is_source_of_truth_for_definitions() {
-        let registry = OntologyRegistry::from_json(&registry_json()).unwrap();
-        assert_eq!(registry.definition(OntologyType::Bit).unwrap().definition, "Single binary information unit.");
-    }
-    #[test]
-    fn edge_registry_is_complete() {
-        let registry = OntologyRegistry::from_json(&registry_json()).unwrap();
-        assert_eq!(registry.edge_kind("projects_to"), Some(EdgeKind::ProjectsTo));
-        assert!(registry.supports_edge(EdgeKind::Contains));
-    }
-    #[test]
-    fn kind_namespace_is_scoped_to_one_type() {
-        let registry = OntologyRegistry::from_json(&registry_json()).unwrap();
-        assert_eq!(registry.owner_of_kind("rust-crate"), Some(OntologyType::Unit));
-        assert_eq!(registry.owner_of_kind("function"), Some(OntologyType::Element));
-    }
+    #[test] fn loads_canonical_registry() { let registry = OntologyRegistry::from_json(&registry_json()).unwrap(); assert_eq!(registry.len(), 49); assert_eq!(registry.level(1), Some(OntologyType::Universe)); assert_eq!(registry.level(49), Some(OntologyType::Bit)); }
+    #[test] fn registry_is_source_of_truth_for_definitions() { let registry = OntologyRegistry::from_json(&registry_json()).unwrap(); assert_eq!(registry.definition(OntologyType::Bit).unwrap().definition, "Single binary information unit."); }
+    #[test] fn edge_registry_is_complete() { let registry = OntologyRegistry::from_json(&registry_json()).unwrap(); assert_eq!(registry.edge_kind("projects_to"), Some(EdgeKind::ProjectsTo)); assert!(registry.supports_edge(EdgeKind::Contains)); }
+    #[test] fn kind_namespace_is_scoped_to_one_type() { let registry = OntologyRegistry::from_json(&registry_json()).unwrap(); assert_eq!(registry.owner_of_kind("rust-crate"), Some(OntologyType::Unit)); assert_eq!(registry.owner_of_kind("function"), Some(OntologyType::Element)); }
 }
