@@ -31,11 +31,11 @@ Commands documented as machine surfaces MUST NOT emit informational prose to std
 | Code | Class | Meaning |
 |---:|---|---|
 | `0` | success | requested operation completed |
-| `2` | input/configuration | invalid level/language/path/registry, unreadable requested input, Clap usage failure |
-| `3` | engine/invariant | graph invariant, internal projection, or machine-output failure |
-| `4` | health gate | self inspection completed but reported degraded/unhealthy state |
+| `1` | health gate | self inspection completed but reported degraded/unhealthy state |
+| `2` | input/configuration | invalid level/language/path/registry, unreadable requested input, safety-preflight rejection, Clap usage failure |
+| `3` | engine/invariant | graph invariant, internal projection, or machine-output failure in the canonical discovery path |
 
-Malformed source that is contractually preserved as an observation is NOT by itself a process failure.
+Unexpected process aborts/panics are not a stable application exit class and are treated as defects. Malformed source that is contractually preserved as an observation is NOT by itself a process failure.
 
 ## Deprecation policy
 
