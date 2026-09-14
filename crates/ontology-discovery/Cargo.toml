@@ -8,6 +8,7 @@ license.workspace = true
 ontology-core = { path = "../ontology-core" }
 ontology-graph = { path = "../ontology-graph" }
 ontology-registry = { path = "../ontology-registry" }
+ontology-rust = { path = "../ontology-rust" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
