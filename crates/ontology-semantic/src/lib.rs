@@ -15,6 +15,9 @@ pub struct SemanticTarget {
 
 impl SemanticTarget {
     pub fn new(ontology_type: OntologyType, kind: Option<impl Into<String>>) -> Self {
-        Self { ontology_type, kind: kind.map(Into::into) }
+        Self {
+            ontology_type,
+            kind: kind.map(Into::into),
+        }
     }
 }
