@@ -1,0 +1,60 @@
+name: External Repository Scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: "Public GitHub repository in owner/name form"
+        required: true
+        type: string
+      ref:
+        description: "Branch or tag to inspect"
+        required: true
+        default: "main"
+        type: string
+      max_depth:
+        description: "Discovery max depth"
+        required: true
+        default: "3"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+      - name: Self gate
+        run: |
+          cargo run -p ontology-engine -- self --json > /tmp/self.json
+          diff -u .ontology/self.json /tmp/self.json
+      - name: Validate target input
+        env:
+          TARGET_REPOSITORY: ${{ inputs.repository }}
+          MAX_DEPTH: ${{ inputs.max_depth }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TARGET_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]
+          [[ "$MAX_DEPTH" =~ ^[0-9]+$ ]]
+      - name: Clone target read-only
+        env:
+          TARGET_REPOSITORY: ${{ inputs.repository }}
+          TARGET_REF: ${{ inputs.ref }}
+        run: git clone --depth 1 --branch "$TARGET_REF" "https://github.com/${TARGET_REPOSITORY}.git" /tmp/ontology-target
+      - name: Discover target
+        env:
+          MAX_DEPTH: ${{ inputs.max_depth }}
+        run: |
+          cargo run -p ontology-engine -- discover /tmp/ontology-target --include-files --rust-ast --max-depth "$MAX_DEPTH" > external-scan.json
+          python -m json.tool external-scan.json >/dev/null
+      - uses: actions/upload-artifact@v4
+        with:
+          name: external-ontology-scan
+          path: external-scan.json
+          if-no-files-found: error

@@ -1,0 +1,77 @@
+name: Repository Docs Sync
+
+on:
+  release:
+    types: [published]
+  workflow_run:
+    workflows: ["Validate Universal Ontology Engine"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: repository-docs-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - name: Fetch branch and release state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main dev --tags
+          main_version="$(git show origin/main:Cargo.toml | awk -F'"' '/^version = / {print $2; exit}')"
+          dev_version="$(git show origin/dev:Cargo.toml | awk -F'"' '/^version = / {print $2; exit}')"
+          stable_release="$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | grep -Ev '-' | head -n1 || true)"
+          dev_release="$(git tag -l 'v*-dev.*' --sort=-v:refname | head -n1 || true)"
+          main_sha="$(git rev-parse origin/main)"
+          dev_sha="$(git rev-parse origin/dev)"
+          if [[ "$main_sha" == "$dev_sha" ]]; then
+            relation=aligned
+          elif git merge-base --is-ancestor "$main_sha" "$dev_sha"; then
+            relation=dev_ahead
+          elif git merge-base --is-ancestor "$dev_sha" "$main_sha"; then
+            relation=main_ahead
+          else
+            relation=diverged
+          fi
+          ci_state="$(gh run list --workflow 'Validate Universal Ontology Engine' --branch main --limit 1 --json conclusion --jq '.[0].conclusion // "unknown"')"
+          gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=50" > /tmp/releases.json
+          python tools/repo_status.py \
+            --main-version "$main_version" \
+            --dev-version "$dev_version" \
+            --stable-release "$stable_release" \
+            --dev-release "$dev_release" \
+            --branch-relation "$relation" \
+            --ci-state "$ci_state"
+          python tools/sync_repository_docs.py --releases-json /tmp/releases.json
+      - name: Commit generated repository docs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- README.md CHANGELOG.md .ontology/status.json; then
+            echo "repository docs already synchronized"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md CHANGELOG.md .ontology/status.json
+          git commit -m "chore(release): sync generated repository docs"
+          git push origin HEAD:main

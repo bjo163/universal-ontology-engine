@@ -1,0 +1,43 @@
+name: Self Steward
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  steward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+      - name: Verify self snapshot
+        run: |
+          cargo run -p ontology-engine -- self --json > /tmp/self.json
+          diff -u .ontology/self.json /tmp/self.json
+      - name: Verify generated self docs
+        run: python tools/sync_readme.py --check
+      - name: Verify branch relationship
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main dev
+          main_sha="$(git rev-parse origin/main)"
+          dev_sha="$(git rev-parse origin/dev)"
+          if [[ "$main_sha" == "$dev_sha" ]]; then exit 0; fi
+          if git merge-base --is-ancestor "$main_sha" "$dev_sha"; then exit 0; fi
+          if git merge-base --is-ancestor "$dev_sha" "$main_sha"; then exit 0; fi
+          echo "main/dev divergence detected" >&2
+          exit 1
