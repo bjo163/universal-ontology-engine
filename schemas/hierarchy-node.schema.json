@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bjo163/universe-foundation/blob/main/schemas/hierarchy-node.schema.json",
+  "title": "Universal Hierarchy Node",
+  "type": "object",
+  "required": ["level", "id", "name", "path"],
+  "properties": {
+    "level": {
+      "type": "string",
+      "enum": ["UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"]
+    },
+    "id": {"type": "string", "minLength": 1},
+    "name": {"type": "string", "minLength": 1},
+    "path": {"type": "string", "minLength": 1},
+    "native_type": {"type": "string"},
+    "language": {"type": "string"},
+    "children": {
+      "type": "array",
+      "items": {"$ref": "hierarchy-node.schema.json"}
+    },
+    "metadata": {"type": "object"}
+  },
+  "additionalProperties": false
+}
