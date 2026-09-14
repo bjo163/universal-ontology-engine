@@ -7,7 +7,7 @@ default-run = "ontology-engine"
 
 [[bin]]
 name = "ontology-engine"
-path = "src/main.rs"
+path = "src/main_cli.rs"
 
 [[bin]]
 name = "ontology-syntax-discover"
