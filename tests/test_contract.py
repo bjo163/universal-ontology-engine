@@ -50,7 +50,8 @@ class UniverseContractTests(unittest.TestCase):
         self.assertEqual(self.contract["canonicalLevels"], 49)
 
     def test_universal_registry_and_schema_are_aligned(self) -> None:
-        self.assertEqual(self.ontology["title"], self.schema["title"])
+        self.assertEqual(self.ontology["title"], "Universal Ontology v1.0")
+        self.assertEqual(self.schema["title"], "Universal Ontology v1.0 Registry")
         self.assertEqual(self.ontology["contract_version"], self.schema["properties"]["contract_version"]["const"])
         self.assertEqual(self.ontology["shape"], {key: value["const"] for key, value in self.schema["properties"]["shape"]["properties"].items()})
         self.assertEqual(self.ontology["rules"], {key: value["const"] for key, value in self.schema["properties"]["rules"]["properties"].items()})
