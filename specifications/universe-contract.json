@@ -5,16 +5,20 @@
   "type": "object",
   "required": ["contract_version", "hierarchy", "canonicalVocabulary", "universe", "ecosystems"],
   "properties": {
-    "contract_version": {"const": "0.3"},
+    "contract_version": {"const": "1.0"},
     "hierarchy": {
       "type": "array",
-      "const": ["UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"]
+      "const": [
+        "UNIVERSE", "CREATION", "COSMIC_ORDER", "REALITY", "REALM", "WORLD", "ECOSYSTEM",
+        "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE",
+        "COMPONENT", "ELEMENT", "IMPLEMENTATION"
+      ]
     },
     "canonicalVocabulary": {
       "type": "array",
       "items": {"type": "string"},
       "uniqueItems": true,
-      "minItems": 12
+      "minItems": 17
     },
     "universe": {
       "type": "object",
