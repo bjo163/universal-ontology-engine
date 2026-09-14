@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "source": "assets/documentation/technical/color-system.md",
+  "palette": {
+    "void": "#07090A",
+    "charcoal": "#111418",
+    "graphite": "#20252B",
+    "white": "#F5F7F8",
+    "muted": "#99A2AA",
+    "cyan": "#00D8FF",
+    "acid": "#8CFF00",
+    "ultraviolet": "#9C4DFF",
+    "black": "#000000"
+  },
+  "roles": {
+    "base": "{palette.void}",
+    "surface": "{palette.charcoal}",
+    "surfaceSecondary": "{palette.graphite}",
+    "text": "{palette.white}",
+    "muted": "{palette.muted}",
+    "border": "{palette.graphite}",
+    "structure": "{palette.white}",
+    "observation": "{palette.cyan}",
+    "signal": "{palette.cyan}",
+    "attention": "{palette.acid}",
+    "projection": "{palette.ultraviolet}",
+    "unknown": "{palette.muted}"
+  },
+  "notes": {
+    "unknown": "Unknown meaning requires label + break/void geometry; color is secondary.",
+    "error": "No canonical OX-DX brand error color is introduced by this handoff.",
+    "monochrome": "All critical meaning must survive monochrome."
+  }
+}

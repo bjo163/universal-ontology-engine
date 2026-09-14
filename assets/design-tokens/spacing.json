@@ -1,0 +1,40 @@
+{
+  "source": "assets/documentation/technical/design-tokens.md",
+  "micro": {
+    "value": "3px",
+    "numeric": 3
+  },
+  "u": {
+    "value": "7px",
+    "numeric": 7
+  },
+  "2u": {
+    "value": "14px",
+    "numeric": 14
+  },
+  "3u": {
+    "value": "21px",
+    "numeric": 21
+  },
+  "5u": {
+    "value": "35px",
+    "numeric": 35
+  },
+  "field": {
+    "value": "49px",
+    "numeric": 49
+  },
+  "field2": {
+    "value": "98px",
+    "numeric": 98
+  },
+  "preferred": [
+    3,
+    7,
+    14,
+    21,
+    35,
+    49,
+    98
+  ]
+}

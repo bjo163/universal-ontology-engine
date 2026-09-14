@@ -1,0 +1,67 @@
+{
+  "note": "Reference mapping for a future Tailwind theme.extend. This file does not select Tailwind as the implementation framework.",
+  "theme": {
+    "extend": {
+      "colors": {
+        "ox": {
+          "void": "#07090A",
+          "charcoal": "#111418",
+          "graphite": "#20252B",
+          "white": "#F5F7F8",
+          "muted": "#99A2AA",
+          "cyan": "#00D8FF",
+          "acid": "#8CFF00",
+          "ultraviolet": "#9C4DFF",
+          "black": "#000000"
+        }
+      },
+      "spacing": {
+        "ox-micro": "3px",
+        "ox-1": "7px",
+        "ox-2": "14px",
+        "ox-3": "21px",
+        "ox-5": "35px",
+        "ox-field": "49px",
+        "ox-field-2": "98px"
+      },
+      "borderWidth": {
+        "ox-hair": "1px",
+        "ox-relation": "3px",
+        "ox-structure": "7px"
+      },
+      "borderRadius": {
+        "ox": "0px"
+      },
+      "transitionDuration": {
+        "ox-micro": "98ms",
+        "ox-witness": "196ms",
+        "ox-resolve": "294ms",
+        "ox-field": "490ms"
+      },
+      "transitionTimingFunction": {
+        "ox-resolution": "cubic-bezier(0.21, 0.63, 0.28, 1)"
+      },
+      "screens": {
+        "ox-compact": "420px",
+        "ox-medium": "840px",
+        "ox-wide": "1260px",
+        "ox-ultra": "1680px"
+      },
+      "fontFamily": {
+        "ox-sans": [
+          "Inter",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif"
+        ],
+        "ox-mono": [
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Consolas",
+          "monospace"
+        ]
+      }
+    }
+  }
+}

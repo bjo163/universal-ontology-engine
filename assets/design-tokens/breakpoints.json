@@ -1,0 +1,11 @@
+{
+  "source": "assets/documentation/technical/design-tokens.md",
+  "compact": "420px",
+  "medium": "840px",
+  "wide": "1260px",
+  "ultra": "1680px",
+  "principle": {
+    "moreSpace": "MORE CONTEXT",
+    "lessSpace": "MORE FOCUS"
+  }
+}
