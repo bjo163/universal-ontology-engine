@@ -43,8 +43,8 @@ PATTERNS: dict[str, list[tuple[str, str]]] = {
         ("type", r"\btype\s+([A-Za-z_][A-Za-z0-9_]*)\s+(?:struct|interface)\b"),
     ],
     "python": [
-        ("function", r"^\s*(?:async\s+)?def\s+([A-Za-z_][A-Za-z0-9_]*)\s*\("),
-        ("class", r"^\s*class\s+([A-Za-z_][A-Za-z0-9_]*)\b"),
+        ("function", r"^[ \t]*(?:async[ \t]+)?def[ \t]+([A-Za-z_][A-Za-z0-9_]*)[ \t]*\("),
+        ("class", r"^[ \t]*class[ \t]+([A-Za-z_][A-Za-z0-9_]*)\b"),
     ],
     "java": [
         ("class", r"\b(?:public\s+|protected\s+|private\s+|abstract\s+|final\s+)*class\s+([A-Za-z_][A-Za-z0-9_]*)\b"),
