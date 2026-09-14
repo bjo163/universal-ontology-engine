@@ -24,14 +24,36 @@ jobs:
           python -m json.tool specifications/foundation-contract.json >/dev/null
           python -m json.tool specifications/foundation-contract.instance.json >/dev/null
           python -m json.tool schemas/universe.schema.json >/dev/null
+          python -m json.tool schemas/foundation-node.schema.json >/dev/null
       - name: Validate single foundation contract
         run: python tools/validate-universe.py
-      - name: Validate and test registry CLI
+      - name: Validate and test registry and discovery tooling
         run: |
           python -m compileall -q tools tests
           python tools/universe_cli.py --manifest universe.json validate
           python tools/universe_cli.py --manifest universe.json --json list
           python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Smoke test hierarchy discovery
+        run: |
+          python - <<'PY'
+          import tempfile
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, "tools")
+          import hierarchy_discover
+
+          with tempfile.TemporaryDirectory() as temp:
+              workspace = Path(temp)
+              repo = workspace / "ecosystem-test" / "demo"
+              (repo / "src" / "core").mkdir(parents=True)
+              (repo / ".git").mkdir()
+              (repo / "package.json").write_text('{"name":"demo"}', encoding="utf-8")
+              (repo / "src" / "core" / "main.ts").write_text("export const ok = true;\n", encoding="utf-8")
+              tree = hierarchy_discover.discover(workspace)
+              assert tree["level"] == "UNIVERSE"
+              assert tree["children"][0]["level"] == "ECOSYSTEM"
+              assert tree["children"][0]["children"][0]["children"][0]["level"] == "REPOSITORY"
+          PY
       - name: Smoke test doctor against fixture workspace
         run: |
           python - <<'PY'
