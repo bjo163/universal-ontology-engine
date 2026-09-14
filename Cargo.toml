@@ -5,6 +5,7 @@ members = [
   "crates/ontology-registry",
   "crates/ontology-discovery",
   "crates/ontology-rust",
+  "crates/ontology-language",
   "crates/ontology-cli",
 ]
 resolver = "2"

@@ -12,5 +12,6 @@ path = "src/main.rs"
 ontology-core = { path = "../ontology-core" }
 ontology-registry = { path = "../ontology-registry" }
 ontology-discovery = { path = "../ontology-discovery" }
+ontology-language = { path = "../ontology-language" }
 clap.workspace = true
 serde_json.workspace = true
