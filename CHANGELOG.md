@@ -2,6 +2,23 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.6 — STABLE — 2026-09-14
+
+## What's Changed
+* feat: add cross-language syntax projection smoke by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/24
+* release: promote cross-language syntax projection by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/25
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.5...v0.1.6
+
+## v0.1.6-dev.19 — DEV — 2026-09-14
+
+## What's Changed
+* feat: add cross-language syntax projection smoke by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/24
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.5...v0.1.6-dev.19
+
 ## v0.1.5 — STABLE — 2026-09-14
 
 ## What's Changed
