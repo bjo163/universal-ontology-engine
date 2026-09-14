@@ -11,10 +11,15 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "universe.json"
-CONTRACT_VERSION = "0.3"
+CONTRACT_VERSION = "1.0"
 FOUNDATION_HIERARCHY = [
-    "UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY",
-    "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION",
+    "UNIVERSE", "CREATION", "ORDER", "REALITY", "REALM", "WORLD", "DOMAIN",
+    "ECOSYSTEM", "ORGANIZATION", "COMMUNITY", "REGION", "ENVIRONMENT", "NETWORK", "CONTEXT",
+    "PURPOSE", "MISSION", "OBJECTIVE", "PROGRAM", "PROJECT", "PRODUCT", "SYSTEM",
+    "REPOSITORY", "SOURCE", "UNIT", "MODULE", "SUBSYSTEM", "COMPONENT", "ELEMENT",
+    "SYMBOL", "ENTITY", "PROPERTY", "RELATION", "OPERATION", "FUNCTION", "BEHAVIOR",
+    "STATE", "EVENT", "PROCESS", "FLOW", "TRANSITION", "ACTION", "EXECUTION",
+    "INSTRUCTION", "EXPRESSION", "VALUE", "DATA", "TOKEN", "CHARACTER", "BIT",
 ]
 
 
@@ -46,6 +51,8 @@ def validate(data: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if data.get("contract_version") != CONTRACT_VERSION:
         errors.append(f"contract_version must be {CONTRACT_VERSION}")
+    if data.get("ontology") != "Universal Ontology v1.0.0":
+        errors.append("ontology must be Universal Ontology v1.0.0")
 
     universe = data.get("universe")
     if not isinstance(universe, dict) or not universe.get("id") or not universe.get("name"):
@@ -75,10 +82,14 @@ def validate(data: dict[str, Any]) -> list[str]:
 def foundation_summary() -> dict[str, Any]:
     return {
         "version": CONTRACT_VERSION,
+        "ontology": "Universal Ontology v1.0.0",
         "hierarchy": FOUNDATION_HIERARCHY,
+        "canonical_levels": 49,
+        "zones": 7,
+        "levels_per_zone": 7,
         "single_foundation": True,
         "optional_layers": ["ORGANIZATION", "DOMAIN"],
-        "semantic_layers_not_directories": ["UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"],
+        "semantic_layers_not_directories": ["UNIT", "MODULE", "SUBSYSTEM", "COMPONENT", "ELEMENT"],
     }
 
 
@@ -118,7 +129,7 @@ def command_validate(data: dict[str, Any], as_json: bool) -> int:
         for error in errors:
             print(f"FAIL: {error}")
     else:
-        print(f"VALID: {len(ecosystems(data))} ecosystem(s); foundation v{CONTRACT_VERSION}")
+        print(f"VALID: {len(ecosystems(data))} ecosystem(s); Universal Ontology v1.0.0; 49 canonical levels")
     return 0 if not errors else 1
 
 
