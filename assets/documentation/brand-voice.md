@@ -55,3 +55,20 @@ Philosophical language may speak about order, signs, scale, relation, measure, o
 The desired tension is:
 
 **deep enough to make you think; precise enough to inspect.**
+
+
+## Communication source routing
+
+This file remains the canonical source for **voice and tone**.
+
+Operational communication rules are intentionally separated by concern:
+
+- `communication/messaging-framework.md` — message depth and public explanation hierarchy.
+- `communication/terminology.md` — canonical definitions and technical wording.
+- `communication/conceptual-boundaries.md` — distinctions that must not be conflated.
+- `communication/quranic-inspiration.md` — philosophical/engineering boundary.
+- `communication/status-language.md` — maturity claims.
+- `communication/github-language.md` and `communication/release-language.md` — operational surfaces.
+- `communication/checklist.md` — pre-publication audit.
+
+Do not duplicate the full voice definition inside those files. They apply this voice to narrower communication concerns.

@@ -33,3 +33,13 @@ Start with `documentation/brand-guidelines.md`, then use the manifesto, voice, t
 - Approved master geometry: `source/design/ox-dx-master-geometry.svg`
 
 Future contributors must derive new assets from the canonical geometry and documented tokens. Do not redraw the symbol, modify the wordmark, invent palette values, or embed new technical ontology semantics in decorative graphics.
+
+## Communication source hierarchy
+
+- Voice and tone: `documentation/brand-voice.md`
+- Message hierarchy: `documentation/communication/messaging-framework.md`
+- Canonical terminology: `documentation/communication/terminology.md`
+- Philosophical/engineering boundary: `documentation/communication/quranic-inspiration.md`
+- Status claims: `documentation/communication/status-language.md`
+
+Technical truth still comes from the repository's normative specifications, engineering standards, implementation, tests, and generated release/status evidence.

@@ -199,3 +199,37 @@ Every listed item is either a canonical source of truth or an approved derivativ
 | `ox-dx-social-linkedin` | `web/social/ox-dx-social-linkedin.svg` | Social / OpenGraph communication asset | SVG | canonical | **APPROVED** |
 | `ox-dx-social-opengraph` | `web/social/ox-dx-social-opengraph.svg` | Social / OpenGraph communication asset | SVG | canonical | **APPROVED** |
 | `ox-dx-social-x` | `web/social/ox-dx-social-x.svg` | Social / OpenGraph communication asset | SVG | canonical | **APPROVED** |
+
+
+## Communication System
+
+| Name | Path | Purpose | Format | Variant | Status |
+|---|---|---|---|---|---|
+| `about` | `documentation/communication/about.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `brand-story` | `documentation/communication/brand-story.md` | Canonical project story | MD | communication | **APPROVED** |
+| `canonical-phrases` | `documentation/communication/canonical-phrases.md` | Canonical approved phrase list | MD | communication | **CANONICAL** |
+| `checklist` | `documentation/communication/checklist.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `communication-safety` | `documentation/communication/communication-safety.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `community` | `documentation/communication/community.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `conceptual-boundaries` | `documentation/communication/conceptual-boundaries.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `copy-patterns` | `documentation/communication/copy-patterns.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `examples` | `documentation/communication/examples.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `from-structure-to-experience` | `documentation/communication/from-structure-to-experience.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `from-universe-to-bit` | `documentation/communication/from-universe-to-bit.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `gen-z-style` | `documentation/communication/gen-z-style.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `github-language` | `documentation/communication/github-language.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `grunge-language` | `documentation/communication/grunge-language.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `headline-system` | `documentation/communication/headline-system.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `intelligent-language` | `documentation/communication/intelligent-language.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `message-matrix` | `documentation/communication/message-matrix.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `messaging-framework` | `documentation/communication/messaging-framework.md` | Canonical messaging hierarchy | MD | communication | **CANONICAL** |
+| `microcopy` | `documentation/communication/microcopy.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `naming-conventions` | `documentation/communication/naming-conventions.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `one-liners` | `documentation/communication/one-liners.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `quranic-inspiration` | `documentation/communication/quranic-inspiration.md` | Canonical philosophical/engineering boundary | MD | communication | **CANONICAL** |
+| `readme-alignment` | `documentation/communication/readme-alignment.md` | README alignment audit | MD | communication | **APPROVED** |
+| `release-language` | `documentation/communication/release-language.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `resolution-language` | `documentation/communication/resolution-language.md` | OX-DX communication guidance | MD | communication | **APPROVED** |
+| `status-language` | `documentation/communication/status-language.md` | Canonical maturity/status language | MD | communication | **CANONICAL** |
+| `terminology` | `documentation/communication/terminology.md` | Canonical communication terminology | MD | communication | **CANONICAL** |
+| `worldview` | `documentation/communication/worldview.md` | Communication worldview | MD | communication | **APPROVED** |
