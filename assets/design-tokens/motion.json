@@ -1,0 +1,22 @@
+{
+  "source": "assets/documentation/visual/motion-grammar.md",
+  "duration": {
+    "micro": "98ms",
+    "witness": "196ms",
+    "resolve": "294ms",
+    "field": "490ms"
+  },
+  "easing": {
+    "resolution": "cubic-bezier(0.21, 0.63, 0.28, 1)"
+  },
+  "states": [
+    "FIELD",
+    "RIFT",
+    "TRACE",
+    "PULSE",
+    "GRAIN"
+  ],
+  "reducedMotion": {
+    "rule": "Render the resolved state directly where practical; never hide required information behind motion."
+  }
+}
