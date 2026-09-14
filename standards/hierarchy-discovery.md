@@ -1,74 +1,79 @@
-# Hierarchy Discovery Standard
+# Hierarchy Discovery Standard v0.3
 
 ## Purpose
 
-Define how Universe Foundation maps a real workspace and native repositories onto the universal semantic hierarchy without requiring canonical directory names.
-
-## Canonical chain
+Discovery maps a native workspace into the universal semantic hierarchy without modifying repository layout.
 
 ```text
 UNIVERSE → ECOSYSTEM → ORGANIZATION? → DOMAIN? → PROJECT → REPOSITORY → SOURCE → UNIT → MODULE → COMPONENT → ELEMENT → IMPLEMENTATION
 ```
 
-## Discovery principles
-
-1. Discovery is additive and read-only by default.
-2. Native repository structure is preserved.
-3. Semantic levels are classifications, not mandatory directories.
-4. An explicit manifest wins over filename heuristics.
-5. Native manifests and language metadata are used as evidence.
-6. Ambiguous lower-level constructs MUST be reported with confidence rather than invented as facts.
-7. External systems are represented as relationships.
-
 ## Evidence precedence
 
-```text
-explicit foundation metadata
-    > repository metadata
-    > native build/workspace manifest
-    > recognized directory/file conventions
-    > conservative heuristic
-```
+Discovery MUST prefer evidence in this order:
 
-## Default mappings
+1. explicit hierarchy metadata supplied by the repository/tool;
+2. repository manifests and workspace metadata;
+3. native language/framework structure;
+4. directory and file structure;
+5. conservative heuristics.
 
-### Repository → Source
-Recognized source roots include `src/`, `app/`, `apps/`, `packages/`, `crates/`, `cmd/`, `internal/`, `lib/`, and language-specific roots.
+A lower-precedence heuristic MUST NOT overwrite a higher-confidence explicit classification.
 
-### Source → Unit
-Use workspace/package/module manifests first. Otherwise classify obvious native containers such as Rust crates, Node packages/workspaces, Go commands/packages, Python packages, and Java modules.
+## Symbol-aware discovery
 
-### Unit → Module
-Use explicit language modules/namespaces or stable source groupings.
+For recognized source files, `ELEMENT` SHOULD represent a real language construct rather than the file itself.
 
-### Module → Component
-Use cohesive feature/service/class/subsystem boundaries when confidently detectable.
+The reference parser recognizes high-confidence declarations for Rust, TypeScript, JavaScript, Go, Python, Java, and Kotlin using only the standard library.
 
-### Component → Element
-Use functions, methods, types, interfaces, handlers, constants, and analogous constructs.
-
-### Element → Implementation
-Represent the concrete implementation location or construct. This layer may be a file span, symbol span, generated AST node, or other implementation reference rather than a directory.
-
-## Output contract
-
-Discovery emits a tree of nodes using `schemas/hierarchy-node.schema.json`.
-
-Each node contains at least:
+Each parser-backed Element SHOULD expose:
 
 ```json
 {
-  "level": "UNIT",
-  "id": "stable-or-scoped-id",
-  "name": "native-name",
-  "path": "relative/path"
+  "metadata": {
+    "symbol": "App",
+    "kind": "function",
+    "confidence": "high",
+    "evidence": "language-parser",
+    "span": {
+      "line_start": 1,
+      "line_end": 3
+    }
+  }
 }
 ```
 
-Optional fields identify `native_type`, `language`, `metadata`, and nested `children`.
+`IMPLEMENTATION` SHOULD point to the same concrete symbol span and retain the native language kind.
 
-## Safety
+The parser is intentionally conservative. It is not an AST replacement and MUST NOT claim syntax-tree precision it cannot establish.
 
-Discovery MUST ignore generated and dependency trees by default, including `.git/`, `node_modules/`, `.next/`, `target/`, `dist/`, `build/`, coverage output, and similar generated paths. An explicit override may opt into them.
+## Native mapping
 
-Discovery MUST never mutate source repositories.
+Native structures remain unchanged. Examples:
+
+```text
+src/                 → SOURCE
+crate/package/app    → UNIT
+module/namespace     → MODULE
+class/service/feature → COMPONENT
+function/method/type → ELEMENT
+body/logic           → IMPLEMENTATION
+```
+
+The discovery engine MUST NOT create `unit/`, `module/`, `component/`, `element/`, or `implementation/` directories to satisfy the semantic hierarchy.
+
+## Generated and dependency output
+
+Dependency, build, cache, and generated directories SHOULD be excluded by default, including `.git`, `node_modules`, `target`, `dist`, `build`, `.next`, coverage directories, and Python virtual environments/caches.
+
+## Confidence
+
+Every heuristic or parser-derived classification SHOULD include confidence/evidence metadata. `high` means the native construct was directly recognized; `medium` means native structure strongly suggests the classification; `low` means a fallback grouping was required.
+
+## Read-only requirement
+
+Discovery is observational. It MUST NOT modify source code, manifests, directory names, or repository metadata.
+
+## Stable identity
+
+Node IDs MUST remain stable for an unchanged semantic path. Local path names are evidence and operational metadata; they are not universal identity by themselves.
