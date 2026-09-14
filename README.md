@@ -1,90 +1,137 @@
 # Universe Foundation
 
-Canonical foundation for the complete software hierarchy. One foundation governs the full chain from the Universe boundary down to concrete Implementation.
+Canonical foundation for the Universal Ontology and the systems that consume it.
 
-## Canonical hierarchy
+> **Quran Inspired ALLAH my Beloved**
+>
+> This is the philosophical inspiration statement of the foundation. It is not a claim that the technical ontology is prescribed by the Qur'an.
 
-```text
-UNIVERSE
-└── ECOSYSTEM
-    └── ORGANIZATION (optional)
-        └── DOMAIN (optional)
-            └── PROJECT
-                └── REPOSITORY
-                    └── SOURCE
-                        └── UNIT
-                            └── MODULE
-                                └── COMPONENT
-                                    └── ELEMENT
-                                        └── IMPLEMENTATION
-```
+## Canonical ontology
 
-This is one continuous semantic hierarchy. There is no required ecosystem-foundation repository, sub-foundation, or second normative contract.
+**Universal Ontology v1.0.0** defines a **7 Zones × 7 Levels = 49-level canonical resolution spine**.
 
-## What this foundation owns
-
-Universe Foundation defines and validates:
-
-- identity and ownership boundaries for every canonical layer;
-- discovery and workspace topology;
-- project, repository, and source boundaries;
-- universal implementation vocabulary from Unit through Implementation;
-- native language/framework mappings;
-- relationships within and across ecosystems;
-- validation, health, and orchestration contracts.
-
-Native structures remain valid. `src`, `apps`, `packages`, `crates`, `cmd`, `pkg`, `internal`, `modules`, and `components` are implementation mappings, not mandatory universal directories.
-
-## Universal identity
-
-Every canonical node SHOULD have a stable identifier within its parent scope. Paths and directory names are operational metadata unless explicitly declared as identity.
-
-The generic node contract is `schemas/foundation-node.schema.json`.
-
-## Registry
-
-`universe.json` is the top-level registry. It identifies ecosystems and their operational locations. Lower-level entities are discovered through explicit parent/child references rather than a second foundation contract.
-
-An `ecosystem.json` file MAY be used as an optional local discovery manifest, but it is metadata only and MUST NOT redefine the canonical hierarchy.
-
-## Foundation contract
-
-The normative contract is v0.3 and is represented by:
-
-- `governance/hierarchy.md` — canonical hierarchy and ownership rules.
-- `specifications/universe-contract.md` — complete normative contract.
-- `specifications/universe-contract.json` — machine-readable contract schema.
-- `specifications/universe-contract.instance.json` — reference contract instance.
-- `specifications/foundation-contract.md` — universal lower-layer semantics and mappings.
-- `specifications/foundation-contract.json` — machine-readable foundation schema.
-- `specifications/hierarchy-model.md` — canonical node/parent/discovery model.
-- `schemas/universe.schema.json` — Universe registry schema.
-- `schemas/foundation-node.schema.json` — generic canonical node schema.
-
-## CLI
-
-```bash
-python tools/universe_cli.py list
-python tools/universe_cli.py inspect rocksoul
-python tools/universe_cli.py validate
-python tools/universe_cli.py discover X:\REPO\universe
-python tools/universe_cli.py status X:\REPO\universe
-python tools/universe_cli.py doctor X:\REPO\universe
-```
-
-Use `--json` for launcher/orchestrator integration.
-
-## Native mapping
+The spine is a vocabulary and ordering system, not a mandatory filesystem tree. The actual model is a graph that distinguishes containment, references, semantic projection, runtime observation, and physical representation.
 
 ```text
-UNIT
-├── Rust      → crate
-├── Node      → package / application / library
-├── Go        → package / command / service
-├── Python    → package / module
-└── Java      → module / package / application
+ZONE 1  EXISTENCE
+01 UNIVERSE
+02 CREATION
+03 ORDER
+04 REALITY
+05 REALM
+06 WORLD
+07 DOMAIN
+
+ZONE 2  CONTEXT
+08 ECOSYSTEM
+09 ORGANIZATION
+10 COMMUNITY
+11 REGION
+12 ENVIRONMENT
+13 NETWORK
+14 CONTEXT
+
+ZONE 3  INTENT
+15 PURPOSE
+16 MISSION
+17 OBJECTIVE
+18 PROGRAM
+19 PROJECT
+20 PRODUCT
+21 SYSTEM
+
+ZONE 4  STRUCTURE
+22 REPOSITORY
+23 SOURCE
+24 UNIT
+25 MODULE
+26 SUBSYSTEM
+27 COMPONENT
+28 ELEMENT
+
+ZONE 5  SEMANTIC
+29 SYMBOL
+30 ENTITY
+31 PROPERTY
+32 RELATION
+33 OPERATION
+34 FUNCTION
+35 BEHAVIOR
+
+ZONE 6  DYNAMIC
+36 STATE
+37 EVENT
+38 PROCESS
+39 FLOW
+40 TRANSITION
+41 ACTION
+42 EXECUTION
+
+ZONE 7  REPRESENTATION
+43 INSTRUCTION
+44 EXPRESSION
+45 VALUE
+46 DATA
+47 TOKEN
+48 CHARACTER
+49 BIT
 ```
 
-Lower constructs such as module, class, struct, function, method, interface, handler, and concrete logic are mapped semantically to `MODULE`, `COMPONENT`, `ELEMENT`, and `IMPLEMENTATION` as appropriate for the language/framework.
+The normative machine-readable registry is `specifications/universal-ontology-v1.0.json`; the normative explanation is `specifications/universal-ontology-v1.0.md`.
 
-The foundation never requires artificial `unit/`, `module/`, `component/`, `element/`, or `implementation/` directories.
+## Critical architectural rule
+
+The 49 levels MUST NOT be implemented as 49 physical directories or as one rigid AST hierarchy.
+
+```text
+CONTAINMENT   = ownership / structure
+PROJECTION    = one resource viewed at another ontology level
+RELATION      = semantic or dynamic connection
+REPRESENTATION = concrete encoding
+```
+
+This allows a Rust function to project into instructions, expressions, values, data, tokens, characters, and bits without claiming that all of those are literal child folders.
+
+## Foundation vs engine
+
+```text
+universe-foundation
+    = vocabulary + schemas + invariants + contracts
+
+universal-ontology-engine (Rust)
+    = discovery + parsing + graph + projection + runtime + binary/bit inspection
+```
+
+The engine is deliberately a separate implementation project. The foundation remains implementation-neutral.
+
+## Identity
+
+Every discovered resource SHOULD have a stable semantic identifier scoped to its owning boundary. Paths, filenames, offsets, and timestamps are provenance/observation metadata, not a substitute for stable identity.
+
+## Native structures remain valid
+
+The foundation never requires artificial ontology-named directories such as `unit/`, `module/`, `component/`, `element/`, or `implementation/`.
+
+Examples of native mappings include:
+
+```text
+Rust       crate/module/item/function
+Node       package/app/module/function
+Go         package/cmd/type/function
+Python     package/module/class/function
+Java       module/package/class/method
+```
+
+These structures are evidence for ontology projection, not replacements for the canonical vocabulary.
+
+## Compatibility
+
+Older foundation contracts that describe the earlier 11/17-level hierarchy are retained only as migration/compatibility material. They MUST NOT be treated as a competing canonical ontology.
+
+Migration MUST preserve existing stable IDs and repository paths.
+
+## Engine target
+
+The reference Rust engine is designed to traverse from managed universe boundaries to bounded machine representation, including bit-level inspection when the input format permits it.
+
+See `standards/universal-ontology-engine.md` for the architecture.
