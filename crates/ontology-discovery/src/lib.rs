@@ -104,34 +104,48 @@ pub fn discover_workspace(
         true,
     )?;
 
-    for ecosystem_dir in read_dir_sorted(workspace)?
+    let ecosystem_dirs = read_dir_sorted(workspace)?
         .into_iter()
-        .filter(|p| is_ecosystem_dir(p))
-    {
-        let ecosystem_name = file_name(&ecosystem_dir, "ecosystem");
-        let ecosystem_id = NodeId::scoped(&universe, &format!("ecosystem:{ecosystem_name}"));
-        insert_node(
+        .filter(|path| is_ecosystem_dir(path))
+        .collect::<Vec<_>>();
+
+    if ecosystem_dirs.is_empty() && is_repository(workspace) {
+        discover_repository(
             &mut graph,
-            Some(universe.clone()),
-            OntologyType::Ecosystem,
-            ecosystem_id.clone(),
-            true,
-        )?;
-        observations.push(DiscoveryObservation {
-            path: rel(workspace, &ecosystem_dir),
-            kind: "ecosystem".into(),
-            language: None,
-            evidence: "ecosystem-* directory".into(),
-        });
-        discover_ecosystem(
-            &mut graph,
-            &ecosystem_id,
-            &ecosystem_dir,
+            &universe,
+            workspace,
             &options,
             workspace,
             &mut observations,
         )?;
+    } else {
+        for ecosystem_dir in ecosystem_dirs {
+            let ecosystem_name = file_name(&ecosystem_dir, "ecosystem");
+            let ecosystem_id = NodeId::scoped(&universe, &format!("ecosystem:{ecosystem_name}"));
+            insert_node(
+                &mut graph,
+                Some(universe.clone()),
+                OntologyType::Ecosystem,
+                ecosystem_id.clone(),
+                true,
+            )?;
+            observations.push(DiscoveryObservation {
+                path: rel(workspace, &ecosystem_dir),
+                kind: "ecosystem".into(),
+                language: None,
+                evidence: "ecosystem-* directory".into(),
+            });
+            discover_ecosystem(
+                &mut graph,
+                &ecosystem_id,
+                &ecosystem_dir,
+                &options,
+                workspace,
+                &mut observations,
+            )?;
+        }
     }
+
     Ok(DiscoveryResult {
         graph,
         observations,
@@ -261,7 +275,9 @@ fn discover_source_tree(
         evidence: "native source boundary".into(),
     });
     observations.push(DiscoveryObservation {
-        path: rel(workspace, source_root), kind: "unmaterialized-levels".into(), language: language.clone(),
+        path: rel(workspace, source_root),
+        kind: "unmaterialized-levels".into(),
+        language: language.clone(),
         evidence: "UNIT and MODULE omitted because discovery has no native ownership evidence; canonical intermediate levels may remain unmaterialized".into(),
     });
     walk_source_files(
@@ -363,7 +379,9 @@ fn walk_source_files(
                     EdgeKind::ObservedAt,
                 )?;
                 observations.push(DiscoveryObservation {
-                    path: rel(workspace, &path), kind: "execution".into(), language: language.clone(),
+                    path: rel(workspace, &path),
+                    kind: "execution".into(),
+                    language: language.clone(),
                     evidence: "observed file boundary; represented by ObservedAt relation, not containment".into(),
                 });
             }
