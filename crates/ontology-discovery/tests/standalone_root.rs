@@ -1,7 +1,5 @@
 use ontology_core::{EdgeKind, OntologyType};
-use ontology_discovery::{
-    discover_workspace, discover_workspace_with_syntax, DiscoveryOptions,
-};
+use ontology_discovery::{discover_workspace, DiscoveryOptions};
 use ontology_registry::OntologyRegistry;
 use std::fs;
 use std::path::PathBuf;
@@ -90,15 +88,14 @@ fn discovers_standalone_node_repository_without_inventing_levels() {
     )
     .unwrap();
 
-    let result = discover_workspace_with_syntax(
+    let result = discover_workspace(
         &root,
         registry(),
         DiscoveryOptions {
             include_files: true,
             max_depth: Some(4),
-            parse_rust_ast: false,
+            parse_rust_ast: true,
         },
-        true,
     )
     .unwrap();
 
@@ -155,9 +152,9 @@ fn named_typescript_semantic_ids_ignore_line_movement() {
     let options = DiscoveryOptions {
         include_files: false,
         max_depth: Some(4),
-        parse_rust_ast: false,
+        parse_rust_ast: true,
     };
-    let first = discover_workspace_with_syntax(&root, registry(), options.clone(), true).unwrap();
+    let first = discover_workspace(&root, registry(), options.clone()).unwrap();
     let first_ids = first
         .graph
         .nodes_by_type(OntologyType::Function)
@@ -169,7 +166,7 @@ fn named_typescript_semantic_ids_ignore_line_movement() {
         "\n\n// declaration moved without semantic identity change\nexport function stable() { return 1; }\n",
     )
     .unwrap();
-    let second = discover_workspace_with_syntax(&root, registry(), options, true).unwrap();
+    let second = discover_workspace(&root, registry(), options).unwrap();
     let second_ids = second
         .graph
         .nodes_by_type(OntologyType::Function)
