@@ -67,7 +67,7 @@ pub fn discover_workspace(
 
     let mut graph = OntologyGraph::new(registry);
     let mut observations = Vec::new();
-    let universe = insert_node(&mut graph, None, OntologyType::Universe, "universe", true)?;
+    let universe = insert_node(&mut graph, None, OntologyType::Universe, NodeId::new("universe"), true)?;
 
     for ecosystem_dir in read_dir_sorted(workspace)?.into_iter().filter(|p| is_ecosystem_dir(p)) {
         let ecosystem_name = file_name(&ecosystem_dir, "ecosystem");
@@ -90,7 +90,7 @@ fn discover_ecosystem(
     workspace: &Path,
     observations: &mut Vec<DiscoveryObservation>,
 ) -> Result<(), DiscoveryError> {
-    for child in read_dir_sorted(ecosystem)?.into_iter().filter(|p| is_real_dir(p)) {
+    for child in read_dir_sorted(ecosystem_dir)?.into_iter().filter(|p| is_real_dir(p)) {
         if is_repository(&child) {
             discover_repository(graph, ecosystem, &child, options, workspace, observations)?;
             continue;
