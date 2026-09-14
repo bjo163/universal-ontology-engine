@@ -61,8 +61,7 @@ pub fn discover_workspace(
     let mut observations = Vec::new();
     let universe = insert_node(&mut graph, None, OntologyType::Universe, "universe", true)?;
 
-    let entries = read_dir_sorted(workspace)?;
-    for ecosystem_dir in entries.into_iter().filter(|p| is_ecosystem_dir(p)) {
+    for ecosystem_dir in read_dir_sorted(workspace)?.into_iter().filter(|p| is_ecosystem_dir(p)) {
         let ecosystem_name = ecosystem_dir.file_name().unwrap_or_default().to_string_lossy().to_string();
         let ecosystem_id = scoped(&universe, &format!("ecosystem:{ecosystem_name}"));
         insert_node(&mut graph, Some(universe.clone()), OntologyType::Ecosystem, ecosystem_id.as_str(), true)?;
@@ -73,14 +72,12 @@ pub fn discover_workspace(
             let project_id = scoped(&ecosystem_id, &format!("project:{project_name}"));
             insert_node(&mut graph, Some(ecosystem_id.clone()), OntologyType::Project, project_id.as_str(), true)?;
 
-            let repos = repository_children(&project_dir)?;
-            for repo_dir in repos {
+            for repo_dir in repository_children(&project_dir)? {
                 let repo_name = repo_dir.file_name().unwrap_or_default().to_string_lossy().to_string();
                 let repo_id = scoped(&project_id, &format!("repository:{repo_name}"));
                 insert_node(&mut graph, Some(project_id.clone()), OntologyType::Repository, repo_id.as_str(), true)?;
                 let language = detect_language(&repo_dir);
                 observations.push(DiscoveryObservation { path: rel(workspace, &repo_dir), kind: "repository".into(), language: language.clone(), evidence: "git or native manifest".into() });
-
                 discover_repository(&mut graph, &repo_id, &repo_dir, &language, &options, workspace, &mut observations)?;
             }
         }
@@ -98,19 +95,15 @@ fn discover_repository(
     workspace: &Path,
     observations: &mut Vec<DiscoveryObservation>,
 ) -> Result<(), DiscoveryError> {
-    let sources: Vec<PathBuf> = read_dir_sorted(repo_dir)?
-        .into_iter()
+    let sources: Vec<PathBuf> = read_dir_sorted(repo_dir)?.into_iter()
         .filter(|p| p.is_dir() && SOURCE_DIRS.contains(&p.file_name().and_then(|v| v.to_str()).unwrap_or_default()))
         .collect();
-
     let source_paths = if sources.is_empty() {
         if contains_source_files(repo_dir)? { vec![repo_dir.to_path_buf()] } else { Vec::new() }
-    } else {
-        sources
-    };
+    } else { sources };
 
     for source_dir in source_paths {
-        let source_name = if source_dir == repo_dir { ".".to_owned() } else { source_dir.file_name().unwrap_or_default().to_string_lossy().to_string() };
+        let source_name = if source_dir == repo_dir { "." } else { source_dir.file_name().and_then(|v| v.to_str()).unwrap_or("source") };
         let source_id = scoped(repository, &format!("source:{source_name}"));
         insert_node(graph, Some(repository.clone()), OntologyType::Source, source_id.as_str(), true)?;
         observations.push(DiscoveryObservation { path: rel(workspace, &source_dir), kind: "source".into(), language: language.clone(), evidence: "native source directory".into() });
@@ -130,19 +123,17 @@ fn discover_units(
 ) -> Result<(), DiscoveryError> {
     let mut unit_candidates = Vec::new();
     for path in read_dir_sorted(source_dir)? {
-        if !is_real_dir(&path) { continue; }
-        let name = path.file_name().unwrap_or_default().to_string_lossy().to_string();
-        if IGNORED.contains(&name.as_str()) { continue; }
+        if !is_real_dir(&path) || is_ignored(&path) { continue; }
         if is_native_unit(&path, language) { unit_candidates.push(path); }
     }
-
-    if unit_candidates.is_empty() && (contains_source_files(source_dir)? || source_dir == source_dir) {
+    if unit_candidates.is_empty() && contains_source_files(source_dir)? {
         unit_candidates.push(source_dir.to_path_buf());
     }
 
     for unit_dir in unit_candidates {
-        let unit_name = unit_dir.file_name().unwrap_or_default().to_string_lossy().to_string();
-        let unit_id = scoped(source, &format!("unit:{}", if unit_dir == source_dir { "." } else { &unit_name }));
+        let unit_name = unit_dir.file_name().and_then(|v| v.to_str()).unwrap_or("source");
+        let unit_key = if unit_dir == source_dir { "." } else { unit_name };
+        let unit_id = scoped(source, &format!("unit:{unit_key}"));
         insert_node(graph, Some(source.clone()), OntologyType::Unit, unit_id.as_str(), true)?;
         observations.push(DiscoveryObservation { path: rel(workspace, &unit_dir), kind: "unit".into(), language: language.clone(), evidence: unit_evidence(&unit_dir, language) });
         discover_modules(graph, &unit_id, &unit_dir, language, options, workspace, observations, 0)?;
@@ -165,15 +156,15 @@ fn discover_modules(
     if dirs.is_empty() {
         let module_id = scoped(unit, "module:.");
         insert_node(graph, Some(unit.clone()), OntologyType::Module, module_id.as_str(), true)?;
-        discover_components(graph, &module_id, unit_dir, language, options, workspace, observations, depth + 1)?;
+        discover_components(graph, &module_id, unit_dir, language, options, workspace, observations)?;
         return Ok(());
     }
     for module_dir in dirs {
-        let name = module_dir.file_name().unwrap_or_default().to_string_lossy().to_string();
+        let name = module_dir.file_name().and_then(|v| v.to_str()).unwrap_or("module");
         let module_id = scoped(unit, &format!("module:{name}"));
         insert_node(graph, Some(unit.clone()), OntologyType::Module, module_id.as_str(), true)?;
         observations.push(DiscoveryObservation { path: rel(workspace, &module_dir), kind: "module".into(), language: language.clone(), evidence: "native directory grouping".into() });
-        discover_components(graph, &module_id, &module_dir, language, options, workspace, observations, depth + 1)?;
+        discover_components(graph, &module_id, &module_dir, language, options, workspace, observations)?;
     }
     Ok(())
 }
@@ -186,18 +177,17 @@ fn discover_components(
     options: &DiscoveryOptions,
     workspace: &Path,
     observations: &mut Vec<DiscoveryObservation>,
-    depth: usize,
 ) -> Result<(), DiscoveryError> {
     for path in read_dir_sorted(module_dir)? {
         if is_ignored(&path) { continue; }
         if path.is_file() && is_source_file(&path) {
-            let stem = path.file_stem().unwrap_or_default().to_string_lossy().to_string();
+            let stem = path.file_stem().and_then(|v| v.to_str()).unwrap_or("component");
             let component_id = scoped(module, &format!("component:{stem}"));
             insert_node(graph, Some(module.clone()), OntologyType::Component, component_id.as_str(), true)?;
             observations.push(DiscoveryObservation { path: rel(workspace, &path), kind: "component".into(), language: language.clone(), evidence: "source file".into() });
             discover_element(graph, &component_id, &path, language, options, workspace, observations)?;
-        } else if path.is_dir() && options.max_depth.map(|max| depth < max).unwrap_or(true) {
-            let name = path.file_name().unwrap_or_default().to_string_lossy().to_string();
+        } else if path.is_dir() && options.max_depth.map(|max| 1 < max).unwrap_or(true) {
+            let name = path.file_name().and_then(|v| v.to_str()).unwrap_or("component");
             let component_id = scoped(module, &format!("component:{name}"));
             insert_node(graph, Some(module.clone()), OntologyType::Component, component_id.as_str(), true)?;
             discover_element(graph, &component_id, &path, language, options, workspace, observations)?;
@@ -215,7 +205,7 @@ fn discover_element(
     workspace: &Path,
     observations: &mut Vec<DiscoveryObservation>,
 ) -> Result<(), DiscoveryError> {
-    let label = path.file_stem().or_else(|| path.file_name()).unwrap_or_default().to_string_lossy().to_string();
+    let label = path.file_stem().or_else(|| path.file_name()).and_then(|v| v.to_str()).unwrap_or("element");
     let element_id = scoped(component, &format!("element:{label}"));
     insert_node(graph, Some(component.clone()), OntologyType::Element, element_id.as_str(), true)?;
     observations.push(DiscoveryObservation { path: rel(workspace, path), kind: "element".into(), language: language.clone(), evidence: if path.is_file() { "file boundary; symbol parsing delegated" } else { "directory boundary" }.into() });
@@ -231,31 +221,23 @@ fn insert_node(graph: &mut OntologyGraph, parent: Option<NodeId>, ty: OntologyTy
     graph.insert_node(Node { id: id.clone(), parent, ontology_type: ty, kind: None, name: None, source_span: None, materialized })?;
     Ok(id)
 }
-
 fn scoped(parent: &NodeId, local: &str) -> NodeId { NodeId::scoped(parent, local) }
-
 fn read_dir_sorted(path: &Path) -> Result<Vec<PathBuf>, DiscoveryError> {
-    let mut out = std::fs::read_dir(path)
-        .map_err(|source| DiscoveryError::ReadDir { path: path.to_path_buf(), source })?
-        .filter_map(Result::ok)
-        .map(|entry| entry.path())
-        .collect::<Vec<_>>();
+    let mut out = std::fs::read_dir(path).map_err(|source| DiscoveryError::ReadDir { path: path.to_path_buf(), source })?.filter_map(Result::ok).map(|e| e.path()).collect::<Vec<_>>();
     out.sort_by_key(|p| p.file_name().map(|v| v.to_string_lossy().to_lowercase()));
     Ok(out)
 }
-
 fn is_ecosystem_dir(path: &Path) -> bool { path.is_dir() && path.file_name().map(|v| v.to_string_lossy().starts_with("ecosystem-")).unwrap_or(false) }
 fn is_real_dir(path: &Path) -> bool { path.is_dir() && !is_ignored(path) && !path.file_name().map(|v| v.to_string_lossy().starts_with('.')).unwrap_or(false) }
-fn is_ignored(path: &Path) -> bool { path.file_name().map(|v| IGNORED.contains(&v.to_string_lossy().as_ref())).unwrap_or(false) }
-fn is_source_file(path: &Path) -> bool { path.is_file() && path.extension().map(|v| SOURCE_EXTENSIONS.contains(&v.to_string_lossy().as_ref())).unwrap_or(false) }
+fn is_ignored(path: &Path) -> bool { path.file_name().and_then(|v| v.to_str()).map(|name| IGNORED.contains(&name)).unwrap_or(false) }
+fn is_source_file(path: &Path) -> bool { path.is_file() && path.extension().and_then(|v| v.to_str()).map(|e| SOURCE_EXTENSIONS.contains(&e)).unwrap_or(false) }
 fn contains_source_files(path: &Path) -> Result<bool, DiscoveryError> { Ok(read_dir_sorted(path)?.into_iter().any(|p| is_source_file(&p))) }
 fn is_native_unit(path: &Path, language: &Option<String>) -> bool {
     match language.as_deref() {
         Some("rust") => path.join("Cargo.toml").is_file(),
         Some("node") => path.join("package.json").is_file(),
         Some("python") => path.join("pyproject.toml").is_file() || path.join("__init__.py").is_file(),
-        Some("go") => true,
-        Some("java") | Some("kotlin") => true,
+        Some("go") | Some("java") | Some("kotlin") => contains_source_files(path).unwrap_or(false),
         _ => contains_source_files(path).unwrap_or(false),
     }
 }
@@ -269,13 +251,11 @@ fn unit_evidence(path: &Path, language: &Option<String>) -> String {
 }
 fn repository_children(project: &Path) -> Result<Vec<PathBuf>, DiscoveryError> {
     let dirs = read_dir_sorted(project)?;
-    let direct: Vec<PathBuf> = dirs.iter().filter(|p| is_real_dir(p) && is_repository(p)).cloned().collect();
+    let direct = dirs.iter().filter(|p| is_real_dir(p) && is_repository(p)).cloned().collect::<Vec<_>>();
     if !direct.is_empty() { return Ok(direct); }
-    Ok(dirs.into_iter().filter(|p| is_real_dir(p) && read_dir_sorted(p).map(|_| is_repository(p)).unwrap_or(false)).collect())
+    Ok(dirs.into_iter().filter(|p| is_real_dir(p) && is_repository(p)).collect())
 }
-fn is_repository(path: &Path) -> bool {
-    path.join(".git").exists() || ["Cargo.toml", "package.json", "go.mod", "pyproject.toml", "pom.xml", "build.gradle", "build.gradle.kts"].iter().any(|name| path.join(name).is_file())
-}
+fn is_repository(path: &Path) -> bool { path.join(".git").exists() || ["Cargo.toml", "package.json", "go.mod", "pyproject.toml", "pom.xml", "build.gradle", "build.gradle.kts"].iter().any(|name| path.join(name).is_file()) }
 fn detect_language(repo: &Path) -> Option<String> {
     let has = |name: &str| repo.join(name).is_file();
     if has("Cargo.toml") { Some("rust".into()) }
@@ -293,10 +273,7 @@ mod tests {
     use super::*;
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
-
-    fn registry() -> Arc<OntologyRegistry> {
-        Arc::new(OntologyRegistry::from_json(include_str!("../../../specifications/universal-ontology-v1.0.json")).unwrap())
-    }
+    fn registry() -> Arc<OntologyRegistry> { Arc::new(OntologyRegistry::from_json(include_str!("../../../specifications/universal-ontology-v1.0.json")).unwrap()) }
     fn temp_workspace() -> PathBuf {
         let stamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
         let path = std::env::temp_dir().join(format!("ontology-discovery-{stamp}"));
@@ -305,14 +282,13 @@ mod tests {
         fs::write(path.join("ecosystem-demo/project-a/repo-a/src/core/lib.rs"), "pub fn demo() {}\n").unwrap();
         path
     }
-
     #[test]
     fn discovers_native_workspace_without_inventing_missing_levels() {
         let path = temp_workspace();
         let result = discover_workspace(&path, registry(), DiscoveryOptions { include_files: true, max_depth: Some(3) }).unwrap();
-        assert!(result.graph.nodes_by_type(OntologyType::Ecosystem).count() == 1);
-        assert!(result.graph.nodes_by_type(OntologyType::Repository).count() == 1);
-        assert!(result.graph.nodes_by_type(OntologyType::Source).count() == 1);
+        assert_eq!(result.graph.nodes_by_type(OntologyType::Ecosystem).count(), 1);
+        assert_eq!(result.graph.nodes_by_type(OntologyType::Repository).count(), 1);
+        assert_eq!(result.graph.nodes_by_type(OntologyType::Source).count(), 1);
         assert!(result.graph.nodes_by_type(OntologyType::Execution).count() >= 1);
         assert!(result.observations.iter().any(|x| x.evidence == "Cargo.toml"));
         fs::remove_dir_all(path).unwrap();
