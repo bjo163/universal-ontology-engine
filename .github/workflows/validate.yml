@@ -22,8 +22,8 @@ jobs:
           python -m json.tool specifications/universe-contract.json >/dev/null
           python -m json.tool specifications/universe-contract.instance.json >/dev/null
           python -m json.tool schemas/universe.schema.json >/dev/null
-      - name: Validate reference manifest
-        run: python tools/validate-universe-v02.py
+      - name: Validate canonical manifest
+        run: python tools/validate-universe.py
       - name: Validate and test registry CLI
         run: |
           python -m compileall -q tools tests
