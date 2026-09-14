@@ -44,6 +44,8 @@ jobs:
           cargo fmt --all -- --check
           cargo check --workspace
           cargo test --workspace --all-targets
+      - name: Self inspection gate
+        run: cargo run -p ontology-engine -- self --json
       - name: Smoke test ontology CLI
         run: |
           cargo run -p ontology-engine -- levels
