@@ -339,7 +339,7 @@ The ontology contract version and the Rust package version are separate concerns
 | Ontology | `1.0.0` |
 | Canonical levels | **49** |
 | Workspace crates | **7** |
-| Rust sources | **8** |
+| Rust sources | **9** |
 | Read-only inspection | **YES** |
 
 Self inspection command:
