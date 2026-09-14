@@ -54,16 +54,17 @@ class UniverseCliTests(unittest.TestCase):
             rocksoul = workspace / "ecosystem-rocksoul"
             rocksoul.mkdir()
             (rocksoul / ".git").mkdir()
-            rows = []
+            captured = []
             original_print_json = universe_cli.print_json
             try:
-                universe_cli.print_json = rows.append
+                universe_cli.print_json = captured.append
                 code = universe_cli.command_status(self.manifest, workspace, True)
             finally:
                 universe_cli.print_json = original_print_json
             self.assertEqual(code, 0)
-            self.assertEqual(rows[0][0]["git_repository"], True)
-            self.assertEqual(rows[1]["exists"], False)
+            result = captured[0]
+            self.assertTrue(result[0]["git_repository"])
+            self.assertFalse(result[1]["exists"])
 
 
 if __name__ == "__main__":
