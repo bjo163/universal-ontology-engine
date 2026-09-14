@@ -3,44 +3,48 @@
   "$id": "https://github.com/bjo163/universe-foundation/blob/main/specifications/foundation-contract.json",
   "title": "Universal Ontology Foundation Contract",
   "type": "object",
-  "required": ["version", "hierarchy", "optionalLayers", "supportingDimensions", "nativeMappings", "rules"],
+  "required": ["version", "ontology", "zones", "levelsPerZone", "canonicalLevels", "hierarchy", "rules"],
   "properties": {
-    "version": {"const": "1.0"},
+    "version": {"const": "1.0.0"},
+    "ontology": {"const": "Universal Ontology v1.0.0"},
+    "zones": {"const": 7},
+    "levelsPerZone": {"const": 7},
+    "canonicalLevels": {"const": 49},
     "hierarchy": {
-      "const": [
-        "UNIVERSE", "CREATION", "COSMIC_ORDER", "REALITY", "REALM", "WORLD", "ECOSYSTEM",
-        "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE",
-        "COMPONENT", "ELEMENT", "IMPLEMENTATION"
-      ]
+      "type": "array",
+      "minItems": 49,
+      "maxItems": 49,
+      "uniqueItems": true,
+      "items": {"type": "string"}
     },
-    "optionalLayers": {"const": ["ORGANIZATION", "DOMAIN"]},
+    "optionalLevels": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
     "supportingDimensions": {
       "type": "array",
       "items": {"type": "string"},
       "uniqueItems": true
     },
-    "nativeMappings": {
-      "type": "object",
-      "properties": {
-        "rust": {"type": "array", "items": {"type": "string"}},
-        "node": {"type": "array", "items": {"type": "string"}},
-        "go": {"type": "array", "items": {"type": "string"}},
-        "python": {"type": "array", "items": {"type": "string"}},
-        "java": {"type": "array", "items": {"type": "string"}}
-      },
-      "additionalProperties": false
-    },
     "rules": {
       "type": "object",
-      "required": ["singleFoundation", "semanticDirectories", "externalSystems", "stableIdentity", "parentScopedIdentity", "creatorOutsideModel", "tokenIsParserDetail"],
+      "required": [
+        "singleFoundation", "semanticDirectories", "externalSystems", "stableIdentity",
+        "typeIsCanonicalLevel", "kindIsSpecialization", "projectionDistinctFromContainment",
+        "representationDistinctFromSemantics", "intermediateLevelsMayBeUnmaterialized"
+      ],
       "properties": {
         "singleFoundation": {"const": true},
         "semanticDirectories": {"const": false},
         "externalSystems": {"const": "relationship"},
         "stableIdentity": {"const": true},
-        "parentScopedIdentity": {"const": true},
-        "creatorOutsideModel": {"const": true},
-        "tokenIsParserDetail": {"const": true}
+        "typeIsCanonicalLevel": {"const": true},
+        "kindIsSpecialization": {"const": true},
+        "projectionDistinctFromContainment": {"const": true},
+        "representationDistinctFromSemantics": {"const": true},
+        "intermediateLevelsMayBeUnmaterialized": {"const": true},
+        "creatorOutsideModel": {"const": true}
       },
       "additionalProperties": false
     }
