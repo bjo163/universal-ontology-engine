@@ -54,30 +54,75 @@ pub enum RuleContractError {
 
 impl ProjectionRule {
     pub fn validate(&self) -> Result<(), RuleContractError> {
-        if self.rule_id.trim().is_empty() { return Err(RuleContractError::EmptyRuleId); }
-        if self.rule_version.trim().is_empty() { return Err(RuleContractError::EmptyRuleVersion); }
-        if self.edge_kind != EdgeKind::ProjectsTo { return Err(RuleContractError::InvalidEdgeKind); }
-        if !self.required_evidence.is_disjoint(&self.optional_evidence) { return Err(RuleContractError::EvidenceOverlap); }
-        if !self.required_fields.is_disjoint(&self.optional_fields) { return Err(RuleContractError::FieldOverlap); }
-        if self.required_fields.iter().chain(self.optional_fields.iter()).any(|field| field.trim().is_empty()) { return Err(RuleContractError::EmptyFieldName); }
-        if !matches!(self.missing_required_outcome, UnresolvedCode::Insufficient | UnresolvedCode::InvalidEvidence) { return Err(RuleContractError::InvalidMissingOutcome); }
+        if self.rule_id.trim().is_empty() {
+            return Err(RuleContractError::EmptyRuleId);
+        }
+        if self.rule_version.trim().is_empty() {
+            return Err(RuleContractError::EmptyRuleVersion);
+        }
+        if self.edge_kind != EdgeKind::ProjectsTo {
+            return Err(RuleContractError::InvalidEdgeKind);
+        }
+        if !self.required_evidence.is_disjoint(&self.optional_evidence) {
+            return Err(RuleContractError::EvidenceOverlap);
+        }
+        if !self.required_fields.is_disjoint(&self.optional_fields) {
+            return Err(RuleContractError::FieldOverlap);
+        }
+        if self
+            .required_fields
+            .iter()
+            .chain(self.optional_fields.iter())
+            .any(|field| field.trim().is_empty())
+        {
+            return Err(RuleContractError::EmptyFieldName);
+        }
+        if !matches!(
+            self.missing_required_outcome,
+            UnresolvedCode::Insufficient | UnresolvedCode::InvalidEvidence
+        ) {
+            return Err(RuleContractError::InvalidMissingOutcome);
+        }
         Ok(())
     }
 
     pub fn stable_key(&self) -> (&str, &str, OntologyType, Option<&str>) {
-        (&self.rule_id, &self.rule_version, self.target.ontology_type, self.target.kind.as_deref())
+        (
+            &self.rule_id,
+            &self.rule_version,
+            self.target.ontology_type,
+            self.target.kind.as_deref(),
+        )
     }
 
-    pub fn evaluate(&self, evidence: &ProjectionEvidence) -> Result<RuleEvaluation, RuleContractError> {
+    pub fn evaluate(
+        &self,
+        evidence: &ProjectionEvidence,
+    ) -> Result<RuleEvaluation, RuleContractError> {
         self.validate()?;
-        let accepted: BTreeSet<_> = self.required_evidence.union(&self.optional_evidence).copied().collect();
+        let accepted: BTreeSet<_> = self
+            .required_evidence
+            .union(&self.optional_evidence)
+            .copied()
+            .collect();
         if evidence.evidence_kinds.is_disjoint(&accepted) {
-            return Ok(RuleEvaluation::Unresolved(UnresolvedResult::single(evidence.source_id.clone(), UnresolvedCode::Unsupported, self.rule_id.clone())));
+            return Ok(RuleEvaluation::Unresolved(UnresolvedResult::single(
+                evidence.source_id.clone(),
+                UnresolvedCode::Unsupported,
+                self.rule_id.clone(),
+            )));
         }
         if !self.required_evidence.is_subset(&evidence.evidence_kinds)
-            || self.required_fields.iter().any(|field| !evidence.fields.contains_key(field))
+            || self
+                .required_fields
+                .iter()
+                .any(|field| !evidence.fields.contains_key(field))
         {
-            return Ok(RuleEvaluation::Unresolved(UnresolvedResult::single(evidence.source_id.clone(), self.missing_required_outcome, self.rule_id.clone())));
+            return Ok(RuleEvaluation::Unresolved(UnresolvedResult::single(
+                evidence.source_id.clone(),
+                self.missing_required_outcome,
+                self.rule_id.clone(),
+            )));
         }
         Ok(RuleEvaluation::Candidate(ProjectionCandidate {
             source_id: evidence.source_id.clone(),
@@ -115,7 +160,10 @@ mod tests {
             evidence_kinds: BTreeSet::from([EvidenceKind::NativeSyntax]),
             fields: BTreeMap::from([("native_kind".into(), "function".into())]),
         };
-        assert_eq!(rule().evaluate(&evidence).unwrap(), rule().evaluate(&evidence).unwrap());
+        assert_eq!(
+            rule().evaluate(&evidence).unwrap(),
+            rule().evaluate(&evidence).unwrap()
+        );
     }
 
     #[test]
@@ -126,7 +174,9 @@ mod tests {
             evidence_kinds: BTreeSet::from([EvidenceKind::NativeSyntax]),
             fields: BTreeMap::new(),
         };
-        let RuleEvaluation::Unresolved(result) = rule().evaluate(&evidence).unwrap() else { panic!("expected unresolved") };
+        let RuleEvaluation::Unresolved(result) = rule().evaluate(&evidence).unwrap() else {
+            panic!("expected unresolved")
+        };
         assert!(result.codes.contains(&UnresolvedCode::Insufficient));
     }
 }
