@@ -361,8 +361,8 @@ cargo run -p ontology-engine -- self --json
 | Stable release | `v0.1.9` |
 | Dev release | `v0.1.9-dev.26` |
 | Main version | `0.1.9` |
-| Dev version | `0.1.9-dev.26` |
-| Branch relation | `main_ahead` |
+| Dev version | `0.1.9` |
+| Branch relation | `aligned` |
 | Branch model | `feature/* -> dev -> main` |
 
 See [`CHANGELOG.md`](CHANGELOG.md) for generated release history.
