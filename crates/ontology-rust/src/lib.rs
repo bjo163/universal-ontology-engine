@@ -92,7 +92,8 @@ impl<'ast> Visit<'ast> for RustVisitor {
             Item::Use(item) => self.push(OntologyType::Instruction, "use", None, item.span()),
             Item::ExternCrate(item) => self.push(OntologyType::Instruction, "extern_crate", Some(item.ident.to_string()), item.span()),
             Item::ForeignMod(item) => self.push(OntologyType::Entity, "foreign_mod", None, item.span()),
-            Item::Verbatim(_) => {}
+            Item::Verbatim(_) => {},
+            _ => {},
         }
         syn::visit::visit_item(self, item);
     }
@@ -109,8 +110,8 @@ impl<'ast> Visit<'ast> for RustVisitor {
             ImplItem::Fn(item) => self.push(OntologyType::Operation, "method", Some(item.sig.ident.to_string()), item.span()),
             ImplItem::Type(item) => self.push(OntologyType::Entity, "associated_type", Some(item.ident.to_string()), item.span()),
             ImplItem::Macro(item) => self.push(OntologyType::Operation, "impl_macro", None, item.span()),
-            ImplItem::Verbatim(_) => {}
-            _ => {}
+            ImplItem::Verbatim(_) => {},
+            _ => {},
         }
         syn::visit::visit_impl_item(self, item);
     }
