@@ -12,6 +12,28 @@ Universal Ontology Engine provides a canonical vocabulary for resolving software
 
 The 49 levels are a **resolution spine over a graph**. They are not a mandatory 49-level folder tree, AST, compiler IR, or binary layout.
 
+<!-- AUTO:SELF_STATUS:START -->
+## Self status
+
+> Auto-generated from `.ontology/self.json`. Do not edit this block manually.
+
+| Signal | Value |
+|---|---:|
+| Repository | `universal-ontology-engine` |
+| Self health | **✅ HEALTHY** |
+| Ontology | `1.0.0` |
+| Canonical levels | **49** |
+| Workspace crates | **7** |
+| Rust sources | **8** |
+| Read-only inspection | **YES** |
+
+Self inspection command:
+
+```bash
+cargo run -p ontology-engine -- self --json
+```
+<!-- AUTO:SELF_STATUS:END -->
+
 ## Canonical levels
 
 ```text
