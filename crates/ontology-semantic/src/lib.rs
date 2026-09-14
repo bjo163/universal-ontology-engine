@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 pub mod normalization;
 pub mod resolution;
 pub mod rules;
+pub mod trace;
 
 pub const SEMANTIC_PROJECTION_RFC_ID: &str = "oxdx.semantic-projection.rfc/v1";
 
