@@ -8,9 +8,9 @@
   },
   "branches": {
     "model": "feature/* -> dev -> main",
-    "relation": "main_ahead"
+    "relation": "aligned"
   },
-  "ci": "",
+  "ci": "success",
   "health": "healthy",
   "releases": {
     "dev": "v0.1.10-dev.28",
@@ -20,7 +20,7 @@
   "schema": "universal-ontology-engine/repository-status-v1",
   "self": "healthy",
   "versions": {
-    "dev": "0.1.10-dev.28",
+    "dev": "0.1.10",
     "main": "0.1.10"
   }
 }
