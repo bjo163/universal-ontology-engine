@@ -44,16 +44,18 @@ discovery → semantic → runtime → representation → bit
 
 `TYPE` is one canonical level. `KIND` is a specialization owned by exactly one type. The Rust compiled type representation is checked against the registry at load time; the registry remains the source of truth for definitions, ordering, and ontology rules.
 
-Intermediate levels may be unmaterialized. Native language structures remain authoritative and are mapped into the universal vocabulary rather than forced into artificial directories.
+`CONTAINS` is structural containment only. `PROJECTS_TO`, `REPRESENTED_AS`, `REFERENCES`, `CAUSES`, and the other relation classes are graph edges and must not be interpreted as filesystem or parent-child containment.
+
+The graph engine uses stable semantic node IDs, deterministic ordered storage/traversal, explicit typed edges, and registry-backed edge validation. Intermediate levels may be unmaterialized; native language structures remain authoritative and are mapped into the universal vocabulary rather than forced into artificial directories.
 
 ## Rust workspace
 
 ```text
 crates/
 ├── ontology-core      # canonical compiled ontology primitives
-├── ontology-graph      # typed graph and invariants
-├── ontology-registry   # registry loader + canonical validation
-└── ontology-cli        # ontology-engine command-line interface
+├── ontology-graph     # registry-aware typed graph and invariants
+├── ontology-registry  # registry loader + canonical validation
+└── ontology-cli       # ontology-engine command-line interface
 ```
 
 ## Current commands
@@ -70,7 +72,7 @@ cargo run -p ontology-engine -- --registry path/to/universal-ontology-v1.0.json 
 ```text
 Phase 1   Core ontology primitives                  ✅
 Phase 2   Canonical registry + schema loading       ✅
-Phase 3   Persistent typed graph + identity         →
+Phase 3   Registry-aware typed graph + identity     ✅
 Phase 4   Filesystem / Git discovery                →
 Phase 5   Rust source + AST adapters                →
 Phase 6   Cross-language parsing adapters            →
@@ -92,6 +94,12 @@ The canonical registry is:
 
 ```text
 specifications/universal-ontology-v1.0.json
+```
+
+The machine-validation schema is:
+
+```text
+schemas/universal-ontology.schema.json
 ```
 
 The normative explanation is:
