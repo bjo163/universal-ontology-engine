@@ -2,13 +2,17 @@
 
 > **Quran Inspired ALLAH my Beloved**
 >
-> Philosophical inspiration only; the technical ontology is not presented as a Qur'anic prescription.
+> Philosophical inspiration only. The technical ontology is not presented as a Qur'anic prescription.
 
 Rust reference implementation of **Universal Ontology v1.0.0**.
 
-## Canonical model
+## What it is
 
-**7 zones × 7 levels = 49 canonical levels.** The 49-level sequence is a resolution spine over a graph, not a mandatory filesystem tree.
+Universal Ontology Engine provides a canonical vocabulary for resolving software and other resources across **7 zones × 7 levels = 49 canonical levels**.
+
+The 49 levels are a **resolution spine over a graph**. They are not a mandatory 49-level folder tree, AST, compiler IR, or binary layout.
+
+## Canonical levels
 
 ```text
 01 UNIVERSE       08 ECOSYSTEM      15 PURPOSE        22 REPOSITORY
@@ -28,71 +32,136 @@ Rust reference implementation of **Universal Ontology v1.0.0**.
 35 BEHAVIOR       42 EXECUTION      49 BIT
 ```
 
+## Core rules
+
+```text
+TYPE  = one canonical ontology level
+KIND  = specialization/native evidence owned by a TYPE
+
+parent / CONTAINS     = structural ownership only
+PROJECTS_TO           = semantic projection
+REPRESENTED_AS        = representation relationship
+REFERENCES / CAUSES  = graph relationships
+OBSERVED_AT           = observation relationship
+
+SourceSpan            = provenance, not identity
+```
+
+Intermediate canonical levels may be omitted when native evidence does not justify them. Native structures remain authoritative; the engine maps evidence into the universal vocabulary instead of forcing artificial folders.
+
 ## Architecture
 
 ```text
-NORMATIVE REGISTRY JSON
-        ↓
-ontology-registry
-        ↓
-49-level validated registry
-        ↓
-ontology-core + ontology-graph
-        ↓
-ontology-discovery
-        ↓
-ontology-rust + ontology-language
-        ↓
-[PRE-PHASE-7 GATE]
-        ↓
-semantic projection
-        ↓
-runtime observation
-        ↓
-representation / encoding
-        ↓
-bit-level inspection
+Registry
+   ↓
+Core Types + Graph Invariants
+   ↓
+Filesystem / Git Discovery
+   ↓
+Rust + Cross-language Syntax Evidence
+   ↓
+[ PRE-PHASE-7 GATE ]
+   ↓
+Semantic Projection
+   ↓
+Runtime Observation
+   ↓
+Representation / Encoding
+   ↓
+Bounded Bit Inspection
+   ↓
+Query + Certification
 ```
 
-`TYPE` is one canonical level. `KIND` is a specialization/evidence vocabulary owned by a canonical type and never creates a new level.
-
-`CONTAINS` and `parent` are structural ownership only. `PROJECTS_TO`, `REPRESENTED_AS`, `REFERENCES`, `CAUSES`, `OBSERVED_AT`, and the other relation classes are graph relations and never become implicit tree children.
-
-Intermediate canonical levels may be unmaterialized. Native language structures remain authoritative and are mapped into the universal vocabulary rather than forced into artificial directories.
-
-## Rust workspace
+Workspace crates:
 
 ```text
 crates/
-├── ontology-core         # canonical compiled ontology primitives
-├── ontology-graph        # registry-aware typed graph and invariants
-├── ontology-registry     # registry loader + canonical validation
-├── ontology-discovery    # read-only filesystem/workspace discovery
-├── ontology-rust         # syn-based Rust AST syntax adapter
-├── ontology-language     # normalized syntax adapters for TS/JS/Python/Go/Java/Kotlin
-└── ontology-cli          # ontology-engine command-line interface
+├── ontology-core         # canonical types, IDs, spans, edge kinds
+├── ontology-registry     # registry loading and validation
+├── ontology-graph        # typed graph and invariants
+├── ontology-discovery    # read-only workspace/repository discovery
+├── ontology-rust         # Rust AST adapter via syn
+├── ontology-language     # TS/JS/Python/Go/Java/Kotlin syntax adapters
+└── ontology-cli          # ontology-engine CLI
 ```
 
-## Phase 1–6 hardening contract
+## Phase 1–6 status
 
-Phase 1–3 provide the canonical type/edge vocabulary, registry enforcement, stable IDs, explicit containment, deterministic traversal, and registry-backed graph invariants.
+| Phase | Scope | Status |
+|---|---|---|
+| 1 | Core ontology primitives | ✅ Hardened |
+| 2 | Canonical registry + schema | ✅ Hardened |
+| 3 | Typed graph + identity | ✅ Hardened |
+| 4 | Filesystem / Git discovery | ✅ Hardened |
+| 5 | Rust syntax + AST adapter | ✅ Hardened |
+| 6 | Cross-language syntax adapters | ✅ Hardened |
+| 7 | Semantic projection | ⛔ Gate first |
+| 8 | Runtime observation | → |
+| 9 | Binary / encoding readers | → |
+| 10 | Token / character representation | → |
+| 11 | Bit-level bounded reader | → |
+| 12 | Query + certification | → |
 
-Phase 4 now refuses to fabricate `UNIT`/`MODULE` from generic source directories. Those levels are materialized only with native evidence; otherwise they are explicitly reported as unmaterialized. `EXECUTION` observations are standalone dynamic nodes connected with `OBSERVED_AT`, never nested below `ELEMENT`.
+### Phase 1–6 hardening
 
-Phase 5 Rust AST observations preserve native syntax kind as evidence and retain source spans as provenance. AST projection node IDs no longer depend on line/column offsets; named constructs use semantic parent-scoped keys with deterministic duplicate disambiguation.
+Phase 4 does not manufacture `UNIT` or `MODULE` from generic directories such as `src/`. Those levels are materialized only when native evidence exists.
 
-Phase 6 adapters for TypeScript, JavaScript, Python, Go, Java, and Kotlin provide deterministic normalized syntax evidence. Common declaration modifiers/prefixes, Python async functions, Go receiver functions, and non-void Java methods are covered. These adapters are intentionally syntax-boundary adapters, not semantic analyzers or compiler replacements.
+Phase 4 runtime observations are standalone `EXECUTION` nodes:
 
-## CLI examples
+```text
+EXECUTION ──OBSERVED_AT──> TARGET
+```
+
+They are never structural children of an `ELEMENT`.
+
+Phase 5 AST identity is semantic and parent-scoped. Named observations use canonical type + native construct kind + name, with deterministic duplicate disambiguation. Source line/column is provenance only.
+
+Phase 6 preserves native syntax evidence for TypeScript, JavaScript, Python, Go, Java, and Kotlin. It is a syntax boundary, not compiler-grade semantic analysis.
+
+## Pre-Phase-7 gate
+
+Phase 7 must not start until CI proves:
+
+```text
+registry ↔ schema consistency
+        AND
+no synthetic UNIT/MODULE
+        AND
+EXECUTION is non-structural + OBSERVED_AT
+        AND
+projection preserves parent/containment
+        AND
+AST IDs survive line/whitespace movement
+        AND
+native syntax kind stays evidence/metadata
+        AND
+discovery/traversal is deterministic
+        AND
+malformed input remains observable
+```
+
+## CLI
+
+Validate and inspect the canonical registry:
 
 ```bash
 cargo run -p ontology-engine -- validate
 cargo run -p ontology-engine -- levels
 cargo run -p ontology-engine -- inspect 49
+```
+
+Discover a workspace:
+
+```bash
 cargo run -p ontology-engine -- discover /path/to/workspace
 cargo run -p ontology-engine -- discover /path/to/workspace --rust-ast
 cargo run -p ontology-engine -- discover /path/to/workspace --rust-ast --include-files --max-depth 3
+```
 
+Normalize source syntax:
+
+```bash
 cargo run -p ontology-engine -- parse rust path/to/file.rs
 cargo run -p ontology-engine -- parse typescript path/to/file.ts
 cargo run -p ontology-engine -- parse javascript path/to/file.js
@@ -102,63 +171,30 @@ cargo run -p ontology-engine -- parse java path/to/file.java
 cargo run -p ontology-engine -- parse kotlin path/to/file.kt
 ```
 
-Discovery and parse commands emit deterministic machine-readable JSON where applicable, including ontology version, source language, native kind, canonical type, source span, and evidence.
-
-## Phase roadmap
-
-```text
-Phase 1   Core ontology primitives                     ✅ hardened
-Phase 2   Canonical registry + schema loading          ✅ hardened
-Phase 3   Registry-aware typed graph + identity        ✅ hardened
-Phase 4   Filesystem / Git discovery                   ✅ hardened
-Phase 5   Rust source + AST adapter                    ✅ hardened
-Phase 6   Cross-language syntax adapters               ✅ hardened
-Phase 7   Semantic projection                          ⛔ blocked by gate until CI green
-Phase 8   Runtime observation                          →
-Phase 9   Binary / encoding readers                    →
-Phase 10  Token / character representation             →
-Phase 11  Bit-level bounded reader                     →
-Phase 12  Query engine + certification                 →
-```
-
-### Pre-Phase-7 gate
-
-The gate must prove all of the following:
-
-```text
-canonical 49-level registry + schema consistency
-        AND
-no synthetic UNIT/MODULE from generic directory grouping
-        AND
-EXECUTION is standalone + OBSERVED_AT relation
-        AND
-PROJECTS_TO never mutates structural parent
-        AND
-AST IDs survive line/whitespace movement
-        AND
-native syntax kind remains evidence/metadata
-        AND
-deterministic discovery/traversal
-        AND
-malformed input remains observable failure/evidence
-```
-
-Phase 7 begins only after the latest CI run is green against this gate.
+Discovery and parsing are read-only and deterministic for a fixed input revision/environment. Machine-readable output retains ontology version, language, native kind, canonical type, provenance, and evidence where available.
 
 ## Safety boundaries
 
-Discovery and parsing are observational and read-only. The engine must not rewrite a repository, infer semantic truth from filenames alone, or turn filesystem layout into the canonical ontology.
+The engine observes; it does not rewrite repositories or treat filenames alone as semantic truth.
 
-Semantic projection is explicit. A syntax observation may `PROJECTS_TO` a canonical semantic node, while structural ownership continues to use `parent`/`CONTAINS`. `KIND` never becomes a hidden 50th+ level.
+Semantic projection is explicit. Runtime observations remain separate from source structure. Representation and binary inspection must remain bounded and streaming-capable. Malformed input is reported as evidence/error rather than silently changing ontology meaning.
 
-Binary and bit inspection must be bounded and streaming-capable. Malformed input must remain an explicit observation/error rather than silently changing ontology meaning. External runtimes, encodings, binaries, parsers, and host systems are evidence sources, not ontology owners.
-
-## Normative specification
+## Source hierarchy
 
 ```text
-specifications/universal-ontology-v1.0.json
-schemas/universal-ontology.schema.json
-specifications/universal-ontology-v1.0.md
-standards/universal-ontology-engine.md
-docs/architecture.md
+Normative ontology
+  specifications/universal-ontology-v1.0.json
+  schemas/universal-ontology.schema.json
+  specifications/universal-ontology-v1.0.md
+
+Engineering rules
+  standards/universal-ontology-engine.md
+
+Implementation architecture
+  docs/architecture.md
+
+Entry point
+  README.md
 ```
+
+The README is a concise project guide. The normative registry and schema remain authoritative.
