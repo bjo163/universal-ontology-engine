@@ -48,10 +48,11 @@ class HierarchyDiscoveryTests(unittest.TestCase):
             self.assertEqual(elements[0]["metadata"]["evidence"], "language-parser")
             self.assertEqual(elements[0]["metadata"]["span"], {"line_start": 1, "line_end": 3})
             self.assertEqual(elements[1]["metadata"]["span"], {"line_start": 5, "line_end": 7})
-            self.assertEqual(elements[0]["children"][0]["level"], "IMPLEMENTATION")
+            self.assertEqual(elements[0]["children"][0]["level"], "EXECUTION")
             self.assertEqual(elements[0]["children"][0]["metadata"]["span"], {"line_start": 1, "line_end": 3})
             self.assertEqual(unit_node["language"], "node")
             self.assertFalse((repo / "unit").exists())
+            self.assertEqual(tree["metadata"]["canonical_level_count"], 49)
 
     def test_python_symbol_spans_are_detected(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -81,11 +82,12 @@ class HierarchyDiscoveryTests(unittest.TestCase):
 
     def test_json_is_serializable(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
-            workspace = Path(temp)
+            workspace = Path(temp) 
             (workspace / "ecosystem-test").mkdir()
             output = hierarchy_discover.discover(workspace)
             json.dumps(output)
             self.assertEqual(output["metadata"]["read_only"], True)
+            self.assertEqual(output["metadata"]["canonical_level_count"], 49)
 
 
 if __name__ == "__main__":
