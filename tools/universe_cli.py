@@ -133,7 +133,7 @@ def command_status(data: dict[str, Any], workspace: Path, as_json: bool) -> int:
     return 0
 
 
-def command_discover(data: dict[str, Any], workspace: Path, as_json: bool) -> int:
+def discover(data: dict[str, Any], workspace: Path) -> dict[str, Any]:
     registered = {str(item["path"]): str(item["id"]) for item in ecosystems(data)}
     discovered: list[dict[str, Any]] = []
     if workspace.is_dir():
@@ -148,18 +148,69 @@ def command_discover(data: dict[str, Any], workspace: Path, as_json: bool) -> in
                 })
     missing = sorted(path for path in registered if not (workspace / path).is_dir())
     unknown = sorted(item["path"] for item in discovered if not item["registered"])
-    result = {"workspace": str(workspace.resolve()), "discovered": discovered, "missing": missing, "unknown": unknown}
+    return {"workspace": str(workspace.resolve()), "discovered": discovered, "missing": missing, "unknown": unknown}
+
+
+def command_discover(data: dict[str, Any], workspace: Path, as_json: bool) -> int:
+    result = discover(data, workspace)
     if as_json:
         print_json(result)
     else:
-        for item in discovered:
+        for item in result["discovered"]:
             mark = "registered" if item["registered"] else "UNKNOWN"
             print(f"{item['path']}\t{mark}\t{item.get('id') or '-'}")
-        for path in missing:
+        for path in result["missing"]:
             print(f"MISSING\t{path}")
-        for path in unknown:
+        for path in result["unknown"]:
             print(f"UNKNOWN\t{path}")
     return 0
+
+
+def read_ecosystem_manifest(path: Path) -> dict[str, Any] | None:
+    manifest = path / "ecosystem.json"
+    if not manifest.is_file():
+        return None
+    try:
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def command_doctor(data: dict[str, Any], workspace: Path, as_json: bool) -> int:
+    registry_errors = validate(data)
+    discovery = discover(data, workspace)
+    rows: list[dict[str, Any]] = []
+    errors = list(registry_errors)
+    for item in ecosystems(data):
+        path = workspace / str(item["path"])
+        local = read_ecosystem_manifest(path) if path.is_dir() else None
+        entry_errors: list[str] = []
+        if not path.is_dir():
+            entry_errors.append("workspace directory missing")
+        elif local is None:
+            entry_errors.append("ecosystem.json missing or invalid")
+        else:
+            local_id = local.get("id")
+            if local_id != item["id"]:
+                entry_errors.append(f"identity mismatch: registry={item['id']} local={local_id!r}")
+        rows.append({"id": item["id"], "path": item["path"], "healthy": not entry_errors, "errors": entry_errors})
+        errors.extend(f"{item['id']}: {error}" for error in entry_errors)
+    result = {
+        "healthy": not errors and not discovery["unknown"],
+        "registry_errors": registry_errors,
+        "ecosystems": rows,
+        "discovery": discovery,
+    }
+    if discovery["unknown"]:
+        errors.extend(f"unknown ecosystem directory: {path}" for path in discovery["unknown"])
+    if as_json:
+        print_json(result)
+    else:
+        print(f"HEALTHY: {result['healthy']}")
+        for error in errors:
+            print(f"FAIL: {error}")
+    return 0 if result["healthy"] else 1
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -171,10 +222,12 @@ def build_parser() -> argparse.ArgumentParser:
     inspect = sub.add_parser("inspect", help="inspect one registered ecosystem")
     inspect.add_argument("id")
     sub.add_parser("validate", help="validate the registry")
-    discover = sub.add_parser("discover", help="scan a workspace for ecosystem-* directories")
-    discover.add_argument("workspace", type=Path)
+    discover_parser = sub.add_parser("discover", help="scan a workspace for ecosystem-* directories")
+    discover_parser.add_argument("workspace", type=Path)
     status = sub.add_parser("status", help="show registered ecosystem filesystem status")
     status.add_argument("workspace", type=Path)
+    doctor = sub.add_parser("doctor", help="check registry, workspace, and ecosystem manifests")
+    doctor.add_argument("workspace", type=Path)
     return parser
 
 
@@ -196,6 +249,8 @@ def main(argv: list[str] | None = None) -> int:
         return command_discover(data, args.workspace, args.as_json)
     if args.command == "status":
         return command_status(data, args.workspace, args.as_json)
+    if args.command == "doctor":
+        return command_doctor(data, args.workspace, args.as_json)
     return fail("unknown command")
 
 
