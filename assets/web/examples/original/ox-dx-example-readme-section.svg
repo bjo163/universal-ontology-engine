@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none"><rect width="1200" height="630" fill="#07090A"/>
+<path d="M98 84H441M490 84H882" stroke="#F5F7F8" stroke-width="7"/>
+<rect x="931" y="77" width="14" height="14" fill="#00D8FF" transform="rotate(45 938 84)"/>
+<text x="98" y="175" fill="#F5F7F8" font-family="Arial, sans-serif" font-size="54" font-weight="700">EVIDENCE FIRST.</text>
+<text x="98" y="231" fill="#99A2AA" font-family="Arial, sans-serif" font-size="24">Observe what exists. Preserve the trace.</text>
+<text x="98" y="273" fill="#99A2AA" font-family="Arial, sans-serif" font-size="24">Resolve only what the evidence supports.</text>
+<path d="M98 343H343L392 392V441M98 539H343L392 490V476" stroke="#F5F7F8" stroke-width="7"/>
+<path d="M441 392H560M588 392H735" stroke="#99A2AA" stroke-width="3"/>
+<rect x="777" y="385" width="14" height="14" fill="#00D8FF" transform="rotate(45 784 392)"/>
+</svg>
