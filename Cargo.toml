@@ -2,6 +2,7 @@
 members = [
   "crates/ontology-core",
   "crates/ontology-graph",
+  "crates/ontology-registry",
   "crates/ontology-cli",
 ]
 resolver = "2"
