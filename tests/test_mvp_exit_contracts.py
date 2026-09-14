@@ -1,5 +1,4 @@
 import json
-import re
 import unittest
 from pathlib import Path
 
@@ -62,7 +61,12 @@ class MvpExitContractsTest(unittest.TestCase):
 
     def test_cli_contract_has_non_overlapping_exit_classes(self):
         contract = (ROOT / "docs/contracts/cli-v1.md").read_text(encoding="utf-8")
-        for row in ["`0` | success", "`2` | input/configuration", "`3` | engine/invariant", "`4` | health gate"]:
+        for row in [
+            "`0` | success",
+            "`1` | health gate",
+            "`2` | input/configuration",
+            "`3` | engine/invariant",
+        ]:
             self.assertIn(row, contract)
         self.assertIn("--rust-ast", contract)
         self.assertIn("--syntax", contract)
@@ -73,7 +77,7 @@ class MvpExitContractsTest(unittest.TestCase):
         self.assertIn("2 * 1024 * 1024", source)
         self.assertIn("100_000", source)
         self.assertIn("HARD_MAX_DEPTH: usize = 256", source)
-        self.assertIn("file_type().is_symlink()", source)
+        self.assertIn("file_type.is_symlink()", source)
 
     def test_release_provenance_requires_lockfile_and_separate_versions(self):
         self.assertTrue((ROOT / "Cargo.lock").is_file())
