@@ -8,7 +8,7 @@
   },
   "branches": {
     "model": "feature/* -> dev -> main",
-    "relation": "aligned"
+    "relation": "main_ahead"
   },
   "ci": "success",
   "health": "healthy",
