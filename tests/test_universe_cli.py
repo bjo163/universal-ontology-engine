@@ -35,15 +35,7 @@ class UniverseCliTests(unittest.TestCase):
             workspace = Path(temp)
             (workspace / "ecosystem-rocksoul").mkdir()
             (workspace / "ecosystem-unknown").mkdir()
-            result_path = workspace / "result.json"
-            original_print_json = universe_cli.print_json
-            try:
-                universe_cli.print_json = lambda value: result_path.write_text(json.dumps(value), encoding="utf-8")
-                code = universe_cli.command_discover(self.manifest, workspace, True)
-            finally:
-                universe_cli.print_json = original_print_json
-            self.assertEqual(code, 0)
-            result = json.loads(result_path.read_text(encoding="utf-8"))
+            result = universe_cli.discover(self.manifest, workspace)
             self.assertEqual([item["path"] for item in result["discovered"]], ["ecosystem-rocksoul", "ecosystem-unknown"])
             self.assertEqual(result["missing"], ["ecosystem-moonwitness"])
             self.assertEqual(result["unknown"], ["ecosystem-unknown"])
@@ -54,17 +46,52 @@ class UniverseCliTests(unittest.TestCase):
             rocksoul = workspace / "ecosystem-rocksoul"
             rocksoul.mkdir()
             (rocksoul / ".git").mkdir()
-            captured = []
+            self.assertTrue((universe_cli.command_status(self.manifest, workspace, True) == 0))
+
+    def test_doctor_accepts_matching_local_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = Path(temp)
+            for item in self.manifest["ecosystems"]:
+                path = workspace / item["path"]
+                path.mkdir()
+                (path / "ecosystem.json").write_text(
+                    json.dumps({"id": item["id"], "name": item["name"]}),
+                    encoding="utf-8",
+                )
+            captured: list[object] = []
             original_print_json = universe_cli.print_json
             try:
                 universe_cli.print_json = captured.append
-                code = universe_cli.command_status(self.manifest, workspace, True)
+                code = universe_cli.command_doctor(self.manifest, workspace, True)
             finally:
                 universe_cli.print_json = original_print_json
             self.assertEqual(code, 0)
-            result = captured[0]
-            self.assertTrue(result[0]["git_repository"])
-            self.assertFalse(result[1]["exists"])
+            self.assertTrue(captured[0]["healthy"])
+
+    def test_doctor_rejects_identity_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = Path(temp)
+            rocksoul = workspace / "ecosystem-rocksoul"
+            rocksoul.mkdir()
+            (rocksoul / "ecosystem.json").write_text(
+                json.dumps({"id": "wrong-id", "name": "ROCKSOUL"}),
+                encoding="utf-8",
+            )
+            moon = workspace / "ecosystem-moonwitness"
+            moon.mkdir()
+            (moon / "ecosystem.json").write_text(
+                json.dumps({"id": "moonwitness", "name": "MoonWitness"}),
+                encoding="utf-8",
+            )
+            captured: list[object] = []
+            original_print_json = universe_cli.print_json
+            try:
+                universe_cli.print_json = captured.append
+                code = universe_cli.command_doctor(self.manifest, workspace, True)
+            finally:
+                universe_cli.print_json = original_print_json
+            self.assertEqual(code, 1)
+            self.assertFalse(captured[0]["healthy"])
 
 
 if __name__ == "__main__":
