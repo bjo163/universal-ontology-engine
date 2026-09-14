@@ -41,6 +41,8 @@ ontology-core + ontology-graph
         ↓
 ontology-discovery
         ↓
+ontology-rust (Rust AST)
+        ↓
 semantic → runtime → representation → bit
 ```
 
@@ -58,6 +60,7 @@ crates/
 ├── ontology-graph      # registry-aware typed graph and invariants
 ├── ontology-registry   # registry loader + canonical validation
 ├── ontology-discovery  # read-only filesystem/workspace discovery
+├── ontology-rust       # syn-based Rust AST semantic adapter
 └── ontology-cli        # ontology-engine command-line interface
 ```
 
@@ -65,13 +68,18 @@ crates/
 
 Phase 4 adds a **read-only** workspace discovery engine. It recognizes `ecosystem-*` workspace boundaries, native repositories/manifests, source directories, native units, directory groupings, source-file components, and observed execution boundaries. It never creates canonical directories and it leaves unsupported or intermediate ontology levels unmaterialized.
 
-Example:
+Phase 5 adds a **Rust AST adapter** backed by `syn`. Rust declarations and constructs are emitted as observations at canonical semantic levels, including `ENTITY`, `PROPERTY`, `FUNCTION`, `OPERATION`, `VALUE`, `MODULE`, and `INSTRUCTION`, with source spans. AST observations are connected from the filesystem `ELEMENT` through `PROJECTS_TO`; they are deliberately not encoded as filesystem containment.
+
+Malformed Rust is preserved as an explicit `rust-ast-error` observation rather than mutating or corrupting the graph.
+
+Examples:
 
 ```bash
-cargo run -p ontology-engine -- discover /path/to/workspace --include-files --max-depth 3
+cargo run -p ontology-engine -- discover /path/to/workspace --rust-ast
+cargo run -p ontology-engine -- discover /path/to/workspace --rust-ast --include-files --max-depth 3
 ```
 
-The command emits a JSON summary with the ontology version, node/edge counts, observation count, and an explicit `read_only=true` marker.
+The command emits JSON with ontology version, node/edge counts, per-level counts, read-only status, and discovery observations.
 
 ## Current commands
 
@@ -80,6 +88,7 @@ cargo run -p ontology-engine -- validate
 cargo run -p ontology-engine -- levels
 cargo run -p ontology-engine -- inspect 49
 cargo run -p ontology-engine -- discover /path/to/workspace
+cargo run -p ontology-engine -- discover /path/to/workspace --rust-ast
 cargo run -p ontology-engine -- --registry path/to/universal-ontology-v1.0.json levels
 ```
 
@@ -90,7 +99,7 @@ Phase 1   Core ontology primitives                  ✅
 Phase 2   Canonical registry + schema loading       ✅
 Phase 3   Registry-aware typed graph + identity     ✅
 Phase 4   Filesystem / Git discovery                ✅
-Phase 5   Rust source + AST adapters                →
+Phase 5   Rust source + AST adapters                ✅
 Phase 6   Cross-language parsing adapters            →
 Phase 7   Semantic projection                       →
 Phase 8   Runtime observation                       →
@@ -102,7 +111,7 @@ Phase 12  Query engine + certification               →
 
 ## Safety boundaries
 
-Discovery is observational and read-only. It must not rewrite a repository, infer semantic truth from filenames alone, or turn filesystem layout into the canonical ontology. Binary and bit inspection must be bounded and streaming-capable; malformed input must remain an explicit observation rather than silently changing ontology meaning.
+Discovery is observational and read-only. It must not rewrite a repository, infer semantic truth from filenames alone, or turn filesystem layout into the canonical ontology. AST parsing adds evidence and source spans; it does not redefine the canonical levels. Binary and bit inspection must be bounded and streaming-capable; malformed input must remain an explicit observation rather than silently changing ontology meaning.
 
 ## Normative specification
 
