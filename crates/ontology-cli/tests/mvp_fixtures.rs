@@ -7,8 +7,12 @@ fn repo_root() -> PathBuf {
 }
 
 fn run_fixture(name: &str, mode: &str) -> Vec<u8> {
-    let fixture = repo_root().join("fixtures/mvp").join(name);
+    let root = repo_root();
+    let registry = root.join("specifications/universal-ontology-v1.0.json");
+    let fixture = root.join("fixtures/mvp").join(name);
     let output = Command::new(env!("CARGO_BIN_EXE_ontology-engine"))
+        .arg("--registry")
+        .arg(&registry)
         .arg("discover")
         .arg(&fixture)
         .arg("--include-files")
