@@ -91,6 +91,27 @@ jobs:
           cat /tmp/ontology-self.json
       - name: Smoke test ontology CLI
         run: |
+          set -euo pipefail
           cargo run -p ontology-engine -- levels
           cargo run -p ontology-engine -- inspect 49
           cargo run -p ontology-engine -- discover . --max-depth 2
+          cargo run -p ontology-engine -- discover crates/ontology-core --rust-ast --max-depth 4 > /tmp/rust-ast.json
+          cargo run -p ontology-engine -- discover crates/ontology-core --syntax --max-depth 4 > /tmp/syntax.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rust_ast = json.loads(Path('/tmp/rust-ast.json').read_text())
+          syntax = json.loads(Path('/tmp/syntax.json').read_text())
+
+          assert rust_ast.get('mode') is None, rust_ast
+          assert syntax.get('mode') == 'syntax-projection', syntax
+          assert syntax.get('read_only') is True, syntax
+          assert syntax.get('nodes', 0) > 1, syntax
+          assert any(key.startswith('34_FUNCTION') for key in syntax.get('nodes_by_level', {})), syntax
+          PY
+          if cargo run -p ontology-engine -- discover crates/ontology-core --syntax --rust-ast --max-depth 4 >/tmp/conflict.out 2>/tmp/conflict.err; then
+            echo "--syntax and --rust-ast unexpectedly accepted together" >&2
+            exit 1
+          fi
+          grep -q "cannot be used with" /tmp/conflict.err
