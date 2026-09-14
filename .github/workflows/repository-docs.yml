@@ -1,10 +1,11 @@
 name: Repository Docs Sync
 
 on:
-  release:
-    types: [published]
   workflow_run:
-    workflows: ["Validate Universal Ontology Engine"]
+    workflows:
+      - "Validate Universal Ontology Engine"
+      - "Release Channels"
+      - "Stable Back Sync"
     types: [completed]
   workflow_dispatch:
 
@@ -19,8 +20,18 @@ concurrency:
 jobs:
   sync:
     if: >-
-      github.event_name != 'workflow_run' ||
-      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        (
+          github.event.workflow_run.name == 'Release Channels' ||
+          github.event.workflow_run.name == 'Stable Back Sync' ||
+          (
+            github.event.workflow_run.name == 'Validate Universal Ontology Engine' &&
+            github.event.workflow_run.head_branch == 'main'
+          )
+        )
+      )
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -66,12 +77,28 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- README.md CHANGELOG.md .ontology/status.json; then
+          if ! git diff --quiet -- README.md CHANGELOG.md .ontology/status.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add README.md CHANGELOG.md .ontology/status.json
+            git commit -m "chore(release): sync generated repository docs"
+            git push origin HEAD:main
+          else
             echo "repository docs already synchronized"
-            exit 0
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md CHANGELOG.md .ontology/status.json
-          git commit -m "chore(release): sync generated repository docs"
-          git push origin HEAD:main
+
+      - name: Keep dev aligned when main is ahead
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main dev
+          main_head="$(git rev-parse origin/main)"
+          dev_head="$(git rev-parse origin/dev)"
+          if [[ "$main_head" == "$dev_head" ]]; then
+            echo "main/dev already aligned"
+          elif git merge-base --is-ancestor "$dev_head" "$main_head"; then
+            git push origin "$main_head:dev"
+            echo "dev fast-forwarded to generated main state"
+          else
+            echo "dev is not behind main; no docs back-sync performed"
+          fi
