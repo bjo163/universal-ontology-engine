@@ -1,0 +1,154 @@
+name: External Reference Smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "crates/ontology-core/**"
+      - "crates/ontology-graph/**"
+      - "crates/ontology-registry/**"
+      - "crates/ontology-discovery/**"
+      - "crates/ontology-rust/**"
+      - "crates/ontology-cli/**"
+      - ".ontology/self.json"
+      - ".github/workflows/external-reference-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: external-reference-smoke
+  cancel-in-progress: true
+
+jobs:
+  rocksoul-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout OX-DX
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Verify OX-DX self snapshot first
+        shell: bash
+        run: |
+          set -euo pipefail
+          cargo run -p ontology-engine -- self --json > /tmp/ox-dx-self.json
+          diff -u .ontology/self.json /tmp/ox-dx-self.json
+
+      - name: Clone external reference specimen
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/ox-dx-external-reference
+          git clone \
+            --depth 1 \
+            --branch main \
+            https://github.com/bjo163/rocksoul-ui.git \
+            /tmp/ox-dx-external-reference
+
+      - name: Discover external repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          cargo run -p ontology-engine -- discover \
+            /tmp/ox-dx-external-reference \
+            --include-files \
+            --rust-ast \
+            --max-depth 3 \
+            > external-reference.json
+
+      - name: Assert meaningful external graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("external-reference.json").read_text())
+          levels = report.get("nodes_by_level", {})
+
+          def count(level: int) -> int:
+              prefix = f"{level:02d}_"
+              return sum(value for key, value in levels.items() if key.startswith(prefix))
+
+          required = {
+              "REPOSITORY": (22, count(22)),
+              "SOURCE": (23, count(23)),
+              "COMPONENT": (27, count(27)),
+              "ELEMENT": (28, count(28)),
+          }
+
+          assert report.get("ontology") == "1.0.0", report
+          assert report.get("read_only") is True, report
+          assert report.get("nodes", 0) > 1, report
+          assert report.get("edges", 0) > 0, report
+
+          for name, (_, value) in required.items():
+              assert value > 0, f"missing required {name} nodes: {levels}"
+
+          assert count(24) == 0, f"synthetic UNIT detected: {levels}"
+          assert count(25) == 0, f"synthetic MODULE detected: {levels}"
+
+          observation_kinds = {
+              item.get("kind") for item in report.get("observations", [])
+          }
+          for kind in ("repository", "source", "component", "element"):
+              assert kind in observation_kinds, (
+                  f"missing {kind} observation: {sorted(observation_kinds)}"
+              )
+
+          print(
+              "external-reference rocksoul-ui: "
+              f"nodes={report['nodes']} edges={report['edges']} "
+              f"repository={count(22)} source={count(23)} "
+              f"component={count(27)} element={count(28)} "
+              f"unit={count(24)} module={count(25)}"
+          )
+          PY
+
+      - name: Publish summary
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("external-reference.json").read_text())
+          levels = report["nodes_by_level"]
+
+          def count(level: int) -> int:
+              prefix = f"{level:02d}_"
+              return sum(value for key, value in levels.items() if key.startswith(prefix))
+
+          print("## OX-DX external reference smoke")
+          print()
+          print("Reference: `bjo163/rocksoul-ui@main`")
+          print()
+          print("| Signal | Count |")
+          print("|---|---:|")
+          print(f"| Nodes | {report['nodes']} |")
+          print(f"| Edges | {report['edges']} |")
+          print(f"| Repository | {count(22)} |")
+          print(f"| Source | {count(23)} |")
+          print(f"| Unit | {count(24)} |")
+          print(f"| Module | {count(25)} |")
+          print(f"| Component | {count(27)} |")
+          print(f"| Element | {count(28)} |")
+          PY
+
+      - name: Upload external discovery artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ox-dx-external-reference-rocksoul-ui
+          path: external-reference.json
+          if-no-files-found: error
+          retention-days: 7
