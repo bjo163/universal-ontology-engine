@@ -166,7 +166,9 @@ fn index_rule_versions(
     for rule in rules {
         match versions.get(&rule.rule_id) {
             Some(existing) if existing != &rule.rule_version => {
-                return Err(TraceContractError::RuleVersionConflict(rule.rule_id.clone()));
+                return Err(TraceContractError::RuleVersionConflict(
+                    rule.rule_id.clone(),
+                ));
             }
             Some(_) => {}
             None => {
