@@ -78,7 +78,11 @@ fn degraded_self_is_exit_one() {
 fn structural_discovery_emits_versioned_json_only() {
     let fixture = repo_root().join("fixtures/mvp/typescript");
     let output = engine().arg("discover").arg(&fixture).output().unwrap();
-    assert!(output.status.success(), "{}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     assert!(output.stderr.is_empty());
     let report: Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(report["schema"], "universal-ontology-engine/discovery-v1");
