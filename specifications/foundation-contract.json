@@ -10,11 +10,7 @@
       "const": ["UNIVERSE", "ECOSYSTEM", "ORGANIZATION", "DOMAIN", "PROJECT", "REPOSITORY", "SOURCE", "UNIT", "MODULE", "COMPONENT", "ELEMENT", "IMPLEMENTATION"]
     },
     "optionalLayers": {"const": ["ORGANIZATION", "DOMAIN"]},
-    "supportingDimensions": {
-      "type": "array",
-      "items": {"type": "string"},
-      "uniqueItems": true
-    },
+    "supportingDimensions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "nativeMappings": {
       "type": "object",
       "properties": {
@@ -28,12 +24,13 @@
     },
     "rules": {
       "type": "object",
-      "required": ["singleFoundation", "semanticDirectories", "externalSystems", "stableIdentity"],
+      "required": ["singleFoundation", "semanticDirectories", "externalSystems", "stableIdentity", "parentScopedIdentity"],
       "properties": {
         "singleFoundation": {"const": true},
         "semanticDirectories": {"const": false},
         "externalSystems": {"const": "relationship"},
-        "stableIdentity": {"const": true}
+        "stableIdentity": {"const": true},
+        "parentScopedIdentity": {"const": true}
       },
       "additionalProperties": false
     }
