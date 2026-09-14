@@ -1,137 +1,94 @@
-# Universe Foundation
-
-Canonical foundation for the Universal Ontology and the systems that consume it.
+# Universal Ontology Engine
 
 > **Quran Inspired ALLAH my Beloved**
 >
-> This is the philosophical inspiration statement of the foundation. It is not a claim that the technical ontology is prescribed by the Qur'an.
+> Philosophical inspiration only; the technical ontology is not presented as a Qur'anic prescription.
 
-## Canonical ontology
+Rust reference implementation of **Universal Ontology v1.0.0**.
 
-**Universal Ontology v1.0.0** defines a **7 Zones × 7 Levels = 49-level canonical resolution spine**.
+## Canonical model
 
-The spine is a vocabulary and ordering system, not a mandatory filesystem tree. The actual model is a graph that distinguishes containment, references, semantic projection, runtime observation, and physical representation.
-
-```text
-ZONE 1  EXISTENCE
-01 UNIVERSE
-02 CREATION
-03 ORDER
-04 REALITY
-05 REALM
-06 WORLD
-07 DOMAIN
-
-ZONE 2  CONTEXT
-08 ECOSYSTEM
-09 ORGANIZATION
-10 COMMUNITY
-11 REGION
-12 ENVIRONMENT
-13 NETWORK
-14 CONTEXT
-
-ZONE 3  INTENT
-15 PURPOSE
-16 MISSION
-17 OBJECTIVE
-18 PROGRAM
-19 PROJECT
-20 PRODUCT
-21 SYSTEM
-
-ZONE 4  STRUCTURE
-22 REPOSITORY
-23 SOURCE
-24 UNIT
-25 MODULE
-26 SUBSYSTEM
-27 COMPONENT
-28 ELEMENT
-
-ZONE 5  SEMANTIC
-29 SYMBOL
-30 ENTITY
-31 PROPERTY
-32 RELATION
-33 OPERATION
-34 FUNCTION
-35 BEHAVIOR
-
-ZONE 6  DYNAMIC
-36 STATE
-37 EVENT
-38 PROCESS
-39 FLOW
-40 TRANSITION
-41 ACTION
-42 EXECUTION
-
-ZONE 7  REPRESENTATION
-43 INSTRUCTION
-44 EXPRESSION
-45 VALUE
-46 DATA
-47 TOKEN
-48 CHARACTER
-49 BIT
-```
-
-The normative machine-readable registry is `specifications/universal-ontology-v1.0.json`; the normative explanation is `specifications/universal-ontology-v1.0.md`.
-
-## Critical architectural rule
-
-The 49 levels MUST NOT be implemented as 49 physical directories or as one rigid AST hierarchy.
+**7 zones × 7 levels = 49 canonical levels.** The 49-level sequence is a resolution spine over a graph, not a mandatory filesystem tree.
 
 ```text
-CONTAINMENT   = ownership / structure
-PROJECTION    = one resource viewed at another ontology level
-RELATION      = semantic or dynamic connection
-REPRESENTATION = concrete encoding
+01 UNIVERSE       08 ECOSYSTEM      15 PURPOSE        22 REPOSITORY
+02 CREATION       09 ORGANIZATION   16 MISSION        23 SOURCE
+03 ORDER          10 COMMUNITY      17 OBJECTIVE      24 UNIT
+04 REALITY        11 REGION         18 PROGRAM        25 MODULE
+05 REALM          12 ENVIRONMENT    19 PROJECT        26 SUBSYSTEM
+06 WORLD          13 NETWORK        20 PRODUCT        27 COMPONENT
+07 DOMAIN         14 CONTEXT        21 SYSTEM         28 ELEMENT
+
+29 SYMBOL         36 STATE          43 INSTRUCTION
+30 ENTITY         37 EVENT          44 EXPRESSION
+31 PROPERTY       38 PROCESS        45 VALUE
+32 RELATION       39 FLOW           46 DATA
+33 OPERATION      40 TRANSITION     47 TOKEN
+34 FUNCTION       41 ACTION         48 CHARACTER
+35 BEHAVIOR       42 EXECUTION      49 BIT
 ```
 
-This allows a Rust function to project into instructions, expressions, values, data, tokens, characters, and bits without claiming that all of those are literal child folders.
-
-## Foundation vs engine
+## Architecture
 
 ```text
-universe-foundation
-    = vocabulary + schemas + invariants + contracts
-
-universal-ontology-engine (Rust)
-    = discovery + parsing + graph + projection + runtime + binary/bit inspection
+FOUNDATION CONTRACT
+        ↓
+49 CANONICAL TYPES
+        ↓
+TYPED GRAPH
+ ┌──────┼───────────┬──────────────┐
+ ↓      ↓           ↓              ↓
+contains references projection representation
+                    ↓
+             runtime / binary / bit
 ```
 
-The engine is deliberately a separate implementation project. The foundation remains implementation-neutral.
+`TYPE` is one canonical level. `KIND` is a specialization owned by exactly one type.
 
-## Identity
+Intermediate levels may be unmaterialized. Native language structures remain authoritative and are mapped into the universal vocabulary rather than forced into artificial directories.
 
-Every discovered resource SHOULD have a stable semantic identifier scoped to its owning boundary. Paths, filenames, offsets, and timestamps are provenance/observation metadata, not a substitute for stable identity.
-
-## Native structures remain valid
-
-The foundation never requires artificial ontology-named directories such as `unit/`, `module/`, `component/`, `element/`, or `implementation/`.
-
-Examples of native mappings include:
+## Rust workspace
 
 ```text
-Rust       crate/module/item/function
-Node       package/app/module/function
-Go         package/cmd/type/function
-Python     package/module/class/function
-Java       module/package/class/method
+crates/
+├── ontology-core   # canonical types, identity, source spans, edge taxonomy
+├── ontology-graph  # typed graph and invariants
+└── ontology-cli    # ontology-engine command-line interface
 ```
 
-These structures are evidence for ontology projection, not replacements for the canonical vocabulary.
+## Current commands
 
-## Compatibility
+```bash
+cargo run -p ontology-engine -- levels
+cargo run -p ontology-engine -- inspect 49
+```
 
-Older foundation contracts that describe the earlier 11/17-level hierarchy are retained only as migration/compatibility material. They MUST NOT be treated as a competing canonical ontology.
+## Engine roadmap
 
-Migration MUST preserve existing stable IDs and repository paths.
+```text
+Phase 1  Core types + graph                    [current]
+Phase 2  Contract/schema loader
+Phase 3  Persistent graph + identity
+Phase 4  Filesystem/Git discovery
+Phase 5  Rust source + AST adapters
+Phase 6  Cross-language parsing adapters
+Phase 7  Semantic projection
+Phase 8  Runtime observation
+Phase 9  Binary/encoding readers
+Phase 10 Character/token analysis
+Phase 11 Bit-level bounded reader
+Phase 12 Query engine + certification
+```
 
-## Engine target
+## Safety boundaries
 
-The reference Rust engine is designed to traverse from managed universe boundaries to bounded machine representation, including bit-level inspection when the input format permits it.
+Binary and bit inspection must be bounded and streaming-capable. The engine must not require whole-file materialization for a range inspection, and malformed input must remain an explicit observation rather than silently changing ontology meaning.
 
-See `standards/universal-ontology-engine.md` for the architecture.
+## Foundation contract
+
+The normative ontology specification lives in:
+
+- `specifications/universal-ontology-v1.0.md`
+- `specifications/universal-ontology-v1.0.json`
+
+The implementation architecture is documented in `standards/universal-ontology-engine.md` and `docs/architecture.md`.
