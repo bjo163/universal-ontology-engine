@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only semantic hierarchy discovery for a local workspace."""
+"""Read-only semantic discovery for a local workspace; canonical levels are optional observations."""
 from __future__ import annotations
 
 import argparse
@@ -21,10 +21,10 @@ LEVELS = [
 ]
 IGNORED = {
     ".git", ".next", ".turbo", "node_modules", "target", "dist", "build",
-    "coverage", "__pycache__", ".venv", "venv", ".idea", ".vscode",
+    "coverage", "__pycache__", ".venv", "venv", ".idea", ".vscode", "vendor",
 }
 SOURCE_NAMES = {"src", "app", "apps", "packages", "crates", "cmd", "internal", "lib", "libs", "pkg"}
-MANIFESTS = ("Cargo.toml", "package.json", "go.mod", "pyproject.toml", "pom.xml", "build.gradle", "build.gradle.kts")
+MANIFESTS = ("Cargo.toml", "package.json", "go.mod", "pyproject.toml", "setup.py", "pom.xml", "build.gradle", "build.gradle.kts")
 SOURCE_EXTENSIONS = {".rs", ".ts", ".tsx", ".js", ".jsx", ".go", ".py", ".java", ".kt"}
 
 
@@ -90,103 +90,71 @@ def source_nodes(repo: Path) -> list[dict[str, Any]]:
         if not child.is_dir() or child.name in IGNORED:
             continue
         if child.name in SOURCE_NAMES:
-            children.append(node("SOURCE", child.name, child.relative_to(repo).as_posix(), "directory", language, unit_nodes(child, repo, language)))
+            children.append(source_node(child, repo, language))
     if not children:
-        native_files = [p.name for p in repo.iterdir() if p.is_file() and p.suffix.lower() in SOURCE_EXTENSIONS]
+        native_files = [p for p in sorted(repo.iterdir(), key=lambda p: p.name.lower()) if p.is_file() and p.suffix.lower() in SOURCE_EXTENSIONS]
         if native_files:
-            children.append(node("SOURCE", ".", ".", "repository-root", language, metadata={"evidence": "native-source-files"}))
+            children.append(source_node(repo, repo, language, repository_root=True))
     return children
 
 
-def unit_nodes(source: Path, repo: Path, language: str | None) -> list[dict[str, Any]]:
-    result: list[dict[str, Any]] = []
-    dirs = [p for p in sorted(source.iterdir(), key=lambda p: p.name.lower()) if p.is_dir() and p.name not in IGNORED]
-    files = [p for p in sorted(source.iterdir(), key=lambda p: p.name.lower()) if p.is_file()]
+def source_node(source: Path, repo: Path, language: str | None, repository_root: bool = False) -> dict[str, Any]:
+    rel = "." if repository_root else source.relative_to(repo).as_posix()
+    children = structural_children(source, repo, language)
+    metadata = {"evidence": "repository-root source files" if repository_root else "native source boundary"}
+    if not has_native_unit(source, language):
+        metadata["unmaterialized_levels"] = ["UNIT", "MODULE"]
+    return node("SOURCE", source.name if not repository_root else ".", rel, "repository-root" if repository_root else "directory", language, children, metadata)
+
+
+def has_native_unit(source: Path, language: str | None) -> bool:
     if language == "rust":
-        for p in dirs:
-            if (p / "Cargo.toml").is_file():
-                result.append(node("UNIT", p.name, p.relative_to(repo).as_posix(), "crate", language, module_nodes(p, repo, language), {"evidence": "Cargo.toml"}))
-    elif language == "node":
-        for p in dirs:
-            if (p / "package.json").is_file():
-                result.append(node("UNIT", p.name, p.relative_to(repo).as_posix(), "package/workspace-member", language, module_nodes(p, repo, language), {"evidence": "package.json"}))
-    elif language == "go":
-        for p in dirs:
-            result.append(node("UNIT", p.name, p.relative_to(repo).as_posix(), "package-or-command", language, module_nodes(p, repo, language), {"evidence": "Go source grouping"}))
-    elif language == "python":
-        for p in dirs:
-            if (p / "__init__.py").exists() or (p / "pyproject.toml").is_file():
-                result.append(node("UNIT", p.name, p.relative_to(repo).as_posix(), "package", language, module_nodes(p, repo, language), {"evidence": "Python package"}))
-    elif language in {"java", "kotlin"}:
-        for p in dirs:
-            result.append(node("UNIT", p.name, p.relative_to(repo).as_posix(), "module/package", language, module_nodes(p, repo, language), {"evidence": "native source grouping"}))
-    if not result and (dirs or files):
-        result.append(node("UNIT", source.name, source.relative_to(repo).as_posix(), "source-group", language, module_nodes(source, repo, language), {"confidence": "low", "evidence": "fallback source grouping"}))
-    return result
+        return any((p / "Cargo.toml").is_file() for p in source.iterdir() if p.is_dir() and p.name not in IGNORED)
+    if language == "node":
+        return any((p / "package.json").is_file() for p in source.iterdir() if p.is_dir() and p.name not in IGNORED)
+    if language == "python":
+        return any((p / "__init__.py").exists() or (p / "pyproject.toml").is_file() for p in source.iterdir() if p.is_dir() and p.name not in IGNORED)
+    return False
 
 
-def module_nodes(unit: Path, repo: Path, language: str | None) -> list[dict[str, Any]]:
-    children = [p for p in sorted(unit.iterdir(), key=lambda p: p.name.lower()) if p.is_dir() and p.name not in IGNORED]
-    if children:
-        return [node("MODULE", p.name, p.relative_to(repo).as_posix(), "directory-group", language, component_nodes(p, repo, language)) for p in children]
-    return [node("MODULE", unit.name, unit.relative_to(repo).as_posix(), "native-group", language, component_nodes(unit, repo, language), {"confidence": "low"})]
-
-
-def component_nodes(module: Path, repo: Path, language: str | None) -> list[dict[str, Any]]:
+def structural_children(source: Path, repo: Path, language: str | None) -> list[dict[str, Any]]:
     result: list[dict[str, Any]] = []
-    for p in sorted(module.iterdir(), key=lambda p: p.name.lower()):
-        if p.name in IGNORED:
+    for child in sorted(source.iterdir(), key=lambda p: p.name.lower()):
+        if child.name in IGNORED:
             continue
-        if p.is_file() and p.suffix.lower() in SOURCE_EXTENSIONS:
-            result.append(node("COMPONENT", p.stem, p.relative_to(repo).as_posix(), "source-file", language, element_nodes(p, repo, language), {"evidence": "source-file"}))
-        elif p.is_dir():
-            result.append(node("COMPONENT", p.name, p.relative_to(repo).as_posix(), "directory-component", language, element_nodes(p, repo, language)))
+        if child.is_dir() and child.name.startswith('.'):
+            continue
+        if child.is_file() and child.suffix.lower() in SOURCE_EXTENSIONS:
+            result.append(component_node(child, repo, language))
+        elif child.is_dir():
+            result.extend(component_nodes_recursive(child, repo, language))
     return result
 
 
-def element_nodes(path: Path, repo: Path, language: str | None) -> list[dict[str, Any]]:
+def component_nodes_recursive(path: Path, repo: Path, language: str | None) -> list[dict[str, Any]]:
+    files = [p for p in sorted(path.rglob("*"), key=lambda p: p.as_posix().lower()) if p.is_file() and p.suffix.lower() in SOURCE_EXTENSIONS and not any(part in IGNORED for part in p.relative_to(repo).parts)]
+    if files:
+        return [component_node(p, repo, language) for p in files]
+    return []
+
+
+def component_node(path: Path, repo: Path, language: str | None) -> dict[str, Any]:
     rel = path.relative_to(repo).as_posix()
-    if not path.is_file():
-        execution = node("EXECUTION", path.name, rel, "directory-execution", language, metadata={"evidence": "directory-boundary", "confidence": "low"})
-        return [node("ELEMENT", path.name, rel, "native-construct-group", language, [execution], {"evidence": "directory-boundary", "confidence": "low"})]
-
     symbols = parse_symbols(path, parser_language(path, language))
-    if symbols:
-        return [
-            node(
-                "ELEMENT",
-                symbol["name"],
-                rel,
-                symbol["kind"],
-                language,
-                [
-                    node(
-                        "EXECUTION",
-                        symbol["name"],
-                        rel,
-                        "symbol-span",
-                        language,
-                        metadata={
-                            "symbol": symbol["name"],
-                            "kind": symbol["kind"],
-                            "span": {"line_start": symbol["line_start"], "line_end": symbol["line_end"]},
-                            "evidence": "language-parser",
-                        },
-                    )
-                ],
-                {
-                    "symbol": symbol["name"],
-                    "kind": symbol["kind"],
-                    "confidence": symbol["confidence"],
-                    "evidence": symbol["evidence"],
-                    "span": {"line_start": symbol["line_start"], "line_end": symbol["line_end"]},
-                },
-            )
-            for symbol in symbols
-        ]
-
-    execution = node("EXECUTION", path.name, rel, "source-file", language, metadata={"evidence": "file-boundary", "confidence": "low"})
-    return [node("ELEMENT", path.stem, rel, "source-construct", language, [execution], {"confidence": "low", "evidence": "parser-no-symbols"})]
+    elements = [
+        node("ELEMENT", symbol["name"], rel, symbol["kind"], language, metadata={
+            "symbol": symbol["name"],
+            "kind": symbol["kind"],
+            "confidence": symbol["confidence"],
+            "evidence": symbol["evidence"],
+            "span": {"line_start": symbol["line_start"], "line_end": symbol["line_end"]},
+            "execution_model": "runtime phase; not a containment child",
+        })
+        for symbol in symbols
+    ]
+    if not elements:
+        elements = [node("ELEMENT", path.stem, rel, "source-construct", language, metadata={"confidence": "low", "evidence": "parser-no-symbols"})]
+    return node("COMPONENT", path.stem, rel, "source-file", language, elements, {"evidence": "source-file"})
 
 
 def discover(workspace: Path, universe_id: str = "universe") -> dict[str, Any]:
@@ -225,6 +193,7 @@ def discover(workspace: Path, universe_id: str = "universe") -> dict[str, Any]:
             "creator_outside_model": True,
             "intermediate_levels_may_be_unmaterialized": True,
             "omitted_semantic_levels_are_not_invented": True,
+            "runtime_execution_is_not_containment": True,
         },
     }
 
