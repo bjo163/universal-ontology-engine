@@ -12,8 +12,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.x"
       - uses: dtolnay/rust-toolchain@stable
@@ -29,6 +29,7 @@ jobs:
           python -m json.tool specifications/universal-ontology-v1.0.json >/dev/null
           python -m json.tool schemas/universe.schema.json >/dev/null
           python -m json.tool schemas/foundation-node.schema.json >/dev/null
+          python -m json.tool schemas/hierarchy-node.schema.json >/dev/null
           python -m json.tool schemas/universal-ontology.schema.json >/dev/null
       - name: Validate canonical ontology contract
         run: python tools/validate-universe.py
@@ -40,7 +41,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Build and test Rust engine
         run: |
-          cargo fmt --all
+          cargo fmt --all -- --check
           cargo check --workspace
           cargo test --workspace --all-targets
       - name: Smoke test ontology CLI
