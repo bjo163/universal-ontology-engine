@@ -12,7 +12,7 @@ import universe_cli  # type: ignore  # noqa: E402
 class UniverseCliTests(unittest.TestCase):
     def setUp(self) -> None:
         self.manifest = {
-            "contract_version": "0.2",
+            "contract_version": "0.3",
             "universe": {"id": "universe", "name": "Universe"},
             "ecosystems": [
                 {"id": "rocksoul", "name": "ROCKSOUL", "path": "ecosystem-rocksoul", "lifecycle": "active"},
@@ -22,6 +22,12 @@ class UniverseCliTests(unittest.TestCase):
 
     def test_validate_accepts_reference_shape(self) -> None:
         self.assertEqual(universe_cli.validate(self.manifest), [])
+
+    def test_foundation_summary_is_complete(self) -> None:
+        summary = universe_cli.foundation_summary()
+        self.assertTrue(summary["single_foundation"])
+        self.assertEqual(summary["version"], "0.3")
+        self.assertEqual(summary["hierarchy"][-3:], ["COMPONENT", "ELEMENT", "IMPLEMENTATION"])
 
     def test_validate_rejects_duplicate_ids_and_paths(self) -> None:
         invalid = json.loads(json.dumps(self.manifest))
@@ -46,7 +52,7 @@ class UniverseCliTests(unittest.TestCase):
             rocksoul = workspace / "ecosystem-rocksoul"
             rocksoul.mkdir()
             (rocksoul / ".git").mkdir()
-            self.assertTrue((universe_cli.command_status(self.manifest, workspace, True) == 0))
+            self.assertTrue(universe_cli.command_status(self.manifest, workspace, True) == 0)
 
     def test_doctor_accepts_matching_local_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -67,6 +73,7 @@ class UniverseCliTests(unittest.TestCase):
                 universe_cli.print_json = original_print_json
             self.assertEqual(code, 0)
             self.assertTrue(captured[0]["healthy"])
+            self.assertTrue(captured[0]["foundation"]["single_foundation"])
 
     def test_doctor_rejects_identity_mismatch(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
