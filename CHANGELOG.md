@@ -2,6 +2,23 @@
 
 > Auto-generated from GitHub Releases. Do not edit manually.
 
+## v0.1.10 — STABLE — 2026-09-14
+
+## What's Changed
+* feat(mvp-exit): freeze Phase 1–6 contracts for v0.1.10 by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/59
+* release: promote MVP Exit v0.1.10 candidate by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/60
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.9...v0.1.10
+
+## v0.1.10-dev.28 — DEV — 2026-09-14
+
+## What's Changed
+* feat(mvp-exit): freeze Phase 1–6 contracts for v0.1.10 by @bjo163 in https://github.com/bjo163/universal-ontology-engine/pull/59
+
+
+**Full Changelog**: https://github.com/bjo163/universal-ontology-engine/compare/v0.1.9...v0.1.10-dev.28
+
 ## v0.1.9 — STABLE — 2026-09-14
 
 ## What's Changed
