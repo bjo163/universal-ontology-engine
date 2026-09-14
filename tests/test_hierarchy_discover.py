@@ -13,7 +13,7 @@ from symbol_parser import parse_symbols  # type: ignore  # noqa: E402
 
 
 class HierarchyDiscoveryTests(unittest.TestCase):
-    def test_discovers_complete_semantic_chain_without_canonical_directories(self) -> None:
+    def test_discovers_native_structure_without_synthetic_unit_module_or_execution(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             workspace = Path(temp)
             repo = workspace / "ecosystem-rocksoul" / "rocksoul-ui"
@@ -32,27 +32,24 @@ class HierarchyDiscoveryTests(unittest.TestCase):
             project = ecosystem["children"][0]
             repo_node = project["children"][0]
             source_node = repo_node["children"][0]
-            unit_node = source_node["children"][0]
-            module_node = unit_node["children"][0]
-            component_node = module_node["children"][0]
+            component_node = source_node["children"][0]
             elements = component_node["children"]
 
             self.assertEqual(tree["level"], "UNIVERSE")
             self.assertEqual(repo_node["level"], "REPOSITORY")
             self.assertEqual(source_node["level"], "SOURCE")
-            self.assertEqual(unit_node["level"], "UNIT")
-            self.assertEqual(module_node["level"], "MODULE")
             self.assertEqual(component_node["level"], "COMPONENT")
             self.assertEqual([item["level"] for item in elements], ["ELEMENT", "ELEMENT"])
             self.assertEqual([item["name"] for item in elements], ["App", "Boot"])
             self.assertEqual(elements[0]["metadata"]["evidence"], "language-parser")
             self.assertEqual(elements[0]["metadata"]["span"], {"line_start": 1, "line_end": 3})
             self.assertEqual(elements[1]["metadata"]["span"], {"line_start": 5, "line_end": 7})
-            self.assertEqual(elements[0]["children"][0]["level"], "EXECUTION")
-            self.assertEqual(elements[0]["children"][0]["metadata"]["span"], {"line_start": 1, "line_end": 3})
-            self.assertEqual(unit_node["language"], "node")
+            self.assertNotIn("children", elements[0])
+            self.assertNotIn("children", elements[1])
+            self.assertEqual(source_node["metadata"]["unmaterialized_levels"], ["UNIT", "MODULE"])
             self.assertFalse((repo / "unit").exists())
             self.assertEqual(tree["metadata"]["canonical_level_count"], 49)
+            self.assertTrue(tree["metadata"]["runtime_execution_is_not_containment"])
 
     def test_python_symbol_spans_are_detected(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -82,7 +79,7 @@ class HierarchyDiscoveryTests(unittest.TestCase):
 
     def test_json_is_serializable(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
-            workspace = Path(temp) 
+            workspace = Path(temp)
             (workspace / "ecosystem-test").mkdir()
             output = hierarchy_discover.discover(workspace)
             json.dumps(output)
