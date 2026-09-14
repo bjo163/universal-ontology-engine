@@ -1,0 +1,13 @@
+[package]
+name = "ontology-discovery"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+ontology-core = { path = "../ontology-core" }
+ontology-graph = { path = "../ontology-graph" }
+ontology-registry = { path = "../ontology-registry" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
