@@ -130,7 +130,7 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 
 [[package]]
 name = "ontology-core"
-version = "0.1.10"
+version = "0.1.11-dev.30"
 dependencies = [
  "serde",
  "thiserror",
@@ -138,7 +138,7 @@ dependencies = [
 
 [[package]]
 name = "ontology-discovery"
-version = "0.1.10"
+version = "0.1.11-dev.30"
 dependencies = [
  "ontology-core",
  "ontology-graph",
@@ -151,7 +151,7 @@ dependencies = [
 
 [[package]]
 name = "ontology-engine"
-version = "0.1.10"
+version = "0.1.11-dev.30"
 dependencies = [
  "clap",
  "ontology-core",
@@ -164,7 +164,7 @@ dependencies = [
 
 [[package]]
 name = "ontology-graph"
-version = "0.1.10"
+version = "0.1.11-dev.30"
 dependencies = [
  "ontology-core",
  "ontology-registry",
@@ -174,7 +174,7 @@ dependencies = [
 
 [[package]]
 name = "ontology-language"
-version = "0.1.10"
+version = "0.1.11-dev.30"
 dependencies = [
  "ontology-core",
  "serde",
@@ -183,7 +183,7 @@ dependencies = [
 
 [[package]]
 name = "ontology-registry"
-version = "0.1.10"
+version = "0.1.11-dev.30"
 dependencies = [
  "ontology-core",
  "serde",
@@ -193,7 +193,7 @@ dependencies = [
 
 [[package]]
 name = "ontology-rust"
-version = "0.1.10"
+version = "0.1.11-dev.30"
 dependencies = [
  "ontology-core",
  "proc-macro2",

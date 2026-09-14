@@ -12,7 +12,7 @@ resolver = "2"
 
 [workspace.package]
 edition = "2021"
-version = "0.1.10"
+version = "0.1.11-dev.30"
 license = "MIT"
 
 [workspace.dependencies]
