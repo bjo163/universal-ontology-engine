@@ -71,6 +71,23 @@ pub fn foundation_rules() -> Vec<NormalizationRule> {
     use NormalizationClass::*;
     use OntologyType::*;
     let mut rules = vec![
+        rule("rust.struct", "rust", "struct", Entity, DeclaredType),
+        rule(
+            "rust.function",
+            "rust",
+            "function",
+            Function,
+            CallableDeclaration,
+        ),
+        rule("rust.const", "rust", "const", Value, NamedValueBinding),
+        rule("rust.static", "rust", "static", Value, NamedValueBinding),
+        rule(
+            "rust.use",
+            "rust",
+            "use",
+            Instruction,
+            ModuleBoundaryStatement,
+        ),
         rule("ts.class", "typescript", "class", Entity, DeclaredType),
         rule(
             "ts.interface",
@@ -251,6 +268,28 @@ mod tests {
         let py_out = normalize_candidates(&py, foundation_rules());
         assert_eq!(ts_out[0].class, py_out[0].class);
         assert_ne!(ts_out[0].original.language, py_out[0].original.language);
+    }
+
+    #[test]
+    fn rust_normalization_uses_same_contract_without_losing_native_evidence() {
+        let rust = NativeEvidenceDescriptor {
+            language: "rust".into(),
+            native_kind: "function".into(),
+            source_type: OntologyType::Function,
+        };
+        let python = NativeEvidenceDescriptor {
+            language: "python".into(),
+            native_kind: "function".into(),
+            source_type: OntologyType::Function,
+        };
+        let rust_out = normalize_candidates(&rust, foundation_rules());
+        let python_out = normalize_candidates(&python, foundation_rules());
+
+        assert_eq!(rust_out.len(), 1);
+        assert_eq!(rust_out[0].class, NormalizationClass::CallableDeclaration);
+        assert_eq!(rust_out[0].class, python_out[0].class);
+        assert_eq!(rust_out[0].original, rust);
+        assert_eq!(rust_out[0].rule_id, "norm.rust.function");
     }
 
     #[test]
