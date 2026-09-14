@@ -111,7 +111,7 @@ impl NodeId {
     pub fn as_str(&self) -> &str { &self.0 }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct SourceSpan {
     pub line_start: u32,
     pub column_start: u32,
